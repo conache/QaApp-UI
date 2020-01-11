@@ -15,6 +15,7 @@ import {
   const initialState = Immutable({
     app: {
       appLoading: false,
+      appErrors: []
     },
   });
   

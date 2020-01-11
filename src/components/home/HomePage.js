@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import {newAppError} from '../../ducks/app';
 
 class HomePage extends React.Component {
   constructor(props) {
@@ -14,4 +16,8 @@ class HomePage extends React.Component {
   }
 }
 
-export default HomePage;
+export default connect(
+  null,
+  {newAppError},
+)(HomePage);
+

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import React, { Component } from 'react';
 import ApplicationContainer from './ApplicationContainer';
+import ErrorsContainer from './ErrorsContainer';
 
 class Main extends Component {
   renderApp() {
@@ -18,13 +19,16 @@ class Main extends Component {
     if (loading) {
       return <div>Loading..</div>;
     }
-    return this.renderApp();
+    return [
+      <ErrorsContainer />,
+      this.renderApp()
+    ];
   }
 }
 
 function mapStateToProps(state) {
   return {
-    loading: state.app.appLoading,
+    loading: state.app.appLoading
   };
 }
 
