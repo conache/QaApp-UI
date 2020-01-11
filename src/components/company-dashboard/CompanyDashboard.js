@@ -5,10 +5,6 @@ import TagsSection from './TagsSection';
 import ReportsSection from './ReportsSection';
 
 class CompanyDashboard extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {match} = this.props;
     

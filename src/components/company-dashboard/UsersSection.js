@@ -1,14 +1,16 @@
 import React from 'react';
 import MaterialTable from "material-table";
+import {getUserAccounts, removeUserAccount, createUserAccount, updateUserAccount} from '../../api/users';
+import { NotificationManager } from 'react-notifications';
 
 class UsersSection extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
       columns: [
-        {title: "Name", field: "name"},
-        {title: "Email", field: "email", editable: 'never'},
+        {title: "First Name", filed: "firstName"},
+        {title: "Last Name", field: "lastName"},
+        {title: "Email", field: "email", editable: 'onAdd'},
         {title: "Job", field: "job", default: 1},
         {
           title: "Role",
@@ -19,11 +21,53 @@ class UsersSection extends React.Component {
           }
         },
       ],
-      data: [
-        {name: "Gigi Tifon", email: "gtifon@gmail.com", job: "Engineer", role: 1},
-        {name: "Andrei Mircea", email: "mandrei@gmail.com", job: "HR", role: 2}
-      ]
+      data: (query) => this.fetchUsers(query)
     }
+  }
+
+  fetchUsers(query) {
+    return new Promise((resolve, reject) => {
+      const {page, pageSize} = query;
+      getUserAccounts(page + 1, pageSize)
+        .then(response => {
+          const results = response.data;
+          resolve({
+            data: results.data,
+            page: results.page - 1,
+            totalCount: results.total
+          })
+        })
+        .catch(error => {
+          NotificationManager.error(`Could not fetch users. Error: ${error.message}`)
+        })
+    });
+  }
+  
+  onRowDelete(entry) {
+    return removeUserAccount(entry.id)
+          .then(() => {
+            NotificationManager.success("User removed successfully");
+          })
+          .catch((error) => {
+            NotificationManager.error(`Could not remove user. Error: ${error.message}`);
+          });
+  }
+
+  onRowAdd(entry) {
+    return createUserAccount(entry)
+            .then(() => {
+              NotificationManager.success("User successfully added to company");
+            })
+            .catch((error) => {
+              NotificationManager.error(`Could not add user to company. Error: ${error.message}`);
+            });
+  }
+
+  onRowUpdate(newEntry, oldEntry) {
+    return updateUserAccount(oldEntry.id, newEntry)
+            .catch(error => {
+              NotificationManager.error(`Could not finish editing user. Error: ${error.message}`);
+            });
   }
 
   render() {
@@ -37,15 +81,9 @@ class UsersSection extends React.Component {
         columns={this.state.columns}
         data={this.state.data}
         editable={{
-          onRowAdd: (newData) => new Promise((resolve, reject) => {
-            resolve();
-          }),
-          onRowUpdate: (newData, oldData) => new Promise((resolve, reject) => {
-            resolve();
-          }),
-          onRowDelete: (oldData) => new Promise((resolve, reject) => {
-            resolve();
-          })
+          onRowAdd: (newData) =>this.onRowAdd(newData),
+          onRowUpdate: (newData, oldData) => this.onRowUpdate(newData, oldData),
+          onRowDelete: (rowData) => this.onRowDelete(rowData)
         }}/>
       </div>
     );
