@@ -9,9 +9,15 @@ class HomePage extends React.Component {
     this.state = {};
   }
 
+  handleClick() {
+    const {newAppError} = this.props;
+    newAppError({message: "This is a test error"});
+  }
+
   render() {
     return (
-      <div className="home-page"> HomePage page </div>
+      <div className="home-page"> HomePage page </div>,
+      <button onClick={() => this.handleClick()}>print error</button>
     );
   }
 }

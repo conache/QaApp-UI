@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 
 import ErrorAlert from "./shared/ErrorAlert";
 import {removeAppError} from '../ducks/app';
+import {pathOr} from 'ramda';
 
 class ErrorsContainer extends Component {
   render() {
@@ -25,10 +26,8 @@ class ErrorsContainer extends Component {
 }
 
 export default connect(
-  (state) => {
-    return {
-      errors: state.app.appErrors
-    }
-  }, 
+  (state) => ({
+      errors: pathOr([], ['app','appErrors'], state)
+  }), 
   {removeAppError}
 )(ErrorsContainer);
