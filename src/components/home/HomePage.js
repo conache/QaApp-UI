@@ -18,7 +18,7 @@ class HomePage extends React.Component {
       <div className="home-page"> 
         <h3>HomePage page</h3> 
         <button onClick={() => this.handleClick()}>print error</button>
-        <Link to="/dashboard">Admin dashboard</Link>
+        <Link to="/company-dashboard">Admin dashboard</Link>
       </div>);
   }
 }
