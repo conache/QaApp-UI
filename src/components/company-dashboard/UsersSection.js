@@ -75,7 +75,10 @@ class UsersSection extends React.Component {
       <div style={{ maxWidth: "100%" }}>
       <MaterialTable
         options={{
-          exportButton: true
+          exportButton: true,
+          search: false,
+          pageSize: 10,
+          pageSizeOptions: []
         }}
         title="Company users"
         columns={this.state.columns}
