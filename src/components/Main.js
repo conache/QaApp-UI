@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 
 import React, { Component } from 'react';
 import ApplicationContainer from './ApplicationContainer';
-import ErrorsContainer from './ErrorsContainer';
 
 class Main extends Component {
   renderApp() {
@@ -20,7 +19,6 @@ class Main extends Component {
       return <div>Loading..</div>;
     }
     return [
-      <ErrorsContainer />,
       this.renderApp()
     ];
   }

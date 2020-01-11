@@ -1,6 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import {newAppError} from '../../ducks/app';
 import { Link } from 'react-router-dom';
 import { NotificationManager } from 'react-notifications';
 
@@ -12,8 +10,6 @@ class HomePage extends React.Component {
   }
 
   handleClick = () => {
-    const {newAppError} = this.props;
-    newAppError({message: "This is a test error"});
     NotificationManager.error('This is a test error');
   }
 
@@ -27,8 +23,5 @@ class HomePage extends React.Component {
   }
 }
 
-export default connect(
-  null,
-  {newAppError},
-)(HomePage);
+export default HomePage;
 
