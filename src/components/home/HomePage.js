@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {newAppError} from '../../ducks/app';
+import { Link } from 'react-router-dom';
 
 class HomePage extends React.Component {
   constructor(props) {
@@ -15,10 +16,12 @@ class HomePage extends React.Component {
   }
 
   render() {
-    return (
-      <div className="home-page"> HomePage page </div>,
-      <button onClick={() => this.handleClick()}>print error</button>
-    );
+    return ( 
+      <div className="home-page"> 
+        <h3>HomePage page</h3> 
+        <button onClick={() => this.handleClick()}>print error</button>
+        <Link to="/dashboard">Admin dashboard</Link>
+      </div>);
   }
 }
 
