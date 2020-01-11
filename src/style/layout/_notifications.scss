@@ -1,0 +1,17 @@
+.notification-container {
+  top: 60px !important;
+
+  .notification {
+    @extend .my-2;
+
+    box-shadow: none !important;
+
+    &.notification-success {
+      background-color: #11a686;
+    }
+
+    &.notification-error {
+      background-color: red;
+    }
+  }
+}
