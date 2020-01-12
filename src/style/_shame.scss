@@ -6,3 +6,9 @@ main {
   margin: 0;
   overflow: hidden;
 }
+
+.container-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
