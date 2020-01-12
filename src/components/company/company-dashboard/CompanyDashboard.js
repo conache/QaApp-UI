@@ -1,8 +1,8 @@
 import React from 'react';
 import {Link, Route, Switch} from 'react-router-dom';
 import UsersSection from './UsersSection';
-import TagsSection from './TagsSection';
 import ReportsSection from './ReportsSection';
+import TagsSectionsContainer from './tags/TagsSectionsContainer';
 
 class CompanyDashboard extends React.Component {
   render() {
@@ -25,7 +25,7 @@ class CompanyDashboard extends React.Component {
         <section>
           <Switch>
             <Route path={`${match.path}/users`} component={UsersSection}/>
-            <Route path={`${match.path}/tags`} component={TagsSection}/>
+            <Route path={`${match.path}/tags`} component={TagsSectionsContainer}/>
             <Route path={`${match.path}/reports`} component={ReportsSection}/>
             <Route component={UsersSection}/>
           </Switch>
