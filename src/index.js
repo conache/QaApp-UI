@@ -3,29 +3,36 @@ import ReactDOM from 'react-dom';
 
 import { Provider } from 'react-redux';
 
+import * as serviceWorker from './serviceWorker';
+import { KeycloakProvider } from '@react-keycloak/web';
+import Keycloak from 'keycloak-js';
+import store from './store';
+
 import './index.scss';
 import 'react-notifications/lib/notifications.css';
 
 import Main from './components/Main.js';
+import {setAuthToken} from './session';
 
-import * as serviceWorker from './serviceWorker';
-
-import { KeycloakProvider } from '@react-keycloak/web';
-import Keycloak from 'keycloak-js';
-import store from './store';
 
 const keycloak = new Keycloak('/keycloak.json');
 const kyecloakInitConfig = {
   onLoad: 'check-sso'
 } 
+
 const onKeycloakEvent = (event, error) => {
-  console.log('onKeycloakEvent', event, error)
+  switch (event) {
+    case 'onTokenExpired':
+      setAuthToken(null);
+    case 'onAuthLogout':
+      setAuthToken(null);
+  }
 }
 
 const onKeycloakTokens = tokens => {
-  console.log('onKeycloakTokens', tokens)
+  const {token} = tokens;
+  setAuthToken(token);
 }
-
 
 ReactDOM.render(
   (
