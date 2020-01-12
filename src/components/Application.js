@@ -13,9 +13,11 @@ import CompanyDashboard from "./company/company-dashboard/CompanyDashboard";
 import Navbar from "./navbar/Navbar";
 
 const App = (props) => {
+  const { getUserInfo } = props.actions;
   useEffect(() => {
-    props.actions.getUserProfile();
-  }, []);
+    getUserInfo();
+  }, [getUserInfo]);
+
   const [keycloak] = useKeycloak();
 
   const { user } = props;

@@ -5,7 +5,7 @@ import * as User from '../api/user';
 export default function reducer(state = Immutable({}), action) {
   switch (action.type)  {
     case 'user/GET_PROFILE_INFO':
-      return state.merge({ profile: action.payload }, { deep: true });
+      return state.merge({ user: action.payload }, { deep: true });
     case 'user/LOGOUT':
       return state.set('user', {});
     default:
@@ -13,8 +13,8 @@ export default function reducer(state = Immutable({}), action) {
   }
 }
 
-export const getProfileInfo         = createAction('app/GET_PROFILE');
-export const userLogOut             = createAction('app/LOGOUT');
+export const getProfileInfo         = createAction('user/GET_PROFILE_INFO');
+export const userLogOut             = createAction('user/LOGOUT');
 
 export const getUserInfo = () => {
   return dispatch => {
@@ -26,5 +26,11 @@ export const getUserInfo = () => {
       .catch((err) => {
         console.error(err);
       })
+  }
+}
+
+export const logout = () => {
+  return dispatch => {
+    dispatch(userLogOut());
   }
 }

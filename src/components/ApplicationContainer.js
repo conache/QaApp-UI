@@ -7,12 +7,12 @@ import { useKeycloak } from '@react-keycloak/web'
 import Application from './Application';
 import { pathOr } from 'ramda';
 import LoadingSpinner from './shared/LoadingSpinner';
-import getUserInfo from '../ducks/user';
+import { getUserInfo } from '../ducks/user';
 
 function mapStateToProps(state) {
   return {
     app: state.app,
-    // user: pathOr({}, ['user', 'profile'], state);
+    user: pathOr({}, ['user'], state),
   };
 }
 
@@ -24,7 +24,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-const ApplicationContainer = () => {
+const ApplicationContainer = (props) => {
   //  this hook can be called only in function components
   const [, initialized] = useKeycloak()
 
@@ -32,7 +32,7 @@ const ApplicationContainer = () => {
     return <LoadingSpinner />
   }
 
-  return <Application />
+  return <Application {...props} />
 }
 
 export default connect(
