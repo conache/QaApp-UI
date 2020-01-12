@@ -1,13 +1,15 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { useKeycloak } from '@react-keycloak/web'
 
 const PrivateRoute = (props) => {
-  const { hasPermission, redirectTo } = props;
+  let { hasPermission, redirectTo } = props;
+  const [keycloak] = useKeycloak();
 
   return (
-    hasPermission 
-      ? <Route {...props} />
+    keycloak.authenticated && hasPermission ?
+      <Route {...props} />
       : (
         <Redirect
           to={{

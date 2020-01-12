@@ -6,21 +6,39 @@ import { Provider } from 'react-redux';
 import './index.scss';
 import 'react-notifications/lib/notifications.css';
 
-import store from './store.js';
 import Main from './components/Main.js';
 
 import * as serviceWorker from './serviceWorker';
 
+import { KeycloakProvider } from '@react-keycloak/web';
+import Keycloak from 'keycloak-js';
+import store from './store';
+
+const keycloak = new Keycloak('/keycloak.json');
+const kyecloakInitConfig = {
+  onLoad: 'check-sso'
+} 
+const onKeycloakEvent = (event, error) => {
+  console.log('onKeycloakEvent', event, error)
+}
+
+const onKeycloakTokens = tokens => {
+  console.log('onKeycloakTokens', tokens)
+}
+
+
 ReactDOM.render(
   (
-      <Provider store={store}>
-        <Main />
-      </Provider>
-    ),
-  document.getElementById('root')
-);
+    <KeycloakProvider
+        keycloak={keycloak}
+        initConfig={kyecloakInitConfig}
+        onEvent={onKeycloakEvent}
+        onTokens={onKeycloakTokens}
+      >
+        <Provider store={store}>
+          <Main />
+        </Provider>
+      </KeycloakProvider>
+  ), document.getElementById('root'));
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
