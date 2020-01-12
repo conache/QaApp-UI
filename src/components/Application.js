@@ -59,7 +59,6 @@ class App extends Component {
           component={CompanyRegisterInfo}
         />
         <PrivateRoute
-          exact
           path="/company-dashboard"
           component={CompanyDashboard}
           hasPermission={userIsCompanyAdmin}

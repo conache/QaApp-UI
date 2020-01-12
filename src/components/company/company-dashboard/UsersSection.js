@@ -39,6 +39,7 @@ class UsersSection extends React.Component {
         })
         .catch(error => {
           NotificationManager.error(`Could not fetch users. Error: ${error.message}`)
+          reject();
         })
     });
   }
