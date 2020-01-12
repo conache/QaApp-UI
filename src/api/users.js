@@ -1,5 +1,5 @@
 import axios from 'axios';
-import config from 'react-global-configuration';
+import { __BASE_API_URL__ } from '../environment';
 
 export function createUserAccount(data) {
   return new Promise((resolve, reject) => {
@@ -9,7 +9,7 @@ export function createUserAccount(data) {
 }
 
 export function getUserAccounts(page=1, pageSize=5) {
-  // return axios.get(`${config.get('baseApiUrl')}/users?per_page=${pageSize}&page=${page}`);
+  // return axios.get(`${__BASE_API_URL__}/users?per_page=${pageSize}&page=${page}`);
   return axios.get(`https://reqres.in/api/users?per_page=${pageSize}&page=${page}`);
 }
 

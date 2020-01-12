@@ -10,7 +10,6 @@ import store from './store.js';
 import Main from './components/Main.js';
 
 import * as serviceWorker from './serviceWorker';
-import "./config"
 
 ReactDOM.render(
   (
