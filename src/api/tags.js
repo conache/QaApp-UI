@@ -27,3 +27,21 @@ export function deleteTag(id) {
   });
   //   return request('delete', '/tags');
 }
+
+export function getProposedTags() {
+  return new Promise((resolve, reject) => {
+    resolve();
+  });
+}
+
+export function acceptProposedTag(id) {
+  return new Promise((resolve, reject) => {
+    reject({ message: "aa" });
+  });
+}
+
+export function declineProposedTag(id) {
+  return new Promise((resolve, reject) => {
+    reject({ message: "aa" });
+  });
+}

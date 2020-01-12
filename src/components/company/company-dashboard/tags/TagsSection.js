@@ -36,6 +36,7 @@ class TagsSection extends React.Component {
           options={{
             exportButton: true,
             search: false,
+            addRowPosition: 'first',
             // pageSize: 10,
             // pageSizeOptions: [],
             sorting: true
@@ -53,7 +54,7 @@ class TagsSection extends React.Component {
   }
 }
 
-export default TagsSection
+export default TagsSection;
 
 const tableData = {
   columns: [
