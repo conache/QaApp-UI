@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import React, { Component } from 'react';
 import ApplicationContainer from './ApplicationContainer';
+import LoadingSpinner from './shared/LoadingSpinner';
 
 class Main extends Component {
   renderApp() {
@@ -16,7 +17,7 @@ class Main extends Component {
   render() {
     const { loading } = this.props;
     if (loading) {
-      return <div>Loading..</div>;
+      return <LoadingSpinner />;
     }
     return [
       this.renderApp()

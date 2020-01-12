@@ -2,8 +2,6 @@
   top: 60px !important;
 
   .notification {
-    @extend .my-2;
-
     box-shadow: none !important;
 
     &.notification-success {
@@ -11,7 +9,7 @@
     }
 
     &.notification-error {
-      background-color: red;
+      background-color: #c00000;
     }
   }
 }
