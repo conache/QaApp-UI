@@ -1,0 +1,10 @@
+{
+  "realm": "qa-platform-realm",
+  "auth-server-url": "http://ec2-3-20-99-103.us-east-2.compute.amazonaws.com:8080/auth/",
+  "ssl-required": "none",
+  "resource": "qa-platform",
+  "public-client": true,
+  "verify-token-audience": true,
+  "use-resource-role-mappings": true,
+  "confidential-port": 0
+}

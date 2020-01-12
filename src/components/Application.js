@@ -1,73 +1,59 @@
 import React, { Component } from 'react';
 import { NotificationContainer } from 'react-notifications';
 import { Route, Redirect, Switch } from 'react-router-dom';
+
+import PrivateRoute from './utils/PrivateRoute';
 import HomePage from './home/HomePage';
 import Dashboard from './dashboard/Dashboard';
 import LandingPage from './landing/LandingPage';
-import { getToken, setToken } from '../session';
 import { UserContext } from '../context';
-import PrivateRoute from './utils/PrivateRoute';
 import CompanyRegisterInfo from './company/company-register-info/CompanyRegisterInfo';
 import CompanyDashboard from './company/company-dashboard/CompanyDashboard';
-import NotFoundPage from './not-found/NotFoundPage';
 
 class App extends Component {
- 
-  componentWillMount() {
-    const token = getToken();
-    if (token) {
-      // Load Data User - get with user data and store it in redux
-      // getCurrentUSer action: this.props.actions.loadDataUser
-    } else {
-      setToken();
-    }
-  }
-
-  isUsserLoggedIn = () => {
-    const token = getToken();
-    return token ? true : false;
-  }
-
   render() {
     const { user } = this.props;
-    // const userIsCompanyAdmin = user.role === 'ADMIN';
     const userIsCompanyAdmin = true;
 
     return (
      <UserContext.Provider value={user}>
        <NotificationContainer />
        <Switch>
-        <Route exact path="/" render={() => <Redirect to="/home" />} />
-        <Route
+        <PrivateRoute
           exact
-          path="/home"
-          component={HomePage}
+          path="/company-info"
+          component={CompanyRegisterInfo}
+          hasPermission={userIsCompanyAdmin}
         />
         <Route
           exact
           path="/landing"
           component={LandingPage}
         />
-        <Route
+        <PrivateRoute
+          exact
+          path="/home"
+          component={HomePage}
+          hasPermission={true}
+        />
+        <PrivateRoute
           exact
           path="/dashboard"
           component={Dashboard}
+          hasPermission={true}
         />
-        <Route
+        <PrivateRoute 
           exact
-          path="/company-info"
-          component={CompanyRegisterInfo}
-        />
+          path="/"
+          render={() => <Redirect to="/home" />} 
+          hasPermission={true}
+          />
         <PrivateRoute
           path="/company-dashboard"
           component={CompanyDashboard}
           hasPermission={userIsCompanyAdmin}
         />
-        {/* <Route
-          path="/company-dashboard"
-          component={CompanyDashboard}
-        /> */}
-        <Route component={NotFoundPage} />
+        <Route render={() => <Redirect to="/" />} />
        </Switch>
      </UserContext.Provider>
     );

@@ -19,7 +19,7 @@ const CompanyRegisterInfo = () => {
     },
     validate,
     onSubmit: values => {
-      alert(JSON.stringify(values, null, 2));
+      window.location.replace("/");
       // TODO: here goes a request for the add-company-info. an action
     },
   });

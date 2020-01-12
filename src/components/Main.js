@@ -1,23 +1,23 @@
-import { Route, HashRouter } from 'react-router-dom';
+import { Route, BrowserRouter as Router } from 'react-router-dom';
 import { connect } from 'react-redux';
-
 import React, { Component } from 'react';
 import ApplicationContainer from './ApplicationContainer';
-import LoadingSpinner from './shared/LoadingSpinner';
+
 
 class Main extends Component {
+ 
   renderApp() {
     return (
-      <HashRouter>
+      <Router>
         <Route component={ApplicationContainer} />
-      </HashRouter>
-    );
+      </Router>
+      );
   }
 
   render() {
     const { loading } = this.props;
     if (loading) {
-      return <LoadingSpinner />;
+      return <div>Loading..</div>;
     }
     return [
       this.renderApp()

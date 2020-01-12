@@ -5,7 +5,6 @@ import { request } from './api/request';
 
 export function deleteSession() {
   document.cookie = 'Authorization=""'
-
   // TODO: Here we need to go to whatever route we want (e.g. landing page). Redirect landingpage
 }
 
@@ -23,7 +22,7 @@ export const getToken = () => {
 
 
 export const setToken = () => {
-  request('get', '/user/token')
+  request('get', 'user/token')
   .then((resp) => {
     console.log(resp);
     document.cookie=`Authorization=${resp}`;

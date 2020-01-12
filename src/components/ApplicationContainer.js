@@ -1,9 +1,12 @@
+import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getUserInfo } from '../ducks/user';
+
+import { useKeycloak } from '@react-keycloak/web'
 
 import Application from './Application';
 import { pathOr } from 'ramda';
+import LoadingSpinner from './shared/LoadingSpinner';
 
 function mapStateToProps(state) {
   return {
@@ -20,7 +23,18 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
+const ApplicationContainer = () => {
+  //  this hook can be called only in function components
+  const [, initialized] = useKeycloak()
+
+  if (!initialized) {
+    return <LoadingSpinner />
+  }
+
+  return <Application />
+}
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Application);
+)(ApplicationContainer);
