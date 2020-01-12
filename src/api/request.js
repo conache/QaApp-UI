@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { mergeDeepLeft } from 'ramda';
-import { getToken } from '../session';
+import { getAuthToken } from '../session';
 import { __BASE_API_URL__ } from '../environment';
 
 const defaultHeaders = {
@@ -11,15 +11,13 @@ const defaultHeaders = {
 };
 
 const prefix = '/';
-
 function createFullUrl(url) {
   return `${__BASE_API_URL__}${prefix}${url}`;
 }
 
 export function request(method = 'GET', url, params = '') {
   const authHeader = {
-    // Authorization: getToken(),
-    Authorization: 'Bearer ',
+    Authorization: `Bearer ${getAuthToken()}`,
   }
 
   return axios({

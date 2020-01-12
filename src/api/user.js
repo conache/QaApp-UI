@@ -1,7 +1,7 @@
 import { request } from './request.js';
 
-export function getUserInfo() {
-  return request('get', '/user/currentUser');
+export function getUserProfile() {
+  return request('get', 'user/currentUser');
 }
 
 export function logout() {

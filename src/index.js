@@ -13,7 +13,7 @@ import 'react-notifications/lib/notifications.css';
 
 import Main from './components/Main.js';
 import {setAuthToken} from './session';
-
+import {getUserInfo} from './ducks/user';
 
 const keycloak = new Keycloak('/keycloak.json');
 const kyecloakInitConfig = {

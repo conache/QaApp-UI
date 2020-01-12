@@ -12,4 +12,4 @@ export function withUser(Component) {
       </UserContext.Consumer>
     );
   };
-}
+} 

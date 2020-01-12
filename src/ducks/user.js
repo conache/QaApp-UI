@@ -1,7 +1,6 @@
 import { createAction } from 'redux-actions';
 import Immutable from 'seamless-immutable';
 import * as User from '../api/user';
-import { deleteSession } from '../session';
 
 export default function reducer(state = Immutable({}), action) {
   switch (action.type)  {
@@ -14,12 +13,12 @@ export default function reducer(state = Immutable({}), action) {
   }
 }
 
-export const getProfileInfo         = createAction('app/GET_PROFILE_INFO');
+export const getProfileInfo         = createAction('app/GET_PROFILE');
 export const userLogOut             = createAction('app/LOGOUT');
 
-export const getUserInformation = params => {
+export const getUserInfo = () => {
   return dispatch => {
-    return User.getUserInfo(params)
+    return User.getUserProfile()
       .then(resp => {
         console.log(resp);
         dispatch(getProfileInfo(resp));
@@ -27,14 +26,5 @@ export const getUserInformation = params => {
       .catch((err) => {
         console.error(err);
       })
-  }
-}
-
-export const logOut = () => {
-  return (dispatch) => {
-    User.logout()
-        .then(() => dispatch(userLogOut()))
-        .catch()
-        .finally(() => deleteSession())
   }
 }

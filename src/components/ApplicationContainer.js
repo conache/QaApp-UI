@@ -7,6 +7,7 @@ import { useKeycloak } from '@react-keycloak/web'
 import Application from './Application';
 import { pathOr } from 'ramda';
 import LoadingSpinner from './shared/LoadingSpinner';
+import getUserInfo from '../ducks/user';
 
 function mapStateToProps(state) {
   return {
@@ -18,7 +19,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators({
-      // loadDataUser: getUserInfo,
+      getUserInfo: getUserInfo
     }, dispatch),
   };
 }
