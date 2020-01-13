@@ -1,6 +1,5 @@
 import React from 'react';
 import LogoutButton from './LogoutButton';
-import { withUser } from '../../../context';
 import QuestionAnswerOutlinedIcon from '@material-ui/icons/QuestionAnswerOutlined';
 import Search from '../Search';
 import { Box, Button } from '@material-ui/core';
@@ -32,4 +31,4 @@ class Navbar extends React.Component {
   }
 }
 
-export default withUser(Navbar);
+export default Navbar;

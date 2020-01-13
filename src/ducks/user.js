@@ -1,6 +1,7 @@
 import { createAction } from 'redux-actions';
 import Immutable from 'seamless-immutable';
 import * as User from '../api/user';
+import { setAuthToken } from '../session';
 
 export default function reducer(state = Immutable({}), action) {
   switch (action.type)  {
@@ -32,5 +33,6 @@ export const getUserInfo = () => {
 export const logout = () => {
   return dispatch => {
     dispatch(userLogOut());
+    setAuthToken(null);
   }
 }
