@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { useKeycloak } from '@react-keycloak/web';
 
-import { logout } from '../../ducks/user';
+import { logout } from '../../../ducks/user';
+import { Button, Box } from '@material-ui/core';
 
 const Logout = (props) => {
   const [keycloak] = useKeycloak();
@@ -12,11 +13,11 @@ const Logout = (props) => {
     props.logout();
   }
   return (
-    <div>
-      <button type="button" onClick={handleLogout}>
+    <Box px={1}>
+      <Button variant="contained" color="secondary" onClick={handleLogout}>
         Logout
-      </button>
-    </div>
+      </Button>
+    </Box>
   );
 };
 

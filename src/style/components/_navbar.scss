@@ -1,0 +1,27 @@
+.navbar {
+  @extend .align-center;
+
+  position: fixed !important;
+  z-index: 99999;
+  height: 64px;
+  width: 100%;
+  background-color: #363636;
+  color: white;
+  justify-content: space-between;
+
+  .logo {
+    width: 64px;
+    height: 64px;
+  }
+
+  .icon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+.nav {
+  &-left, &-right {
+    @extend .align-center, .h-100;
+  }
+}

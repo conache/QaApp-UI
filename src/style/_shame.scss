@@ -1,9 +1,15 @@
 html,
 body,
-#root,
-main {
+#root {
   height: 100%;
   margin: 0;
+}
+
+
+main {
+  // The navbar has height of 64px
+  padding-top: 64px;
+  height: calc(100% - 64px);
 }
 
 .container-center {
@@ -11,3 +17,19 @@ main {
   align-items: center;
   justify-content: center;
 }
+
+.align-center {
+  display: flex;
+  align-items: center;
+}
+
+a {
+  cursor: pointer;
+
+  &:hover,
+  &:focus,
+  &:active {
+    text-decoration: none;
+  }
+}
+
