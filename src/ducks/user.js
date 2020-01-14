@@ -5,26 +5,32 @@ import { setAuthToken } from '../session';
 
 export default function reducer(state = Immutable({}), action) {
   switch (action.type)  {
-    case 'user/GET_PROFILE_INFO':
-      return state.merge({ user: action.payload }, { deep: true });
-    case 'user/LOGOUT':
-      return state.set('user', {});
+    case 'profile/PROFILE_LOADING':
+      return state.merge({ loading: action.payload }, { deep: true });
+    case 'profile/GET_PROFILE_INFO':
+      return state.merge({ profile: action.payload }, { deep: true });
+    case 'profile/LOGOUT':
+      return state.set('profile', {});
     default:
       return state;
   }
 }
 
-export const getProfileInfo         = createAction('user/GET_PROFILE_INFO');
-export const userLogOut             = createAction('user/LOGOUT');
+export const loadingProfile         = createAction('profile/PROFILE_LOADING');
+
+export const getProfileInfo         = createAction('profile/GET_PROFILE_INFO');
+export const userLogOut             = createAction('profile/LOGOUT');
 
 export const getUserInfo = () => {
   return dispatch => {
+    dispatch(loadingProfile(true));
     return User.getUserProfile()
       .then(resp => {
-        console.log(resp);
         dispatch(getProfileInfo(resp.data));
+        dispatch(loadingProfile(false));
       })
       .catch((err) => {
+        dispatch(loadingProfile(false));
         console.error(err);
       })
   }

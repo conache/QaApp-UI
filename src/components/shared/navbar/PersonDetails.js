@@ -3,8 +3,8 @@ import PersonIcon from '@material-ui/icons/Person';
 import { withUser } from '../../../context';
 
 const PersonDetails = (props) => {
-  // const { currentUser, currentUser: { data: { firstName, lastName } } } = props;
-  const { currentUser } = props;
+  // const { currentUser: { user: { firstName, lastName } } } = props;
+  console.log('PersonDetails', props.currentUser)
 
   return (
     <div className="person-details">

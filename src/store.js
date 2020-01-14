@@ -19,6 +19,9 @@ import {
       appLoading: false,
       appErrors: []
     },
+    user: {
+      loading: true,
+    }
   });
   
   // A Middleware got logging 

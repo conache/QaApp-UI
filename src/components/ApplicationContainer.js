@@ -14,7 +14,7 @@ function mapStateToProps(state) {
   return {
     app: state.app,
     loading:  pathOr({}, ['app', 'appLoading'], state),
-    user: pathOr({}, ['user'], state),
+    user: pathOr({}, ['profile'], state),
   };
 }
 

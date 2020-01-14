@@ -6,7 +6,6 @@ import { bindActionCreators } from 'redux';
 import { setAuthToken } from '../session';
 import { KeycloakProvider } from '@react-keycloak/web';
 import Keycloak from 'keycloak-js';
-
 import { loaded } from '../ducks/app';
 
 const keycloak = new Keycloak('/keycloak.json');
@@ -18,7 +17,7 @@ class Main extends Component {
 
   onKeycloakTokens = tokens => {
     const { token } = tokens;
-    const { actions: { appLoaded } } = this.props
+    const { actions: { appLoaded } } = this.props;
     setAuthToken(token);
     appLoaded();
   }
