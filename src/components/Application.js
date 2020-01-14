@@ -25,18 +25,11 @@ class App extends Component {
     }
   }
 
-<<<<<<< HEAD
-  const { user } = props;
-  console.log(user);
-  const userIsCompanyAdmin = true;
-  const userIsAuthenticated = keycloak.authenticated;
-=======
   shouldComponentUpdate(nextProps, _) {
     const {
       actions: { getUserInfo },
       loading,
     } = this.props;
->>>>>>> 1c782d11efc918c62fe73620fb9e6806bd388b87
 
     if (loading !== nextProps.loading && this.hasToken()) {
       getUserInfo();
