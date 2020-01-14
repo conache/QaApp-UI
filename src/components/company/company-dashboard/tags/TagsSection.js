@@ -1,6 +1,7 @@
 import React from 'react';
 import MaterialTable from "material-table";
-// import { getUserAccounts } from '../../../api/users';
+import {NotificationManager} from 'react-notifications';
+import {getAllTags, deleteTag, addTag, editTag} from '../../../../api/tags';
 
 class TagsSection extends React.Component {
   constructor(props) {
@@ -8,37 +9,62 @@ class TagsSection extends React.Component {
     this.state = {}
   }
 
-  componentDidMount() {
-    const { actions: { getAllTags } } = this.props;
-    getAllTags();
+  fetchTags(query) {
+    return new Promise((resolve, reject) => {
+      const {page, pageSize} = query;
+      getAllTags(page, pageSize)
+      .then(response => {
+        const result = response.data;
+        resolve({
+          data: result.tags,
+          page: page,
+          totalCount: result.totalCount
+        });
+      })
+      .catch(error => {
+        NotificationManager.error(`Could not fetch tags. Error: ${error.message}`)
+      })
+    });
   }
 
   onRowDelete = (entry) => {
-    const { deleteTag } = this.props;
-    deleteTag(1)
+    return deleteTag(entry.id)
+          .then(() => {
+            NotificationManager.success("Tag removed successfully");
+          })
+          .catch((error) => {
+            NotificationManager.error(`Could not remove tag. Error: ${error.message}`);
+          });
   }
 
   onRowAdd(entry) {
-    const { addTag } = this.props;
-    addTag(entry);
+    const {name} = entry;
+    return addTag({
+      name
+    }).then(() => {
+      NotificationManager.success("Tag successfully created");
+    }).catch((error) => {
+      NotificationManager.error(`Could not add tag. Error: ${error.message}`);
+    });
   }
 
   onRowUpdate(newEntry, oldEntry) {
-    const { editTag } = this.props;
-    editTag(newEntry);
+    return editTag(newEntry)
+            .catch(error => {
+              NotificationManager.error(`Failed editing tag. Error: ${error.message}`);
+            });
   }
 
   render() {
-    console.log(tableData.columns)
     return (
       <div style={{ maxWidth: "100%" }}>
         <MaterialTable
           options={{
-            exportButton: true,
+            exportButton: false,
             search: false,
             addRowPosition: 'first',
-            // pageSize: 10,
-            // pageSizeOptions: [],
+            pageSize: 10,
+            pageSizeOptions: [],
             sorting: true
           }}
           title="All Tags"
