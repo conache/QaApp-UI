@@ -11,6 +11,8 @@ import {
   import Immutable from 'seamless-immutable';
   
   import app from './ducks/app';
+  import user from './ducks/user';
+  import tags from './ducks/tags';
   
   const initialState = Immutable({
     app: {
@@ -35,6 +37,8 @@ import {
   // Here goes all reducers
   const reducer = combineReducers(Object.assign({}, {
     app,
+    user,
+    tags,
   }));
   
   const middlewares = [thunk];

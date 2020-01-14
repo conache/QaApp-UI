@@ -15,3 +15,14 @@ export default function reducer(state = Immutable({}), action) {
 export const appLoading         = createAction('app/APP_LOADING');
 export const appLoaded          = createAction('app/APP_LOADED');
 
+export const loading = () => {
+  return dispatch => {
+    dispatch(appLoading());
+  }
+}
+
+export const loaded = () => {
+  return dispatch => {
+    dispatch(appLoaded());
+  }
+}

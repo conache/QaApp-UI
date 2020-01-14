@@ -8,10 +8,12 @@ import Application from './Application';
 import { pathOr } from 'ramda';
 import LoadingSpinner from './shared/LoadingSpinner';
 import { getUserInfo } from '../ducks/user';
+import { loading } from '../ducks/app';
 
 function mapStateToProps(state) {
   return {
     app: state.app,
+    loading:  pathOr({}, ['app', 'appLoading'], state),
     user: pathOr({}, ['user'], state),
   };
 }
@@ -19,7 +21,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators({
-      getUserInfo: getUserInfo
+      getUserInfo: getUserInfo,
+      appLoading: loading,
     }, dispatch),
   };
 }

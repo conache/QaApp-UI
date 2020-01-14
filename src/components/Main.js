@@ -2,23 +2,42 @@ import { Route, BrowserRouter as Router } from 'react-router-dom';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import ApplicationContainer from './ApplicationContainer';
+import { bindActionCreators } from 'redux';
+import { setAuthToken } from '../session';
+import { KeycloakProvider } from '@react-keycloak/web';
+import Keycloak from 'keycloak-js';
 
+import { loaded } from '../ducks/app';
+
+const keycloak = new Keycloak('/keycloak.json');
+const kyecloakInitConfig = {
+  onLoad: 'check-sso'
+}
 
 class Main extends Component {
- 
+
+  onKeycloakTokens = tokens => {
+    const { token } = tokens;
+    const { actions: { appLoaded } } = this.props
+    setAuthToken(token);
+    appLoaded();
+  }
+
   renderApp() {
     return (
-      <Router>
-        <Route component={ApplicationContainer} />
-      </Router>
-      );
+      <KeycloakProvider
+        keycloak={keycloak}
+        initConfig={kyecloakInitConfig}
+        onTokens={this.onKeycloakTokens}
+      >
+        <Router>
+          <Route component={ApplicationContainer} />
+        </Router>
+      </KeycloakProvider>
+    );
   }
 
   render() {
-    const { loading } = this.props;
-    if (loading) {
-      return <div>Loading..</div>;
-    }
     return [
       this.renderApp()
     ];
@@ -31,8 +50,12 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps() {
-  return {};
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators({
+      appLoaded: loaded,
+    }, dispatch),
+  };
 }
 
 export default connect(

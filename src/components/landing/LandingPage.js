@@ -9,7 +9,7 @@ const LandingPage = () => {
   return (
     <div className="landing-page">
       <h2>
-        Landing page 
+        QA Platform
       </h2>
       <div>
         <Button href={REGISTER_URL} className="p-1">Register</Button>
