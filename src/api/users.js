@@ -1,28 +1,19 @@
 import axios from 'axios';
 import { __BASE_API_URL__ } from '../environment';
+import {request} from '../api/request';
 
 export function createUserAccount(data) {
-  return new Promise((resolve, reject) => {
-    resolve();
-  });
-  // return axios.post(`https://reqres.in/api/users`, data);
+  return request('POST', 'company/addUser', data);
 }
 
 export function getUserAccounts(page=1, pageSize=5) {
-  // return axios.get(`${__BASE_API_URL__}/users?per_page=${pageSize}&page=${page}`);
-  return axios.get(`https://reqres.in/api/users?per_page=${pageSize}&page=${page}`);
+  return request('GET', `company/users?page=${page}&size=${pageSize}`);
 }
 
 export function removeUserAccount(id) {
-  return new Promise((resolve, reject) => {
-    reject({message: "asdasdasd"});
-  });
-  // return axios.delete(`https://reqres.in/api/users/${id}`);
+  return request('DELETE', `company/deleteUser?userId=${id}`);
 }
 
-export function updateUserAccount(id, data) {
-  return new Promise((resolve, reject) => {
-    reject({message: "test"});
-  });
-  // return axios.put(`https://reqres.in/api/users/${id}`, data);
+export function updateUserAccount(data) {
+  return request('PUT', `company/editUser`, data);
 }

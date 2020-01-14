@@ -21,6 +21,7 @@ const App = (props) => {
   const [keycloak] = useKeycloak();
 
   const { user } = props;
+  console.log(user);
   const userIsCompanyAdmin = true;
   const userIsAuthenticated = keycloak.authenticated;
 

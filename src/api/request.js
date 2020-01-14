@@ -15,7 +15,7 @@ function createFullUrl(url) {
   return `${__BASE_API_URL__}${prefix}${url}`;
 }
 
-export function request(method = 'GET', url, params = '') {
+export function request(method = 'GET', url, body = '') {
   const authHeader = {
     Authorization: `Bearer ${getAuthToken()}`,
   }
@@ -23,7 +23,7 @@ export function request(method = 'GET', url, params = '') {
   return axios({
     method,
     url: createFullUrl(url),
-    data: params,
+    data: body,
     headers: mergeDeepLeft(defaultHeaders, authHeader),
     crossDomain: true,
   });

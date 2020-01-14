@@ -21,7 +21,7 @@ export const getUserInfo = () => {
     return User.getUserProfile()
       .then(resp => {
         console.log(resp);
-        dispatch(getProfileInfo(resp));
+        dispatch(getProfileInfo(resp.data));
       })
       .catch((err) => {
         console.error(err);

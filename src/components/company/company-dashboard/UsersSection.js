@@ -8,16 +8,17 @@ class UsersSection extends React.Component {
     super(props);
     this.state = {
       columns: [
-        {title: "First Name", filed: "firstName"},
+        {title: "First Name", field: "firstName"},
         {title: "Last Name", field: "lastName"},
         {title: "Email", field: "email", editable: 'onAdd'},
-        {title: "Job", field: "job", default: 1},
+        {title: "User", field: "username", editable: 'onAdd'},
+        {title: "Job", field: "job"},
         {
           title: "Role",
           field: "role",
           lookup: {
-            1: "Admin",
-            2: "Normal user"
+            "ROLE_USER": "Normal user",
+            "ROLE_COMPANY_ADMINISTRATOR": "Company admin"
           }
         },
       ],
@@ -25,17 +26,40 @@ class UsersSection extends React.Component {
     }
   }
 
+  // REFACTOR THIS, IT'S 2 AM, WILL DO TOMOROW
+  formatUserJSON(userJSON) {
+    const {attributes} = userJSON;
+    if (!attributes) {
+      return userJSON;
+    }
+  
+    const additional = {};
+    ['job', 'role'].forEach(key => {
+      const fieldValue = attributes[key];
+      if (!fieldValue) {
+        additional[key] = null;
+        return;
+      }
+      additional[key] = fieldValue[0] || '';
+    });
+
+    return {
+      ...userJSON,
+      ...additional
+    }
+  }
+
   fetchUsers(query) {
     return new Promise((resolve, reject) => {
       const {page, pageSize} = query;
-      getUserAccounts(page + 1, pageSize)
+      getUserAccounts(page, pageSize)
         .then(response => {
-          const results = response.data;
+          const result = response.data;
           resolve({
-            data: results.data,
-            page: results.page - 1,
-            totalCount: results.total
-          })
+            data: result.users.map(representation => this.formatUserJSON(representation)),
+            page: page,
+            totalCount: result.totalCount
+          });
         })
         .catch(error => {
           NotificationManager.error(`Could not fetch users. Error: ${error.message}`)
@@ -55,24 +79,39 @@ class UsersSection extends React.Component {
   }
 
   onRowAdd(entry) {
-    return createUserAccount(entry)
-            .then(() => {
-              NotificationManager.success("User successfully added to company");
-            })
-            .catch((error) => {
-              NotificationManager.error(`Could not add user to company. Error: ${error.message}`);
-            });
+    const {firstName, lastName, email, username, job, role} = entry;
+
+    return createUserAccount({
+      userRepresentation: {
+        firstName,
+        lastName,
+        email,
+        username  
+      },
+      roleName: role,
+      jobName: job
+    }).then(() => {
+        NotificationManager.success("User successfully added to company");
+      })
+      .catch((error) => {
+        NotificationManager.error(`Could not add user to company. Error: ${error.message}`);
+      });
   }
 
-  onRowUpdate(newEntry, oldEntry) {
-    return updateUserAccount(oldEntry.id, newEntry)
+  onRowUpdate(newEntry) {
+    let attributes = newEntry.attributes || {};
+    newEntry.attributes = {
+      ...attributes,
+      job: [newEntry.job],
+      role: [newEntry.role]
+    }
+    return updateUserAccount(newEntry)
             .catch(error => {
               NotificationManager.error(`Could not finish editing user. Error: ${error.message}`);
             });
   }
 
   render() {
-    console.log(this.state.data)
     return (
       <div style={{ maxWidth: "100%" }}>
       <MaterialTable
