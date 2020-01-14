@@ -11,13 +11,13 @@ class Navbar extends React.Component {
     return (
       <div className="navbar nav">
         <Box display="flex" className="nav-left">
-          <QuestionAnswerOutlinedIcon className="logo" />
+          <QuestionAnswerOutlinedIcon className="logo" onClick={() => window.location = "/home"} />
           <Search />
           <LogoutButton />
         </Box>
         <Box display="flex" className="nav-right">
           <div className="h-100">
-            <Button variant="contained" color="primary" className="h-100">
+            <Button variant="contained" color="primary" className="h-100" onClick={() => window.location="/ask-question"}>
               Ask question
             </Button>
           </div>

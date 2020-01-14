@@ -1,7 +1,32 @@
 .sidebar-container {
   @extend .h-100;
 
-  width: 323px;
-  background: #bbbbbb;
-  box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.15)
+  width: 250px;
+  background: black;
+  color: white;
+  box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.15);
+  padding: 2rem;
+
+  a {
+    color: white;
+    text-decoration: none !important;
+
+    &:focus,
+    &:active {
+      text-decoration: none !important;
+    }
+
+    &:hover {
+      color: #c1cefd;
+    }
+  }
+
+  .item {
+    font-size: larger;
+    padding: 5px 0;
+  }
+
+  .selected-item {
+    color: #3f51b5;
+  }
 }

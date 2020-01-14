@@ -13,6 +13,7 @@ import CompanyDashboard from "./company/company-dashboard/CompanyDashboard";
 import Navbar from "./shared/navbar/Navbar";
 import { getAuthToken } from '../session';
 import LoadingSpinner from "./shared/LoadingSpinner";
+import AskQuestion from "./questions/AskQuestion";
 
 class App extends Component {
   componentWillMount() {
@@ -66,6 +67,12 @@ class App extends Component {
             <Switch>
               <PrivateRoute
                 exact
+                path="/"
+                render={() => <Redirect to="/home" />}
+                hasPermission={userIsAuthenticated}
+              />
+              <PrivateRoute
+                exact
                 path="/company-info"
                 component={CompanyRegisterInfo}
                 hasPermission={userIsAuthenticated && userIsCompanyAdmin}
@@ -79,14 +86,14 @@ class App extends Component {
               />
               <PrivateRoute
                 exact
-                path="/dashboard"
-                component={Dashboard}
+                path="/ask-question"
+                component={AskQuestion}
                 hasPermission={userIsAuthenticated}
               />
               <PrivateRoute
                 exact
-                path="/"
-                render={() => <Redirect to="/home" />}
+                path="/dashboard"
+                component={Dashboard}
                 hasPermission={userIsAuthenticated}
               />
               <PrivateRoute

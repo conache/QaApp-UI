@@ -5,7 +5,7 @@
   z-index: 99999;
   height: 64px;
   width: 100%;
-  background-color: #363636;
+  background-color: black;
   color: white;
   justify-content: space-between;
 
@@ -23,5 +23,9 @@
 .nav {
   &-left, &-right {
     @extend .align-center, .h-100;
+  }
+
+  &-left {
+    width: 60%;
   }
 }

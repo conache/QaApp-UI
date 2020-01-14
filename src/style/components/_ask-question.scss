@@ -1,0 +1,14 @@
+.ask-question-container {
+  @extend .h-100, .w-100;
+
+  display: flex;
+  justify-content: center;
+
+  .form-box {
+    width: 1145px;
+
+    background: #FFFFFF;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+  }
+}

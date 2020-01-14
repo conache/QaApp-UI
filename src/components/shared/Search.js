@@ -1,10 +1,11 @@
 import React from 'react';
+import { Box } from '@material-ui/core';
 
 const Search = () => {
   return (
-    <div className="search">
+    <Box className="search" flexGrow={1}>
       Search...
-    </div>
+    </Box>
   )
 }
 
