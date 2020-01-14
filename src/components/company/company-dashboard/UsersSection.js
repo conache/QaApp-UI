@@ -102,8 +102,8 @@ class UsersSection extends React.Component {
     let attributes = newEntry.attributes || {};
     newEntry.attributes = {
       ...attributes,
-      job: [newEntry.job],
-      role: [newEntry.role]
+      job: [newEntry.job || "Not specified"],
+      role: [newEntry.role || "ROLE_USER"]
     }
     return updateUserAccount(newEntry)
             .catch(error => {
