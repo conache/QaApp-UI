@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from "react";
+import React, { Component } from "react";
 
 import { withKeycloak } from "@react-keycloak/web";
 
@@ -7,16 +7,6 @@ import LoadingSpinner from "./shared/LoadingSpinner";
 import SubApplication from "./SubApplication";
 
 class App extends Component {
-  componentWillMount() {
-    const {
-      actions: { appLoading },
-    } = this.props;
-
-    if (!this.hasToken()) {
-      appLoading();
-    }
-  }
-
   shouldComponentUpdate(nextProps, _) {
     const {
       actions: { getUserInfo },
@@ -41,11 +31,10 @@ class App extends Component {
       loading,
     } = this.props;
 
-    if (loading) {
+    if (loading && !this.hasToken()) {
       return <LoadingSpinner />;
     }
 
-  
     return <SubApplication {...this.props} />
 
   }

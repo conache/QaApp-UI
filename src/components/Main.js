@@ -6,7 +6,8 @@ import { bindActionCreators } from 'redux';
 import { setAuthToken } from '../session';
 import { KeycloakProvider } from '@react-keycloak/web';
 import Keycloak from 'keycloak-js';
-import { loaded } from '../ducks/app';
+import { loaded, loading } from '../ducks/app';
+import { loadingProfileUser } from '../ducks/user';
 
 const keycloak = new Keycloak('/keycloak.json');
 const kyecloakInitConfig = {
@@ -22,12 +23,22 @@ class Main extends Component {
     appLoaded();
   }
 
+  onKeycloakEvent = event => {
+    const { actions: { appLoading, loadingProfile } } = this.props;
+
+    if (event === 'onAuthSuccess') {
+      appLoading();
+      loadingProfile();
+    }
+  }
+ 
   renderApp() {
     return (
       <KeycloakProvider
         keycloak={keycloak}
         initConfig={kyecloakInitConfig}
         onTokens={this.onKeycloakTokens}
+        onEvent={this.onKeycloakEvent}
       >
         <Router>
           <Route component={ApplicationContainer} />
@@ -53,6 +64,8 @@ function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators({
       appLoaded: loaded,
+      appLoading: loading,
+      loadingProfile: loadingProfileUser,
     }, dispatch),
   };
 }

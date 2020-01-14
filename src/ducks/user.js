@@ -42,3 +42,9 @@ export const logout = () => {
     setAuthToken(null);
   }
 }
+
+export const loadingProfileUser = () => {
+  return dispatch => {
+    dispatch(loadingProfile(true))
+  }
+}

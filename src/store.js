@@ -20,7 +20,7 @@ import {
       appErrors: []
     },
     user: {
-      loading: true,
+      loading: false,
     }
   });
   

@@ -22,7 +22,7 @@ class SubApplication extends Component {
       userProfile,
     } = this.props;
 
-    if (isEmpty(userProfile) && userProfile.loading) {
+    if (userProfile.loading) {
       return <LoadingSpinner />;
     }
 
