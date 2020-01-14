@@ -2,6 +2,7 @@ import React from 'react';
 import MaterialTable from "material-table";
 import {getUserAccounts, removeUserAccount, createUserAccount, updateUserAccount} from '../../../api/users';
 import { NotificationManager } from 'react-notifications';
+import { reject } from 'ramda';
 
 class UsersSection extends React.Component {
   constructor(props) {
@@ -92,8 +93,7 @@ class UsersSection extends React.Component {
       jobName: job
     }).then(() => {
         NotificationManager.success("User successfully added to company");
-      })
-      .catch((error) => {
+    }).catch((error) => {
         NotificationManager.error(`Could not add user to company. Error: ${error.message}`);
       });
   }
