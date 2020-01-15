@@ -53,6 +53,7 @@ class AskQuestion extends React.Component {
 
   render() {
     const { selectedTags, tagError } = this.state;
+    const { history } = this.props;
     
     return (
       <div className="ask-question-container">
@@ -121,7 +122,7 @@ class AskQuestion extends React.Component {
                 </div>
                 <div className="py-1">
                   <Button className="form-button" type="submit" color="primary" variant="contained">Post question</Button>
-                  <Button className="form-button" onClick={() => window.location = "/"}>Discard</Button>
+                  <Button className="form-button" onClick={() => history.push("/")}>Discard</Button>
                 </div>
               </form>
             )}

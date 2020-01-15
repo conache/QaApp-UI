@@ -1,6 +1,6 @@
 import React from 'react';
 import MaterialTable from "material-table";
-import {getUserAccounts, removeUserAccount, createUserAccount, updateUserAccount} from '../../../api/users';
+import { getUserAccounts, removeUserAccount, createUserAccount, updateUserAccount } from '../../../api/users';
 import { NotificationManager } from 'react-notifications';
 import { reject } from 'ramda';
 
@@ -9,11 +9,11 @@ class UsersSection extends React.Component {
     super(props);
     this.state = {
       columns: [
-        {title: "First Name", field: "firstName"},
-        {title: "Last Name", field: "lastName"},
-        {title: "Email", field: "email", editable: 'onAdd'},
-        {title: "User", field: "username", editable: 'onAdd'},
-        {title: "Job", field: "job"},
+        { title: "First Name", field: "firstName" },
+        { title: "Last Name", field: "lastName" },
+        { title: "Email", field: "email", editable: 'onAdd' },
+        { title: "User", field: "username", editable: 'onAdd' },
+        { title: "Job", field: "job" },
         {
           title: "Role",
           field: "role",
@@ -29,11 +29,11 @@ class UsersSection extends React.Component {
 
   // REFACTOR THIS, IT'S 2 AM, WILL DO TOMOROW
   formatUserJSON(userJSON) {
-    const {attributes} = userJSON;
+    const { attributes } = userJSON;
     if (!attributes) {
       return userJSON;
     }
-  
+
     const additional = {};
     ['job', 'role'].forEach(key => {
       const fieldValue = attributes[key];
@@ -52,7 +52,7 @@ class UsersSection extends React.Component {
 
   fetchUsers(query) {
     return new Promise((resolve, reject) => {
-      const {page, pageSize} = query;
+      const { page, pageSize } = query;
       getUserAccounts(page, pageSize)
         .then(response => {
           const result = response.data;
@@ -68,34 +68,34 @@ class UsersSection extends React.Component {
         })
     });
   }
-  
+
   onRowDelete(entry) {
     return removeUserAccount(entry.id)
-          .then(() => {
-            NotificationManager.success("User removed successfully");
-          })
-          .catch((error) => {
-            NotificationManager.error(`Could not remove user. Error: ${error.message}`);
-          });
+      .then(() => {
+        NotificationManager.success("User removed successfully");
+      })
+      .catch((error) => {
+        NotificationManager.error(`Could not remove user. Error: ${error.message}`);
+      });
   }
 
   onRowAdd(entry) {
-    const {firstName, lastName, email, username, job, role} = entry;
+    const { firstName, lastName, email, username, job, role } = entry;
 
     return createUserAccount({
       userRepresentation: {
         firstName,
         lastName,
         email,
-        username  
+        username
       },
       roleName: role,
       jobName: job
     }).then(() => {
-        NotificationManager.success("User successfully added to company");
+      NotificationManager.success("User successfully added to company");
     }).catch((error) => {
-        NotificationManager.error(`Could not add user to company. Error: ${error.message}`);
-      });
+      NotificationManager.error(`Could not add user to company. Error: ${error.message}`);
+    });
   }
 
   onRowUpdate(newEntry) {
@@ -106,29 +106,30 @@ class UsersSection extends React.Component {
       role: [newEntry.role || "ROLE_USER"]
     }
     return updateUserAccount(newEntry)
-            .catch(error => {
-              NotificationManager.error(`Could not finish editing user. Error: ${error.message}`);
-            });
+      .catch(error => {
+        NotificationManager.error(`Could not finish editing user. Error: ${error.message}`);
+      });
   }
 
   render() {
     return (
       <div style={{ maxWidth: "100%" }}>
-      <MaterialTable
-        options={{
-          exportButton: true,
-          search: false,
-          pageSize: 10,
-          pageSizeOptions: []
-        }}
-        title="Company users"
-        columns={this.state.columns}
-        data={this.state.data}
-        editable={{
-          onRowAdd: (newData) =>this.onRowAdd(newData),
-          onRowUpdate: (newData, oldData) => this.onRowUpdate(newData, oldData),
-          onRowDelete: (rowData) => this.onRowDelete(rowData)
-        }}/>
+        <MaterialTable
+          options={{
+            exportButton: true,
+            search: false,
+            pageSize: 10,
+            pageSizeOptions: [],
+            addRowPosition: 'first',
+          }}
+          title="Company users"
+          columns={this.state.columns}
+          data={this.state.data}
+          editable={{
+            onRowAdd: (newData) => this.onRowAdd(newData),
+            onRowUpdate: (newData, oldData) => this.onRowUpdate(newData, oldData),
+            onRowDelete: (rowData) => this.onRowDelete(rowData)
+          }} />
       </div>
     );
   }
