@@ -10,7 +10,6 @@ import Dashboard from "./user/dashboard/Dashboard";
 import LandingPage from "./landing/LandingPage";
 import { UserContext } from "../context";
 import CompanyRegisterInfo from "./company/company-register-info/CompanyRegisterInfo";
-import CompanyDashboard from "./company/company-dashboard/CompanyDashboard";
 import Navbar from "./shared/navbar/Navbar";
 import LoadingSpinner from "./shared/LoadingSpinner";
 import AskQuestion from "./shared/questions/AskQuestion";
@@ -34,9 +33,9 @@ class SubApplication extends Component {
       case 'ROLE_USER':
         return "/dashboard";
       case 'ROLE_COMPANY_ADMINISTRATOR':
-        return "/company-dashboard";
+        return "/dashboard";
       case 'ROLE_ADMIN':
-        return "/company-dashboard";
+        return "/dashboard";
       default:
         return "/landing";
     }
@@ -91,11 +90,6 @@ class SubApplication extends Component {
                   path="/dashboard"
                   component={Dashboard}
                   hasPermission={userIsAuthenticated}
-                />
-                <PrivateRoute
-                  path="/company-dashboard"
-                  component={CompanyDashboard}
-                  hasPermission={userIsAuthenticated && userIsCompanyAdmin}
                 />
                 <Route render={() => <Redirect to="/" />} />
               </Switch>
