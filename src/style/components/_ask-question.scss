@@ -10,5 +10,21 @@
     background: #FFFFFF;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
     padding: 40px;
+
+    .form-group {
+      label {
+        font-weight: bold;
+        font-size: 20px;
+        line-height: 32px;
+      }
+
+      small {
+        margin-bottom: 1rem;
+      }
+
+      .errorClass {
+        color: #f50057;
+      }
+    }
   }
 }

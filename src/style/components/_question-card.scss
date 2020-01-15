@@ -1,0 +1,40 @@
+.question-card {
+  border: 1px solid #606060;
+  padding: 24px;
+  margin: 24px 0;
+
+  &__head {
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+
+    .numbers {
+      font-weight: bold;      
+      line-height: 24px;
+    }
+  }
+
+  &__body {
+    margin-left: 24px;
+
+    .title {
+      font-weight: 500;
+      font-size: 20px;
+      line-height: 32px;
+    }
+
+    .body {
+      margin-bottom: 14px;
+    }
+
+    .tag {
+      padding: 8px 16px;
+      margin-right: 8px;
+      background: #C4C4C4;
+    }
+
+    .card-info {
+      text-align: end;
+    }
+  }
+}
