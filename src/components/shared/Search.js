@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import {NavLink} from 'react-dom';
 import { Autocomplete } from "@material-ui/lab";
-import { TextField, InputAdornment, CircularProgress } from '@material-ui/core';
+import { TextField, InputAdornment, CircularProgress, Grid } from '@material-ui/core';
 import {getSimilarQuestions} from '../../ducks/search';
 import SearchIcon from '@material-ui/icons/Search';
 import { bindActionCreators } from 'redux';
@@ -13,17 +14,25 @@ class Search extends React.Component {
   }
 
   render() {
-    const {search: {loading, results}} = this.props;
+    const {search: {loading, results}, match} = this.props;
     return (
       <Autocomplete className="searchContainer"
           autoComplete
-          includeInputInList
-          freeSolo
+          freeSolo={false}
           disableOpenOnFocus
           loading={loading}
+          filterOptions={option => option}
           options={pathOr([], ['data'], results)}
           renderOption={
-            option => option.text
+            option => {
+              return (
+                <Grid container alignItems="center">
+                  <Grid item>
+                    <div>{option.text}</div>
+                  </Grid>
+                </Grid>
+              );
+            }
           }
           renderInput={params => (
             <TextField
