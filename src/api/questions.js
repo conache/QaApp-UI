@@ -1,4 +1,4 @@
-import {request} from './request';
+import { request } from './request';
 const similar = [
   {
     questionId: 1,
@@ -20,8 +20,12 @@ const similar = [
 export function getSimilarQuestions(text) {
   console.log("Request similar questions for ", text);
   return new Promise((resolve, reject) => {
-    setTimeout(() => {resolve(similar)}, 1000);
+    setTimeout(() => { resolve(similar) }, 1000);
   });
 
   return request('GET', `search?text=${text}`);
+}
+
+export function addQuestion(params) {
+  return request('POST', 'question/add', params);
 }
