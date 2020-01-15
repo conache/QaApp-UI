@@ -1,7 +1,7 @@
 import { request } from './request.js';
 
 export function getAllTags(page=1, pageSize=10) {
-  return request('GET', `user/tags?pageNumber=${page}&size=${pageSize}`);
+  return request('GET', `company/tags?pageNumber=${page}&size=${pageSize}`);
 }
 
 export function addTag(params) {
