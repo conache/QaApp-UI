@@ -1,0 +1,15 @@
+.basic-multi-select {
+  .select {
+    &__control {
+      height: 56px;
+    }
+
+    &__value-container {
+      height: 100%;
+    }
+
+    &__multi-value {
+      padding: 5px;
+    }
+  }
+}
