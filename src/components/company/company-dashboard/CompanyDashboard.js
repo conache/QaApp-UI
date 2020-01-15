@@ -20,7 +20,7 @@ class CompanyDashboard extends React.Component {
           <NavLink exact to={`${match.url}/tags`} className="item" activeClassName="selected-item">
             Tags
             </NavLink>
-          <NavLink exact to={`${match.url}//tags/proposed`} className="item" activeClassName="selected-item">
+          <NavLink exact to={`${match.url}/tags/proposed`} className="item" activeClassName="selected-item">
             Proposed Tags
             </NavLink>
           <NavLink to={`${match.url}/reports`} className="item" activeClassName="selected-item">
@@ -40,6 +40,7 @@ class CompanyDashboard extends React.Component {
             <Route exact path={`${match.path}/tags/proposed`} component={ProposedTags} />
             <Route path={`${match.path}/reports`} component={ReportsSection} />
             <Route path={`${match.path}/all-questions`} component={AllQuestions} />
+            <Route path={`${match.path}/my-questions`} component={AllQuestions} />
             <Route component={UsersSection} />
           </Switch>
         </section>

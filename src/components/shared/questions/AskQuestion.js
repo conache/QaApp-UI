@@ -1,7 +1,7 @@
 import React from 'react';
 import { Formik } from 'formik';
 import { Button, TextField, TextareaAutosize } from '@material-ui/core';
-import CustomFormInput from './CustomFormInput';
+import CustomFormInput from '../CustomFormInput';
 import CreatableSelect from 'react-select/creatable';
 import { filter, reject } from 'ramda';
 
@@ -52,7 +52,7 @@ class AskQuestion extends React.Component {
   };
 
   render() {
-    const { selectedTags } = this.state;
+    const { selectedTags, tagError } = this.state;
     
     return (
       <div className="ask-question-container">
@@ -104,6 +104,7 @@ class AskQuestion extends React.Component {
                     formik={formik}
                     labelTitle="Tags"
                     labelDescription="Add tags to describe what is your question about"
+                    customError={tagError}
                   >
                     <CreatableSelect
                       id="tags"

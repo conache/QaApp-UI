@@ -1,14 +1,9 @@
 import React from 'react';
+import { NavLink, Route, Switch } from 'react-router-dom';
 import Sidebar from '../../shared/Sidebar';
-import { NavLink } from 'react-router-dom';
+import AllQuestions from '../../shared/questions/AllQuestions';
 
 class Dashboard extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {};
-  }
-
   render() {
     const { match } = this.props;
 
@@ -18,14 +13,17 @@ class Dashboard extends React.Component {
           <NavLink to={`${match.url}/all-questions`} className="item" activeClassName="selected-item">
             All questions
             </NavLink>
-          <NavLink exact to={`${match.url}/my-questions`} className="item" activeClassName="selected-item">
+          <NavLink to={`${match.url}/my-questions`} className="item" activeClassName="selected-item">
             My questions
             </NavLink>
-          <NavLink exact to={`${match.url}/tags`} className="item" activeClassName="selected-item">
-            Tags
-            </NavLink>
         </Sidebar>
-        Dashboard page
+        <section className="h-100 w-100 overflow-y">
+          <Switch>
+            <Route path={`${match.path}/all-questions`} component={AllQuestions} />
+            <Route path={`${match.path}/my-questions`} component={AllQuestions} />
+            <Route component={AllQuestions} />
+          </Switch>
+        </section>
       </div>
     );
   }

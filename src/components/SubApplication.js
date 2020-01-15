@@ -13,7 +13,7 @@ import CompanyRegisterInfo from "./company/company-register-info/CompanyRegister
 import CompanyDashboard from "./company/company-dashboard/CompanyDashboard";
 import Navbar from "./shared/navbar/Navbar";
 import LoadingSpinner from "./shared/LoadingSpinner";
-import AskQuestion from "./questions/AskQuestion";
+import AskQuestion from "./shared/questions/AskQuestion";
 
 // const ROLES = ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_COMPANY_ADMINISTRATOR'],  
 class SubApplication extends Component {
@@ -22,6 +22,7 @@ class SubApplication extends Component {
     const {
       userProfile: { profile },
     } = this.props;
+    console.log('Profile:', profile);
     return pathOr('ROLE_USER', ['attributes', 'role', '0'], profile);
   }
 
@@ -87,7 +88,6 @@ class SubApplication extends Component {
                   hasPermission={userIsAuthenticated}
                 />
                 <PrivateRoute
-                  exact
                   path="/dashboard"
                   component={Dashboard}
                   hasPermission={userIsAuthenticated}
