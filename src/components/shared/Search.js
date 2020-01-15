@@ -21,6 +21,15 @@ class Search extends React.Component {
           freeSolo={false}
           disableOpenOnFocus
           loading={loading}
+          loadingText="Finding similar questions..."
+          noOptionsText="No similar questions"
+          onChange={(event, value) => {
+            const questionId = pathOr(null, ['questionId'], value);
+            if (!questionId) {
+              return;
+            }
+          }}
+          getOptionLabel={option => option.text}
           filterOptions={option => option}
           options={pathOr([], ['data'], results)}
           renderOption={
