@@ -1,4 +1,5 @@
 import React from 'react';
+import {withRouter} from 'react-router-dom';
 import { toUpper } from 'ramda';
 import moment from 'moment-mini';
 
@@ -20,24 +21,26 @@ const Numbers = ({ number, text, style }) => {
   )
 }
 
-const QuestionCard = (props) => {
-  const { key, question } = props;
-  const { votes, answers, title, body, tags, date, by } = question;
-
-  return (
-    <div className="question-card d-flex" key={key} >
-      <div className="question-card__head">
-        <Numbers number={votes} text="votes" style={{ paddingBottom: '35px' }} />
-        <Numbers number={answers} text="answers" />
+class QuestionCard extends React.Component {
+  render() {
+    const { key, question, history } = this.props;
+    const { id, votes, answers, title, body, tags, date, by } = question;
+    return (
+      <div className="question-card d-flex" key={key} >
+        <div className="question-card__head">
+          <Numbers number={votes} text="votes" style={{ paddingBottom: '35px' }} />
+          <Numbers number={answers} text="answers" />
+        </div>
+        <div className="question-card__body">
+          <div className="title" onClick={() => history.push(`question/${id}`)}>{title}</div>
+          <div className="body">{body}</div>
+          <div className="d-flex">{tags.map(tag => <div className="tag">{tag}</div>)}</div>
+          <div className="card-info">asked on {moment(date).format("MMM Do YY")} by {by}</div>
+        </div>
       </div>
-      <div className="question-card__body">
-        <div className="title">{title}</div>
-        <div className="body">{body}</div>
-        <div className="d-flex">{tags.map(tag => <div className="tag">{tag}</div>)}</div>
-        <div className="card-info">asked on {moment(date).format("MMM Do YY")} by {by}</div>
-      </div>
-    </div>
-  );
+    );
+  }
 }
 
-export default QuestionCard;
+
+export default withRouter(QuestionCard);
