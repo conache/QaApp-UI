@@ -8,7 +8,12 @@ import PersonDetails from './PersonDetails';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
 const Navbar = props => {
-  const { history } = props;
+  const { history, location } = props;
+
+  if(location.pathname === "/company-info/" || location.pathname === "/company-info") {
+    return null;
+  }
+
   return (
     <div className="navbar nav">
       <Box display="flex" className="nav-left">

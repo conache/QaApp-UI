@@ -1,24 +1,27 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {getQuestion} from '../../ducks/questions'
+import { connect } from 'react-redux';
+import { getQuestion } from '../../ducks/questions'
 import { pathOr } from 'ramda';
 import LoadingSpinner from '../shared/LoadingSpinner';
 import QuestionCard from '../shared/questions/QuestionCard';
 
 class QuestionPage extends React.Component {
   componentDidMount() {
-    const {actions: {loadQuestionById}, match} = this.props;
+    const { actions: { loadQuestionById }, match } = this.props;
     loadQuestionById(match.params.id);
   }
 
   render() {
-    const {match, currentQuestion: {loading, question}} = this.props;
+    const { match, currentQuestion: { loading, question } } = this.props;
     if (loading) {
       return <LoadingSpinner />
     }
 
     return (
-      <QuestionCard question={question} />
+      <div>
+        <QuestionCard question={question} />
+        <div>Answers: </div>
+      </div>
     )
   }
 }
@@ -32,7 +35,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     actions: {
-      loadQuestionById: (id) => {return dispatch(getQuestion(id))}
+      loadQuestionById: (id) => { return dispatch(getQuestion(id)) }
     }
   }
 }

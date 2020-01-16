@@ -3,7 +3,9 @@ import { Formik } from 'formik';
 import { Button, TextField, TextareaAutosize } from '@material-ui/core';
 import CustomFormInput from '../CustomFormInput';
 import CreatableSelect from 'react-select/creatable';
-import { filter, reject } from 'ramda';
+import { filter, reject, isEmpty, isNil, map } from 'ramda';
+import { addQuestion } from '../../../api/questions';
+import { NotificationManager } from 'react-notifications';
 
 const validate = values => {
   const errors = {};
@@ -25,6 +27,7 @@ class AskQuestion extends React.Component {
     super(props)
     this.state = {
       selectedTags: [],
+      proposedTagMessage: '',
     }
   }
 
@@ -33,30 +36,50 @@ class AskQuestion extends React.Component {
 * @param {object} formikActions - formik helpers
 */
   onSubmit = (values) => {
+    const { history } = this.props;
     const { selectedTags } = this.state;
+    const { title, body } = values;
     const newTag = tag => tag.__isNew__;
 
+    const questionTags = map(tag => tag.value, reject(newTag, selectedTags));
     const params = {
-      ...values,
-      selectedTags: reject(newTag, selectedTags),
-      extraTags: filter(newTag, selectedTags),
+      questionTitle: title,
+      questionText: body, 
+      questionTags,
+      // extraTags: map(tag => tag.value, filter(newTag, selectedTags))),
     }
-    console.log(params);
+    return addQuestion(params).then(() => {
+      NotificationManager.success("Question succesfully added");
+      history.push("/");
+    }).catch((error) => {
+      NotificationManager.error(`Could not ask question. Error: ${error.message}`);
+    });
   }
 
-  handleChange = selectedTags => {
+  handleChange = (selectedTags, actionMeta) => {
     this.setState(
       { selectedTags },
-      () => console.log(`Option selected:`, this.state.selectedTags)
+      () => {
+        if (isNil(selectedTags)) {
+          this.setState({ proposedTagMessage: ''});
+        } else if (!isEmpty(selectedTags) && isEmpty(filter(tag => tag.__isNew__, selectedTags))) {
+          this.setState({ proposedTagMessage: ''});
+        }
+      }
     );
+
+    if (actionMeta.action === "create-option") {
+      this.setState({ proposedTagMessage: 'The proposed tags will have to be accepted by an administrator'});
+    }
+    
   };
 
   render() {
-    const { selectedTags, tagError } = this.state;
+    const { selectedTags, tagError, proposedTagMessage } = this.state;
     const { history } = this.props;
     
     return (
-      <div className="ask-question-container">
+      <div className="ask-question-container overflow-y">
         <div className="h-100 w-100" style={{ margin: '0 20%' }}>
           <h2>Ask a question</h2>
           <Formik
@@ -118,6 +141,7 @@ class AskQuestion extends React.Component {
                       value={selectedTags}
                       onChange={this.handleChange}
                     />
+                    <div style={{ color: '#f50057' }}>{proposedTagMessage}</div>
                   </CustomFormInput>
                 </div>
                 <div className="py-1">
