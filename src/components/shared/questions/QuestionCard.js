@@ -20,14 +20,14 @@ class QuestionCard extends React.Component {
       return null;
     }
 
-    const { modelId, votes, answers, questionTitle, questionText, questionTags, questionPublishDate, by } = question;
+    const { modelId, score, answers, questionTitle, questionText, questionTags, questionPublishDate, by } = question;
     console.log("Question card:");
     console.log(question);
     return (
       <div className="question-card d-flex" key={key} >
         <div className="question-card__head">
-          <Numbers number={383} text="votes" style={{ paddingBottom: '35px' }} />
-          <Numbers number={1000} text="answers" />
+          <Numbers number={score} text="votes" style={{ paddingBottom: '35px' }} />
+          <Numbers number={Math.floor(Math.random() * 100)} text="answers" />
         </div>
         <div className="question-card__body">
           <div className="title" onClick={() => history.push(`question/${modelId}`)}>{questionTitle}</div>
