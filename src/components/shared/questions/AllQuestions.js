@@ -1,5 +1,9 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import { pathOr } from 'ramda';
 import QuestionCard from './QuestionCard';
+import LoadingSpinner from '../../shared/LoadingSpinner';
+import {getAllQuestions} from '../../../ducks/questions';
 
 class AllQuestions extends React.Component {
   constructor(props) {
@@ -7,49 +11,43 @@ class AllQuestions extends React.Component {
     this.state = {};
   }
 
+  componentDidMount() {
+    const {actions: {loadQuestions}} = this.props;
+    loadQuestions();
+  }
+
   render() {
+    const {questions: {loadingAllQuestions, allQuestions}} = this.props;
+    if (loadingAllQuestions) {
+      return <LoadingSpinner />
+    }
+    const questions = allQuestions || [];
     return (
       <div className="all-questions d-flex flex-column h-100" style={{ padding: '24px' }}>
-        <h2>All questions page</h2>
-        {questions.map((question, idx) =>
-          <QuestionCard question={question} key={idx}/>
-        )}
-      </div>
+      <h2>All questions page</h2>
+      {questions.map((question, idx) =>
+        <QuestionCard question={question} key={idx}/>
+      )}
+    </div>
     );
   }
 }
 
-export default AllQuestions;
-
-const questions = [
-  {
-    id: 1,
-    title: 'Sed porttitor massa purus mauris quis aliquam massa consequat gravida.',
-    body: 'Felis sodales vitae eu arcu donec est. In morbi magna interdum urna. Eleifend faucibus volutpat diam id at ullamcorper. Sit elementum, amet euismod faucibus orci dui. Dolor lobortis diam maecenas dolor semper pellentesque senectus cursus commodo. Ac libero commodo viverra ut justo diam amet nullam venenatis. Elementum feugiat massa morbi et ornare ac. Sem aliquam, urna id id velit ut vitae.',
-    date: '01/17/2020',
-    by: 'Name Surname',
-    votes: 50,
-    answers: 398,
-    tags: ['tag 1', 'tag 2', 'tag 3', 'tag 4'],
-  },
-  {
-    id: 2,
-    title: 'Sed porttitor massa purus mauris quis aliquam massa consequat gravida.',
-    body: 'Felis sodales vitae eu arcu donec est. In morbi magna interdum urna. Eleifend faucibus volutpat diam id at ullamcorper. Sit elementum, amet euismod faucibus orci dui. Dolor lobortis diam maecenas dolor semper pellentesque senectus cursus commodo. Ac libero commodo viverra ut justo diam amet nullam venenatis. Elementum feugiat massa morbi et ornare ac. Sem aliquam, urna id id velit ut vitae.',
-    date: '01/05/2020',
-    by: 'Name Surname',
-    votes: 200,
-    answers: 79,
-    tags: ['tag 1', 'tag 2', 'tag 4'],
-  },
-  {
-    id: 3,
-    title: 'Sed porttitor massa purus mauris quis aliquam massa consequat gravida.',
-    body: 'Felis sodales vitae eu arcu donec est. In morbi magna interdum urna. Eleifend faucibus volutpat diam id at ullamcorper. Sit elementum, amet euismod faucibus orci dui. Dolor lobortis diam maecenas dolor semper pellentesque senectus cursus commodo. Ac libero commodo viverra ut justo diam amet nullam venenatis. Elementum feugiat massa morbi et ornare ac. Sem aliquam, urna id id velit ut vitae.',
-    date: '05/12/2019',
-    by: 'Name Surname',
-    votes: 50,
-    answers: 398,
-    tags: ['tag 1', 'tag 2', 'tag 3', 'tag 4'],
+function mapStateToProps(state) {
+  return {
+    questions: pathOr({}, ['questions'], state),
   }
-]
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: {
+      loadQuestions: () => {return dispatch(getAllQuestions())}
+    }
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AllQuestions);

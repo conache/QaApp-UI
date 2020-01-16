@@ -28,15 +28,9 @@ export function getSimilarQuestions(text) {
 }
 
 export function getQuestion(id) {
-  // return new Promise((resolve, reject) => {
-  //   setTimeout(() => {resolve({
-  //     data: {
-  //       questionId: 1,
-  //       questionTitle: "Is this a test question?",
-  //       questionTitle: "Bla bla bla",
-  //     }
-  //   })}, 2000);
-  // });
-
   return request('GET', `question/find?questionId=${id}`);
+}
+
+export function getAllQuestions(page=1, pageSize=5) {
+  return request('GET', `question/findAll?page=${page}&size=${pageSize}`);
 }
