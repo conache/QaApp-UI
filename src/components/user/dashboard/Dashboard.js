@@ -13,7 +13,7 @@ import { pathOr } from 'ramda';
 class Dashboard extends React.Component {
   isAdminUser() {
     const role = pathOr('ROLE_USER', ['attributes', 'role', '0'], this.props.currentUser);
-    return role === 'ROLE_COMPANY_ADMIN' || role === 'ROLE_ADMIN';
+    return role === 'ROLE_COMPANY_ADMINISTRATOR' || role === 'ROLE_ADMIN';
   }
 
   render() {
