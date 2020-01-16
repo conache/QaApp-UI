@@ -6,7 +6,11 @@ import {getAllTags, deleteTag, addTag, editTag} from '../../../../api/tags';
 class TagsSection extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {
+      columns: [
+        { title: "Name", field: "name" }
+      ]
+    }
   }
 
   fetchTags(query) {
@@ -14,15 +18,18 @@ class TagsSection extends React.Component {
       const {page, pageSize} = query;
       getAllTags(page, pageSize)
       .then(response => {
+        console.log(response);
         const result = response.data;
+        console.log("Result:", result);
         resolve({
-          data: result.tags,
+          data: result.content,
           page: page,
-          totalCount: result.totalCount
+          totalCount: result.totalElements
         });
       })
       .catch(error => {
-        NotificationManager.error(`Could not fetch tags. Error: ${error.message}`)
+        NotificationManager.error(`Could not fetch tags. Error: ${error.message}`);
+        reject();
       })
     });
   }
@@ -68,8 +75,8 @@ class TagsSection extends React.Component {
             sorting: true
           }}
           title="All Tags"
-          columns={tableData.columns}
-          data={tableData.data}
+          columns={this.state.columns}
+          data={(query => this.fetchTags(query))}
           editable={{
             onRowAdd: (newData) => this.onRowAdd(newData),
             onRowUpdate: (newData, oldData) => this.onRowUpdate(newData, oldData),
@@ -81,14 +88,3 @@ class TagsSection extends React.Component {
 }
 
 export default TagsSection;
-
-const tableData = {
-  columns: [
-    { title: "Tag name", field: "name" }
-  ],
-  data: [
-    { name: "tag 1" },
-    { name: "tag 2" },
-    { name: "tag 3" },
-  ],
-};

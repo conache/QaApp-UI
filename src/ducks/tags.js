@@ -60,7 +60,6 @@ export const deleteTag = (id) => {
   return dispatch => {
     return Tags.deleteTag(id)
       .then((res) => {
-        debugger
         NotificationManager.success('Succesfully deleted');
         // dispatch(getTags());
       })

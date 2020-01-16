@@ -19,7 +19,6 @@ const Navbar = props => {
       <Box display="flex" className="nav-left">
         <QuestionAnswerOutlinedIcon className="logo" onClick={() => history.push("/")} />
         <Search />
-        <LogoutButton />
       </Box>
       <Box display="flex" className="nav-right">
         <div className="h-100">
@@ -31,6 +30,7 @@ const Navbar = props => {
           <NotificationsIcon className="icon" />
         </div>
         <PersonDetails />
+        <LogoutButton />
       </Box>
     </div>
   );

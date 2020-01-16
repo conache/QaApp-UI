@@ -1,11 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {NavLink} from 'react-dom';
+import {withRouter} from 'react-router-dom';
 import { Autocomplete } from "@material-ui/lab";
 import { TextField, InputAdornment, CircularProgress, Grid } from '@material-ui/core';
 import {getSimilarQuestions} from '../../ducks/search';
 import SearchIcon from '@material-ui/icons/Search';
-import { bindActionCreators } from 'redux';
 import { pathOr } from 'ramda';
 
 class Search extends React.Component {
@@ -14,7 +13,8 @@ class Search extends React.Component {
   }
 
   render() {
-    const {search: {loading, results}, match} = this.props;
+    const {search: {loading, results}, history, location} = this.props;
+
     return (
       <Autocomplete className="searchContainer"
           autoComplete
@@ -28,6 +28,7 @@ class Search extends React.Component {
             if (!questionId) {
               return;
             }
+            history.push(`/dashboard/question/${questionId}`);
           }}
           getOptionLabel={option => option.text}
           filterOptions={option => option}
@@ -89,4 +90,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStatetoProps,
   mapDispatchToProps,
-)(Search)
+)(withRouter(Search))

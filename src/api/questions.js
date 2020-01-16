@@ -16,7 +16,8 @@ const similar = [
     questionId: 4,
     text: "What are the 5 biggest myths about computer programmers?"
   }
-]
+];
+
 export function getSimilarQuestions(text) {
   console.log("Request similar questions for ", text);
   return new Promise((resolve, reject) => {
@@ -28,4 +29,17 @@ export function getSimilarQuestions(text) {
 
 export function addQuestion(params) {
   return request('POST', 'question/add', params);
+}
+export function getQuestion(id) {
+  // return new Promise((resolve, reject) => {
+  //   setTimeout(() => {resolve({
+  //     data: {
+  //       questionId: 1,
+  //       questionTitle: "Is this a test question?",
+  //       questionTitle: "Bla bla bla",
+  //     }
+  //   })}, 2000);
+  // });
+
+  return request('GET', `question/find?questionId=${id}`);
 }
