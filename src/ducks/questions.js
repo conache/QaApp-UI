@@ -11,7 +11,9 @@ export default function reducer(state = Immutable({}), action) {
     case 'questions/ALL_QUESTIONS_LOADING':
       return state.merge({ loadingAllQuestions: action.payload }, {deep: true});
     case 'questions/ALL_QUESTIONS':
-      return state.merge({ allQuestions: action.payload.content }, {deep: true});
+      console.log("ALL QUESTIONS:");
+      console.log(action);
+      return state.merge({ allQuestions: action.payload }, {deep: true});
     default:
       return state;
   }
@@ -37,10 +39,12 @@ export const getQuestion = (id) => {
   };
 }
 
-export const getAllQuestions = () => {
+export const getAllQuestions = (params) => {
   return dispatch => {
+    console.log("Get all questions with following filters:");
+    console.log(params);
     dispatch(loadingAllQuestions(true));
-    return Questions.getAllQuestions()
+    return Questions.getAllQuestions(params)
       .then(resp => {
         dispatch(setAllQuestions(resp.data));
         dispatch(loadingAllQuestions(false));

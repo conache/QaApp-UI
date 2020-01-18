@@ -34,6 +34,11 @@ export function getQuestion(id) {
   return request('GET', `question/find?questionId=${id}`);
 }
 
-export function getAllQuestions(page=1, pageSize=5) {
-  return request('GET', `question/findAll?page=${page}&size=${pageSize}`);
+export function getAllQuestions(params) {
+  const {page, pageSize} = params;
+  return request('GET', `question/findAll?page=${page + 1}&size=${pageSize}`);
 }
+
+// export function getAllQuestions(params) {
+//   return request('POST', `question/findAll`, params);
+// }

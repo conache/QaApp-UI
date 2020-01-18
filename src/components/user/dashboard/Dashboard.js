@@ -6,9 +6,9 @@ import UsersSection from '../../company/company-dashboard/UsersSection';
 import ReportsSection from '../../company/company-dashboard/ReportsSection';
 import TagsSectionsContainer from '../../company/company-dashboard/tags/TagsSectionsContainer';
 import ProposedTags from '../../company/company-dashboard/tags/ProposedTags';
-import AllQuestions from '../../shared/questions/AllQuestions';
 import QuestionPage from '../../question/QuestionPage';
 import { pathOr } from 'ramda';
+import AllQuestions from '../../shared/questions/AllQuestions';
 
 class Dashboard extends React.Component {
   isAdminUser() {

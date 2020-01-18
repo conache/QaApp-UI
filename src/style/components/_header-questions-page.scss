@@ -3,5 +3,22 @@
     padding: 8px 22px;
     background-color: transparent;
     box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.75) !important;
+
+    &.selected {
+      background-color: black;
+      color: white
+    }
+  }
+
+  .filters-container {
+    position: relative;
+
+    .filter-menu {
+      width: 100%;
+      position: absolute; 
+      height: 250px;
+      z-index: 1;
+      top: 55px;
+    }
   }
 }
