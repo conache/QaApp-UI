@@ -2,8 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import { pathOr } from 'ramda';
 import QuestionCard from './QuestionCard';
-import LoadingSpinner from '../../shared/LoadingSpinner';
-import {getAllQuestions} from '../../../ducks/questions';
+import HeaderQuestionPage from './HeaderQuestionPage';
 
 class AllQuestions extends React.Component {
   constructor(props) {
@@ -24,11 +23,13 @@ class AllQuestions extends React.Component {
     const questions = allQuestions || [];
     return (
       <div className="all-questions d-flex flex-column h-100" style={{ padding: '24px' }}>
-      <h2>All questions page</h2>
-      {questions.map((question, idx) =>
-        <QuestionCard question={question} key={idx}/>
-      )}
-    </div>
+        <HeaderQuestionPage 
+          title="All questions page"
+        />
+        {/* {questions.map((question, idx) =>
+          <QuestionCard question={question} key={idx}/>
+        )} */}
+      </div>
     );
   }
 }
