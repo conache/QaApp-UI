@@ -3,19 +3,13 @@ import { connect } from "react-redux";
 import {
   Box,
   Button,
-  Card,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  Grid,
-  ClickAwayListener
 } from "@material-ui/core";
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
 import TuneIcon from "@material-ui/icons/Tune";
 import { QUESTIONS_SORT_CRITERIA } from "../../utils/Constants";
 import { pathOr } from "ramda";
 import { getAllActiveTags } from "../../../ducks/tags";
+import QuestionsFilterMenu from './QuestionsFilterMenu';
+
 const FilterButton = props => {
   const { name, selected, onClick } = props;
   return (
@@ -29,95 +23,7 @@ const FilterButton = props => {
   );
 };
 
-class FilterMenu extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      ...props.filters
-    };
-  }
-
-  handleSortCriteriaChange(event) {
-    this.setState({ sortBy: event.target.value });
-  }
-
-  handleTagsChange(tagsList) {
-    this.setState({ tags: tagsList });
-  }
-
-  render() {
-    const { sortBy, tags } = this.state;
-    const { onClose, onFilter, tagsOptions } = this.props;
-
-    return (
-      <ClickAwayListener onClickAway={() => onClose()}>
-        <Card className="filter-menu">
-          <Grid container direction="column">
-            <div className="filter-menu-label">Sort by</div>
-            <Grid container direction="row">
-              <RadioGroup
-                value={sortBy}
-                onChange={e => this.handleSortCriteriaChange(e)}
-                style={{ marginBottom: "15px" }}
-                aria-label="Sort by"
-                name="sortCriteria"
-                row
-              >
-                <FormControlLabel
-                  value={QUESTIONS_SORT_CRITERIA.NEWEST}
-                  control={<Radio color="default" />}
-                  label="Newest"
-                  labelPlacement="start"
-                />
-                <FormControlLabel
-                  value={QUESTIONS_SORT_CRITERIA.VOTES}
-                  control={<Radio color="default" />}
-                  label="Votes"
-                  labelPlacement="start"
-                />
-                <FormControlLabel
-                  value={QUESTIONS_SORT_CRITERIA.NO_ANSWERS}
-                  control={<Radio color="default" />}
-                  label="No answers"
-                  labelPlacement="start"
-                />
-              </RadioGroup>
-            </Grid>
-            <div className="filter-menu-label">By following tags</div>
-            <Grid style={{ marginBottom: "60px" }}>
-              <Select
-                isMulti
-                maxMenuHeight={100}
-                closeMenuOnSelect={false}
-                components={makeAnimated()}
-                defaultValue={tags}
-                value={tags}
-                options={[...tagsOptions]}
-                onChange={newTagsList => this.handleTagsChange(newTagsList)}
-              />
-            </Grid>
-            <Box display="flex">
-              <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                style={{ marginRight: "auto" }}
-                onClick={() => onFilter({ sortBy, tags })}
-              >
-                Apply filters
-              </Button>
-              <Button size="small" onClick={() => onClose()}>
-                Cancel
-              </Button>
-            </Box>
-          </Grid>
-        </Card>
-      </ClickAwayListener>
-    );
-  }
-}
-
-class QuestionsFilter extends React.Component {
+class QuestionsFilterSection extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -205,7 +111,7 @@ class QuestionsFilter extends React.Component {
             </Button>
 
             {menuOpened && (
-              <FilterMenu
+              <QuestionsFilterMenu
                 tagsOptions={tagsOptions || []}
                 filters={filters}
                 onFilter={filters => {
@@ -246,4 +152,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(QuestionsFilter);
+export default connect(mapStateToProps, mapDispatchToProps)(QuestionsFilterSection);

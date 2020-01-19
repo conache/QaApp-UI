@@ -8,7 +8,7 @@ import {
 } from "../../utils/Constants";
 import { getAllQuestions } from "../../../ducks/questions";
 import LoadingSpinner from "../LoadingSpinner";
-import QuestionsFilter from "./QuestionsFilter";
+import QuestionsFilterSection from "./QuestionsFilterSection";
 import QuestionsList from "./QuestionsList";
 import PaginatedComponent from "../PaginatedComponent";
 
@@ -87,7 +87,7 @@ class AllQuestions extends React.Component {
         className="all-questions d-flex flex-column h-100"
         style={{ padding: "24px" }}
       >
-        <QuestionsFilter
+        <QuestionsFilterSection
           title="All questions page"
           onFiltersChange={(...args) => this.onFiltersChange(...args)}
         />
