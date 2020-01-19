@@ -41,8 +41,6 @@ export const getQuestion = (id) => {
 
 export const getAllQuestions = (params) => {
   return dispatch => {
-    console.log("Get all questions with following filters:");
-    console.log(params);
     dispatch(loadingAllQuestions(true));
     return Questions.getAllQuestions(params)
       .then(resp => {

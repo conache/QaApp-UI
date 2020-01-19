@@ -1,6 +1,6 @@
-export const DEFAULT_PAGE_SIZE = 3;
+export const DEFAULT_PAGE_SIZE = 4;
 export const QUESTIONS_SORT_CRITERIA = {
-  NEWEST: "newest",
-  VOTES: "votes",
+  NEWEST: "questionPublishDate",
+  VOTES: "score",
   NO_ANSWERS: "noAnswers"
 };

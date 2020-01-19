@@ -29,6 +29,13 @@ class AllQuestions extends React.Component {
     this.loadData();
   }
 
+  cleanFilters(filters) {
+    return {
+      ...filters,
+      tags: filters.tags ? filters.tags.map(tag => tag.value) : []
+    }
+  }
+
   loadData() {
     const {
       actions: { loadQuestions }
@@ -38,7 +45,7 @@ class AllQuestions extends React.Component {
     loadQuestions({
       page,
       pageSize,
-      ...filters
+      ...this.cleanFilters(filters)
     });
   }
 
@@ -46,18 +53,16 @@ class AllQuestions extends React.Component {
     this.setState({ page: page }, () => this.loadData());
   }
 
-  onFilterChange(key, value) {
+  onFiltersChange(newFilters) {
     this.setState(
       prevState => ({
         page: 0,
         filters: {
           ...prevState.filters,
-          [key]: value,
+          ...newFilters
         },
       }),
       () => {
-        console.log("New statE:");
-        console.log(this.state);
         this.loadData();
       }
     );
@@ -73,8 +78,8 @@ class AllQuestions extends React.Component {
     let questions = [];
 
     if (allQuestions) {
-      totalElements = pathOr(0, ["totalElements"], allQuestions);
-      questions = pathOr([], ["content"], allQuestions);
+      totalElements = pathOr(0, ["value1"], allQuestions);
+      questions = pathOr([], ["value0"], allQuestions);
     }
 
     return (
@@ -84,7 +89,7 @@ class AllQuestions extends React.Component {
       >
         <QuestionsFilter
           title="All questions page"
-          onFilterChange={(...args) => this.onFilterChange(...args)}
+          onFiltersChange={(...args) => this.onFiltersChange(...args)}
         />
         <div className="list-container">
           {loadingAllQuestions && <LoadingSpinner />}

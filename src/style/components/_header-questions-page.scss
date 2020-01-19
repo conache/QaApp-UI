@@ -12,13 +12,24 @@
 
   .filters-container {
     position: relative;
+  }
 
-    .filter-menu {
-      width: 100%;
-      position: absolute; 
-      height: 250px;
-      z-index: 1;
-      top: 55px;
+  .filter-tags-label {
+    margin-right: 8px;
+    padding: 5px;
+  }
+
+  .filter-menu {
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+    padding: 24px;
+    top: 55px;
+    right: 0;
+
+    .filter-menu-label {
+      font-weight: 700;
+      margin-bottom: 10px;
     }
   }
 }

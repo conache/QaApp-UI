@@ -3,15 +3,17 @@ import {
   Box,
   Button,
   Card,
-  CardContent,
-  CardActions,
   RadioGroup,
   FormControlLabel,
-  Radio
+  Radio,
+  Grid,
+  ClickAwayListener
 } from "@material-ui/core";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
 import TuneIcon from "@material-ui/icons/Tune";
 import { QUESTIONS_SORT_CRITERIA } from "../../utils/Constants";
-
+import { pathOr } from "ramda";
 const FilterButton = props => {
   const { name, selected, onClick } = props;
   return (
@@ -25,6 +27,93 @@ const FilterButton = props => {
   );
 };
 
+class FilterMenu extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      ...props.filters
+    };
+  }
+
+  handleSortCriteriaChange(event) {
+    this.setState({ sortBy: event.target.value });
+  }
+
+  handleTagsChange(tagsList) {
+    this.setState({ tags: tagsList });
+  }
+
+  render() {
+    const { sortBy, tags } = this.state;
+    const { onClose, onFilter } = this.props;
+    return (
+      <ClickAwayListener onClickAway={() => onClose()}>
+        <Card className="filter-menu">
+          <Grid container direction="column">
+            <div className="filter-menu-label">Sort by</div>
+            <Grid container direction="row">
+              <RadioGroup
+                value={sortBy}
+                onChange={e => this.handleSortCriteriaChange(e)}
+                style={{ marginBottom: "15px" }}
+                aria-label="Sort by"
+                name="sortCriteria"
+                row
+              >
+                <FormControlLabel
+                  value={QUESTIONS_SORT_CRITERIA.NEWEST}
+                  control={<Radio color="default" />}
+                  label="Newest"
+                  labelPlacement="start"
+                />
+                <FormControlLabel
+                  value={QUESTIONS_SORT_CRITERIA.VOTES}
+                  control={<Radio color="default" />}
+                  label="Votes"
+                  labelPlacement="start"
+                />
+                <FormControlLabel
+                  value={QUESTIONS_SORT_CRITERIA.NO_ANSWERS}
+                  control={<Radio color="default" />}
+                  label="No answers"
+                  labelPlacement="start"
+                />
+              </RadioGroup>
+            </Grid>
+            <div className="filter-menu-label">By following tags</div>
+            <Grid style={{ marginBottom: "60px" }}>
+              <Select
+                isMulti
+                maxMenuHeight={100}
+                closeMenuOnSelect={false}
+                components={makeAnimated()}
+                defaultValue={tags}
+                value={tags}
+                options={tagsOptions}
+                onChange={newTagsList => this.handleTagsChange(newTagsList)}
+              />
+            </Grid>
+            <Box display="flex">
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                style={{ marginRight: "auto" }}
+                onClick={() => onFilter({ sortBy, tags })}
+              >
+                Apply filters
+              </Button>
+              <Button size="small" onClick={() => onClose()}>
+                Cancel
+              </Button>
+            </Box>
+          </Grid>
+        </Card>
+      </ClickAwayListener>
+    );
+  }
+}
+
 class QuestionsFilter extends React.Component {
   constructor(props) {
     super(props);
@@ -37,15 +126,23 @@ class QuestionsFilter extends React.Component {
     };
   }
 
-  changeSortFilter(criteria) {
+  applyFilters(newFilters) {
     this.setState(
-      prevState => ({ filters: { ...prevState, sortBy: criteria } }),
-      () => this.props.onFilterChange("sortBy", criteria)
+      prevState => ({ filters: { ...prevState.filters, ...newFilters } }),
+      () => {
+        console.log("New filters sent to parent:");
+        console.log(this.state.filters);
+        this.props.onFiltersChange(newFilters)
+      }
     );
   }
 
+  changeSortFilter(criteria) {
+    this.applyFilters({ sortBy: criteria });
+  }
+
   closeFilterMenu() {
-    this.setState({menuOpened: false});
+    this.setState({ menuOpened: false });
   }
 
   render() {
@@ -53,85 +150,84 @@ class QuestionsFilter extends React.Component {
     const { filters, menuOpened } = this.state;
 
     return (
-      <Box
-        className="header-question"
-        display="flex"
-        justifyContent="space-between"
-      >
-        <h3>{title}</h3>
-        <div className="filters-container align-center">
-          <FilterButton
-            name="Newest"
-            selected={filters.sortBy === QUESTIONS_SORT_CRITERIA.NEWEST}
-            onClick={() =>
-              this.changeSortFilter(QUESTIONS_SORT_CRITERIA.NEWEST)
-            }
-          />
-          <FilterButton
-            name="Votes"
-            selected={filters.sortBy === QUESTIONS_SORT_CRITERIA.VOTES}
-            onClick={() => this.changeSortFilter(QUESTIONS_SORT_CRITERIA.VOTES)}
-          />
-          <FilterButton
-            name="No answers"
-            selected={filters.sortBy === QUESTIONS_SORT_CRITERIA.NO_ANSWERS}
-            onClick={() =>
-              this.changeSortFilter(QUESTIONS_SORT_CRITERIA.NO_ANSWERS)
-            }
-          />
-          <Button
-            onClick={() =>
-              this.setState(prevState => ({
-                menuOpened: !prevState.menuOpened
-              }))
-            }
-            style={{ marginLeft: "1rem" }}
-            aria-controls="simple-menu"
-            aria-haspopup="true"
-            variant="contained"
-            className={{ "filter-button": true, selected: menuOpened }}
-            endIcon={<TuneIcon />}
-            style={{ marginLeft: "1rem" }}
-          >
-            Filter
-          </Button>
-          {menuOpened && (
-            <Card className="filter-menu">
-              <CardContent>
-                <RadioGroup aria-label="Sort by" name="sortCriteria">
-                  <FormControlLabel
-                    checked={filters.sortBy === QUESTIONS_SORT_CRITERIA.NEWEST}
-                    value={QUESTIONS_SORT_CRITERIA.NEWEST}
-                    control={<Radio color="default"/>}
-                    label="Newest"
-                    labelPlacement="start"
-                  />
-                  <FormControlLabel
-                    checked={filters.sortBy === QUESTIONS_SORT_CRITERIA.VOTES}
-                    value={QUESTIONS_SORT_CRITERIA.VOTES}
-                    control={<Radio color="default"/>}
-                    label="Votes"
-                    labelPlacement="start"
-                  />
-                  <FormControlLabel
-                    checked={filters.sortBy === QUESTIONS_SORT_CRITERIA.NO_ANSWERS}
-                    value={QUESTIONS_SORT_CRITERIA.NO_ANSWERS}
-                    control={<Radio color="default"/>}
-                    label="No answers"
-                    labelPlacement="start"
-                  />
-                </RadioGroup>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Apply filters</Button>
-                <Button size="small" onClick={() => this.closeFilterMenu()}>Cancel</Button>
-              </CardActions>
-            </Card>
-          )}
-        </div>
-      </Box>
+      <React.Fragment>
+        <Box
+          className="header-question"
+          display="flex"
+          justifyContent="space-between"
+        >
+          <h3>{title}</h3>
+          <div className="filters-container align-center">
+            <FilterButton
+              name="Newest"
+              selected={filters.sortBy === QUESTIONS_SORT_CRITERIA.NEWEST}
+              onClick={() =>
+                this.applyFilters({ sortBy: QUESTIONS_SORT_CRITERIA.NEWEST })
+              }
+            />
+            <FilterButton
+              name="Votes"
+              selected={filters.sortBy === QUESTIONS_SORT_CRITERIA.VOTES}
+              onClick={() =>
+                this.applyFilters({ sortBy: QUESTIONS_SORT_CRITERIA.VOTES })
+              }
+            />
+            <FilterButton
+              name="No answers"
+              selected={filters.sortBy === QUESTIONS_SORT_CRITERIA.NO_ANSWERS}
+              onClick={() =>
+                this.applyFilters({
+                  sortBy: QUESTIONS_SORT_CRITERIA.NO_ANSWERS
+                })
+              }
+            />
+            <Button
+              onClick={() =>
+                this.setState(prevState => ({
+                  menuOpened: !prevState.menuOpened
+                }))
+              }
+              style={{ marginLeft: "1rem" }}
+              aria-controls="simple-menu"
+              aria-haspopup="true"
+              variant="contained"
+              className={{ "filter-button": true, selected: menuOpened }}
+              endIcon={<TuneIcon />}
+              style={{ marginLeft: "1rem" }}
+            >
+              Filter
+            </Button>
+
+            {menuOpened && (
+              <FilterMenu
+                filters={filters}
+                onFilter={filters => {
+                  this.closeFilterMenu();
+                  this.applyFilters(filters);
+                }}
+                onClose={() => this.closeFilterMenu()}
+              />
+            )}
+          </div>
+        </Box>
+        {filters.tags?.length > 0 && (
+          <Box className="header-question" display="flex">
+            <div className="filter-tags-label">Selected tags:</div>
+            {filters.tags.map(tag => (
+              <div className="tag">{tag.label}</div>
+            ))}
+          </Box>
+        )}
+      </React.Fragment>
     );
   }
 }
+
+const tagsOptions = [
+  { value: "tag 1", label: "Tag 1" },
+  { value: "tag 2", label: "Tag 2" },
+  { value: "tag 3", label: "Tag 3" },
+  { value: "tag 4", label: "Tag 4" }
+];
 
 export default QuestionsFilter;
