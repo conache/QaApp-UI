@@ -22,7 +22,7 @@ export const getSimilarQuestions = (text) => {
     dispatch(getSimilarQuestionsLoading(true));
     return Questions.getSimilarQuestions(text)
       .then((res) => {
-        dispatch(setSimilarQuestions(res));
+        dispatch(setSimilarQuestions(res.data));
         dispatch(getSimilarQuestionsLoading(false));
       })
       .catch((err) => {

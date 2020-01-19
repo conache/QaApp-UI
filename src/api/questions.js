@@ -19,7 +19,7 @@ const similar = [
 ];
 
 export function getSimilarQuestions(text) {
-  return request('GET', `question/search?text=${text}&maxSize=${5}`);
+  return request('GET', `question/search?text=${text}&maxSize=${10}`);
 }
 
 export function addQuestion(params) {
