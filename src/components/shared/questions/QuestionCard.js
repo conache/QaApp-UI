@@ -20,7 +20,7 @@ class QuestionCard extends React.Component {
       return null;
     }
 
-    const { modelId, score, answers, questionTitle, questionText, questionTags, questionPublishDate, by } = question;
+    const { modelId, score, answers, questionTitle, questionText, questionTags, questionPublishDate, questionAuthorName } = question;
     return (
       <div className="question-card d-flex" key={key} >
         <div className="question-card__head">
@@ -31,7 +31,7 @@ class QuestionCard extends React.Component {
           <div className="title" onClick={() => history.push(`question/${modelId}`)}>{questionTitle}</div>
           <div className="body">{questionText}</div>
           <div className="d-flex">{questionTags?.map(tag => <div className="tag">{tag}</div>)}</div>
-          <div className="card-info">asked on {moment(questionPublishDate).format("MMM Do YY")} by {by}</div>
+          <div className="card-info">asked on {moment(questionPublishDate).format("MMM Do YY")} by {questionAuthorName}</div>
         </div>
       </div>
     );

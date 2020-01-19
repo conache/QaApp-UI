@@ -19,12 +19,7 @@ const similar = [
 ];
 
 export function getSimilarQuestions(text) {
-  console.log("Request similar questions for ", text);
-  return new Promise((resolve, reject) => {
-    setTimeout(() => { resolve(similar) }, 1000);
-  });
-
-  return request('GET', `search?text=${text}`);
+  return request('GET', `question/search?text=${text}&maxSize=${5}`);
 }
 
 export function addQuestion(params) {

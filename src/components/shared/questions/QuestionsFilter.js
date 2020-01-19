@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { connect } from "react-redux";
 import {
   Box,
   Button,
@@ -14,6 +15,7 @@ import makeAnimated from "react-select/animated";
 import TuneIcon from "@material-ui/icons/Tune";
 import { QUESTIONS_SORT_CRITERIA } from "../../utils/Constants";
 import { pathOr } from "ramda";
+import { getAllActiveTags } from "../../../ducks/tags";
 const FilterButton = props => {
   const { name, selected, onClick } = props;
   return (
@@ -45,7 +47,8 @@ class FilterMenu extends React.Component {
 
   render() {
     const { sortBy, tags } = this.state;
-    const { onClose, onFilter } = this.props;
+    const { onClose, onFilter, tagsOptions } = this.props;
+
     return (
       <ClickAwayListener onClickAway={() => onClose()}>
         <Card className="filter-menu">
@@ -89,7 +92,7 @@ class FilterMenu extends React.Component {
                 components={makeAnimated()}
                 defaultValue={tags}
                 value={tags}
-                options={tagsOptions}
+                options={[...tagsOptions]}
                 onChange={newTagsList => this.handleTagsChange(newTagsList)}
               />
             </Grid>
@@ -126,14 +129,17 @@ class QuestionsFilter extends React.Component {
     };
   }
 
+  componentDidMount() {
+    const {
+      actions: { loadTags }
+    } = this.props;
+    loadTags();
+  }
+
   applyFilters(newFilters) {
     this.setState(
       prevState => ({ filters: { ...prevState.filters, ...newFilters } }),
-      () => {
-        console.log("New filters sent to parent:");
-        console.log(this.state.filters);
-        this.props.onFiltersChange(newFilters)
-      }
+      () => this.props.onFiltersChange(newFilters)
     );
   }
 
@@ -146,7 +152,7 @@ class QuestionsFilter extends React.Component {
   }
 
   render() {
-    const { title } = this.props;
+    const { title, tagsOptions } = this.props;
     const { filters, menuOpened } = this.state;
 
     return (
@@ -200,6 +206,7 @@ class QuestionsFilter extends React.Component {
 
             {menuOpened && (
               <FilterMenu
+                tagsOptions={tagsOptions || []}
                 filters={filters}
                 onFilter={filters => {
                   this.closeFilterMenu();
@@ -223,11 +230,20 @@ class QuestionsFilter extends React.Component {
   }
 }
 
-const tagsOptions = [
-  { value: "tag 1", label: "Tag 1" },
-  { value: "tag 2", label: "Tag 2" },
-  { value: "tag 3", label: "Tag 3" },
-  { value: "tag 4", label: "Tag 4" }
-];
+function mapStateToProps(state) {
+  return {
+    tagsOptions: pathOr([], ["tags", "activeTags", "data"], state).map(tag => {
+      return { value: tag.name, label: tag.name };
+    })
+  };
+}
 
-export default QuestionsFilter;
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: {
+      loadTags: () => dispatch(getAllActiveTags())
+    }
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(QuestionsFilter);

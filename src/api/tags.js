@@ -1,11 +1,15 @@
 import { request } from './request.js';
 
+export function getAllActiveTags() {
+  return request('GET', `user/allTags`);
+}
+
 export function getAllTags(page=1, pageSize=10) {
-  return request('GET', `company/tags?pageNumber=${page}&size=${pageSize}`);
+  return request('GET', `user/tags?pageNumber=${page}&size=${pageSize}`);
 }
 
 export function addTag(params) {
-  return request('POST', 'user/addTag', params);
+  return request('POST', 'company/addTag', params);
 }
 
 export function editTag(params) {

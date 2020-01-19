@@ -13,7 +13,7 @@ class Search extends React.Component {
   }
 
   render() {
-    const {search: {loading, results}, history, location} = this.props;
+    const {search: {loading, results}, history} = this.props;
 
     return (
       <Autocomplete className="searchContainer"
