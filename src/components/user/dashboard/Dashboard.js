@@ -6,7 +6,7 @@ import UsersSection from '../../company/company-dashboard/UsersSection';
 import ReportsSection from '../../company/company-dashboard/ReportsSection';
 import TagsSectionsContainer from '../../company/company-dashboard/tags/TagsSectionsContainer';
 import ProposedTags from '../../company/company-dashboard/tags/ProposedTags';
-import QuestionPage from '../../question/QuestionPage';
+import QuestionPageContainer from '../../question/QuestionPageContainer';
 import { pathOr } from 'ramda';
 import AllQuestions from '../../shared/questions/AllQuestions';
 
@@ -54,7 +54,7 @@ class Dashboard extends React.Component {
             <Route exact path={`${match.path}/reports`} component={ReportsSection} />
             <Route exact path={`${match.path}/all-questions`} component={AllQuestions} />
             <Route exact path={`${match.path}/my-questions`} component={AllQuestions} />
-            <Route path={`${match.path}/question/:id`} component={QuestionPage} />
+            <Route path={`${match.path}/question/:id`} component={QuestionPageContainer} />
             <Route component={UsersSection} />
           </Switch>
         </section>

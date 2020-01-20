@@ -1,9 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { getQuestion } from '../../ducks/questions'
-import { pathOr } from 'ramda';
 import LoadingSpinner from '../shared/LoadingSpinner';
-import QuestionCard from '../shared/questions/QuestionCard';
 
 class QuestionPage extends React.Component {
   componentDidMount() {
@@ -12,35 +8,19 @@ class QuestionPage extends React.Component {
   }
 
   render() {
-    const { match, currentQuestion: { loading, question } } = this.props;
+    const { currentQuestion: { loading, question } } = this.props;
     if (loading) {
       return <LoadingSpinner />
     }
 
+    // const { modelId, score, answers, questionTitle, questionText, questionTags, questionPublishDate, questionAuthorName } = question;
+
     return (
-      <div>
-        <QuestionCard question={question} />
-        <div>Answers: </div>
+      <div className="question-page">
+        
       </div>
     )
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    currentQuestion: pathOr({}, ['questions'], state),
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: {
-      loadQuestionById: (id) => { return dispatch(getQuestion(id)) }
-    }
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(QuestionPage);
+export default QuestionPage;
