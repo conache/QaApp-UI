@@ -1,42 +1,62 @@
-import React from 'react';
-import { Formik } from 'formik';
-import { Button, TextField, TextareaAutosize } from '@material-ui/core';
-import CustomFormInput from '../CustomFormInput';
-import CreatableSelect from 'react-select/creatable';
-import { filter, reject, isEmpty, isNil, map } from 'ramda';
-import { addQuestion } from '../../../api/questions';
-import { NotificationManager } from 'react-notifications';
+import React from "react";
+import { connect } from "react-redux";
+import { Formik } from "formik";
+import { Button, TextField, TextareaAutosize } from "@material-ui/core";
+import CustomFormInput from "../CustomFormInput";
+import CreatableSelect from "react-select/creatable";
+import { filter, reject, isEmpty, isNil, map } from "ramda";
+import LoadingSpinner from '../../shared/LoadingSpinner';
+import { addNewQuestion } from "../../../ducks/questions";
+import { getAllActiveTags } from "../../../ducks/tags";
+import { pathOr } from "ramda";
+import makeAnimated from "react-select/animated";
 
 const validate = values => {
   const errors = {};
   if (!values.title) {
-    errors.title = 'Required';
+    errors.title = "Required";
   }
 
   return errors;
 };
 
 const initialValues = {
-  title: '',
-  body: '',
+  title: "",
+  body: ""
 };
 
+const ALL_QUESTIONS_ROUTE = "/dashboard/all-questions";
 
 class AskQuestion extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       selectedTags: [],
-      proposedTagMessage: '',
+      proposedTagMessage: ""
+    };
+  }
+
+  componentDidMount() {
+    const {
+      actions: { loadTags }
+    } = this.props;
+    loadTags();
+  }
+
+  componentDidUpdate() {
+    const {history, newQuestionId} = this.props;
+    
+    if (newQuestionId) {
+      history.push(ALL_QUESTIONS_ROUTE);
     }
   }
 
   /**
-* @param { name: string } values
-* @param {object} formikActions - formik helpers
-*/
-  onSubmit = (values) => {
-    const { history } = this.props;
+   * @param { name: string } values
+   * @param {object} formikActions - formik helpers
+   */
+  onSubmit = values => {
+    const { actions: {addQuestion} } = this.props;
     const { selectedTags } = this.state;
     const { title, body } = values;
     const newTag = tag => tag.__isNew__;
@@ -44,43 +64,41 @@ class AskQuestion extends React.Component {
     const questionTags = map(tag => tag.value, reject(newTag, selectedTags));
     const params = {
       questionTitle: title,
-      questionText: body, 
+      questionText: body,
       questionTags,
-      // extraTags: map(tag => tag.value, filter(newTag, selectedTags))),
-    }
-    return addQuestion(params).then(() => {
-      NotificationManager.success("Question succesfully added");
-      history.push("/");
-    }).catch((error) => {
-      NotificationManager.error(`Could not ask question. Error: ${error.message}`);
-    });
-  }
+      proposedTags: map(tag => tag.value, filter(newTag, selectedTags))
+    };
+    return addQuestion(params);
+  };
 
   handleChange = (selectedTags, actionMeta) => {
-    this.setState(
-      { selectedTags },
-      () => {
-        if (isNil(selectedTags)) {
-          this.setState({ proposedTagMessage: ''});
-        } else if (!isEmpty(selectedTags) && isEmpty(filter(tag => tag.__isNew__, selectedTags))) {
-          this.setState({ proposedTagMessage: ''});
-        }
+    this.setState({ selectedTags }, () => {
+      if (isNil(selectedTags)) {
+        this.setState({ proposedTagMessage: "" });
+      } else if (
+        !isEmpty(selectedTags) &&
+        isEmpty(filter(tag => tag.__isNew__, selectedTags))
+      ) {
+        this.setState({ proposedTagMessage: "" });
       }
-    );
+    });
 
     if (actionMeta.action === "create-option") {
-      this.setState({ proposedTagMessage: 'The proposed tags will have to be accepted by an administrator'});
+      this.setState({
+        proposedTagMessage:
+          "The proposed tags will have to be accepted by an administrator"
+      });
     }
-    
   };
 
   render() {
     const { selectedTags, tagError, proposedTagMessage } = this.state;
-    const { history } = this.props;
-    
+    const { history, tagsOptions, creatingNewQuestion,  } = this.props;
+
     return (
       <div className="ask-question-container overflow-y">
-        <div className="h-100 w-100" style={{ margin: '0 20%' }}>
+        {creatingNewQuestion && <LoadingSpinner />}
+        <div className="h-100 w-100" style={{ margin: "0 20%" }}>
           <h2>Ask a question</h2>
           <Formik
             initialValues={initialValues}
@@ -95,7 +113,8 @@ class AskQuestion extends React.Component {
                     labelTitle="Title"
                     labelDescription="Be specific and clear with the question you are going to ask"
                   >
-                    <TextField variant="outlined"
+                    <TextField
+                      variant="outlined"
                       id="title"
                       name="title"
                       type="text"
@@ -134,19 +153,33 @@ class AskQuestion extends React.Component {
                       id="tags"
                       name="tags"
                       isMulti
-                      options={tags}
-                      placeholder="e.g. (Tortor) (imperdiet) (sed) (libero)"
+                      components={makeAnimated()}
+                      options={[...(tagsOptions || [])]}
+                      placeholder="e.g. (Fun) (Programming) (News) (Procedures)"
                       className="basic-multi-select"
                       classNamePrefix="select"
+                      defaultValue={selectedTags}
                       value={selectedTags}
                       onChange={this.handleChange}
                     />
-                    <div style={{ color: '#f50057' }}>{proposedTagMessage}</div>
+                    <div style={{ color: "#f50057" }}>{proposedTagMessage}</div>
                   </CustomFormInput>
                 </div>
                 <div className="py-1">
-                  <Button className="form-button" type="submit" color="primary" variant="contained">Post question</Button>
-                  <Button className="form-button" onClick={() => history.push("/")}>Discard</Button>
+                  <Button
+                    className="form-button"
+                    type="submit"
+                    color="primary"
+                    variant="contained"
+                  >
+                    Post question
+                  </Button>
+                  <Button
+                    className="form-button"
+                    onClick={() => history.push(ALL_QUESTIONS_ROUTE)}
+                  >
+                    Discard
+                  </Button>
                 </div>
               </form>
             )}
@@ -155,13 +188,24 @@ class AskQuestion extends React.Component {
       </div>
     );
   }
-};
+}
 
-export default AskQuestion;
+function mapStateToProps(state) {
+  return {
+    tagsOptions: pathOr([], ["tags", "activeTags", "data"], state).map(tag => {
+      return { value: tag.name, label: tag.name };}),
+    creatingNewQuestion: pathOr(false, ["questions", "loadingCreateQuestion"], state),
+    newQuestionId: pathOr(null, ["questions", "newQuestionId"], state),
+  };
+}
 
-const tags = [
-  { value: 'tag 1', label: 'Tag 1' },
-  { value: 'tag 2', label: 'Tag 2' },
-  { value: 'tag 3', label: 'Tag 3' },
-  { value: 'tag 4', label: 'Tag 4' },
-];
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: {
+      loadTags: () => dispatch(getAllActiveTags()),
+      addQuestion: (params) => dispatch(addNewQuestion(params))
+    }
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AskQuestion);

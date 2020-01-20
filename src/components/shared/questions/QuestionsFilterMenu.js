@@ -72,7 +72,7 @@ class QuestionsFilterMenu extends React.Component {
               <Select
                 isMulti
                 maxMenuHeight={100}
-                closeMenuOnSelect={false}
+                closeMenuOnSelect={true}
                 components={makeAnimated()}
                 defaultValue={tags}
                 value={tags}

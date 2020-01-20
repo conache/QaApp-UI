@@ -56,7 +56,7 @@ class Search extends React.Component {
           }
           history.push(`/dashboard/question/${questionId}`);
         }}
-        getOptionLabel={option => option}
+        getOptionLabel={option => option.questionTitle}
         filterOptions={options => options}
         options={pathOr([], ["data"], results)}
         renderOption={option => {
