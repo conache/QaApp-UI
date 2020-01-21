@@ -85,7 +85,7 @@ class QuestionPage extends React.Component {
           edit
         </Button>
 
-        <Answers nrAnswers={7} answers={answers} />
+        <Answers nrAnswers={7} answers={listAnswers} />
         <PostAnswer />
 
         <Modal
@@ -108,7 +108,7 @@ class QuestionPage extends React.Component {
 
 export default QuestionPage;
 
-const answers = [
+const listAnswers = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tellus etiam sodales pharetra egestas fames ullamcorper. Dui donec vestibulum morbi odio semper consectetur. Tincidunt vel nam duis pharetra lacus facilisis lectus nulla. Magna proin egestas velit morbi nunc, metus.',
   'Cursus augue vitae ullamcorper feugiat bibendum diam tellus velit, sed. Et augue id sed sem adipiscing odio ante fusce. Suspendisse facilisis nibh vulputate est, molestie elementum nulla. Penatibus enim, faucibus imperdiet arcu bibendum quis. Est quam in ullamcorper curabitur facilisis tristique. Nullam at nulla id eleifend sed rhoncus faucibus arcu. Morbi.',
   'Odio mauris hendrerit nulla pharetra turpis pellentesque venenatis integer diam. Viverra risus nunc quam aliquam. Pellentesque turpis nibh etiam ac nulla. A tristique non, elit pellentesque mauris. Elit fames quis aliquet lorem vehicula eu. Iaculis quam pretium urna risus, ipsum ut. Urna commodo tellus nunc morbi diam quam aliquam. Iaculis at amet vitae id ac.',
