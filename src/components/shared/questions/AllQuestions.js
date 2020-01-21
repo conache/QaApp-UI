@@ -94,7 +94,6 @@ class AllQuestions extends React.Component {
           onFiltersChange={(...args) => this.onFiltersChange(...args)}
         />
         <div className="list-container">
-          {loadingAllQuestions && <LoadingSpinner />}
           <PaginatedComponent
             style={{ marginRight: "auto" }}
             label="questions"
@@ -102,8 +101,8 @@ class AllQuestions extends React.Component {
             page={page}
             pageSize={pageSize}
             onPageChange={page => this.onPageChange(page)}
+            loading={loadingAllQuestions}
           >
-            {!loadingAllQuestions && questions.length === 0 && <div className="no-data-message">No questions</div>}
             <QuestionsList questions={questions} />
           </PaginatedComponent>
         </div>

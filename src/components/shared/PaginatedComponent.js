@@ -1,11 +1,18 @@
 import React from 'react';
 import { TablePagination, Grid } from "@material-ui/core";
+import LoadingSpinner from './LoadingSpinner';
 
 class PaginatedComponent extends React.Component {
   render() {
-    const { children, label, count, page, pageSize, onPageChange } = this.props;
+    const { children, label, count, page, pageSize, onPageChange, loading } = this.props;
+    
+    if(loading) {
+      return <LoadingSpinner />
+    }
+
     return <div>
       {children}
+      {!loading && count === 0 && <div className="no-data-message">No data</div>}
       {count > 0 && (
         <Grid container alignItems="flex-start" justify="flex-end" direction="row">
           <TablePagination

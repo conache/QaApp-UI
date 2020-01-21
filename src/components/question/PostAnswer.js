@@ -3,29 +3,34 @@ import { Formik } from 'formik';
 import { Button, TextareaAutosize } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { addAnswer } from '../../ducks/questions';
 
+const initialValues = {
+  answer: '',
+}
 
 const validate = values => {
   const errors = {};
   if (!values.answer) {
     errors.answer = 'Required';
-  } 
+  }
 
   return errors;
 };
 
 const PostAnswer = (props) => {
-  const onSubmit = values => {
-    window.alert(values.answer)
+  const onSubmit = (values , { resetForm })=> {
+    const { actions: { addAnswer } } = props;
+    addAnswer(values.answer).then(
+      resetForm(initialValues)
+    );
   };
 
   return (
     <div className="post-answer-container ml-72">
       <div className="subtitle">Your answer</div>
       <Formik
-        initialValues={{
-          answer: '',
-        }}
+        initialValues={initialValues}
         onSubmit={onSubmit}
         validate={validate}
         className="w-100"
@@ -66,6 +71,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators({
+      addAnswer: addAnswer,
     }, dispatch),
   };
 }

@@ -1,0 +1,28 @@
+.general-modal {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  background: #24303cde;
+  padding: 5rem;
+  transition: padding 200 ease-in-out;
+}
+
+.modal {
+  @extend .container-center;
+
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+
+  .modal-body {
+    background: #EEEEEE;
+    box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.15);
+    padding: 5rem;
+  }
+}

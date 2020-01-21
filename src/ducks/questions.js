@@ -3,6 +3,8 @@ import Immutable from "seamless-immutable";
 import {NotificationManager} from 'react-notifications';
 
 import * as Questions from "../api/questions";
+import * as Answers from "../api/answers";
+
 
 export default function reducer(state = Immutable({}), action) {
   switch (action.type) {
@@ -86,3 +88,48 @@ export const addNewQuestion = params => {
       });
   };
 };
+
+export const subscribeQuestin = (params) => {
+  // TODO: need more work
+  return dispatch => {
+    return Questions.subscribe(params)
+      .then(resp => {
+        // dispatch(createQuestion(resp.data));
+      })
+      .catch(err => {
+        NotificationManager.error(
+          `We've encountered some troubles. Please try again. Error: ${err.message}`
+        );
+      });
+  };
+}
+
+
+export const getAnswers = params => {
+  return dispatch => {
+    return Answers.getAnswers(params)
+      .then(resp => {
+        // dispatch(createQuestion(resp.data));
+      })
+      .catch(err => {
+        NotificationManager.error(
+          `We've encountered some troubles getting your answers. Please try again. Error: ${err.message}`
+        );
+      });
+  };
+}
+
+export const addAnswer = params => {
+  return dispatch => {
+    return Answers.addAnswer(params)
+      .then(resp => {
+        // dispatch(createQuestion(resp.data));
+        NotificationManager.success("Succesfully submitted your answer.")
+      })
+      .catch(err => {
+        NotificationManager.error(
+          `We've encountered some troubles adding your answer. Please try again. Error: ${err.message}`
+        );
+      });
+  };
+}
