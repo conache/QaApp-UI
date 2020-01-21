@@ -46,9 +46,9 @@ class ProposedTags extends React.Component {
         <MaterialTable
           options={{
             exportButton: false,
-            search: true,
-            // pageSize: 10,
-            // pageSizeOptions: [],
+            search: false,
+            pageSize: 10,
+            pageSizeOptions: [],
             sorting: true,
           }}
           title="Proposed Tags"

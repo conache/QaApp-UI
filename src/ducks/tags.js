@@ -19,6 +19,16 @@ export default function reducer(state = Immutable({}), action) {
         { activeTags: { data: action.payload } },
         { deep: true }
       );
+    case "tags/PROPOSED_TAGS_LOADING":
+      return state.merge(
+        { proposedTags: { data: action.payload } },
+        { deep: true }
+      );
+    case "tags/PROPOSED_TAGS":
+      return state.merge(
+        { proposedTags: { loading: action.payload } },
+        { deep: true }
+      );
     default:
       return state;
   }
@@ -31,6 +41,11 @@ export const getAllActiveTagsLoading = createAction(
   "tags/ALL_ACTIVE_TAGS_LOADING"
 );
 export const setAllActiveTags = createAction("tags/ALL_ACTIVE_TAGS");
+
+export const getProposedTagsLoading = createAction(
+  "tagas/PROPOSED_TAGS_LOADING"
+);
+export const setProposedTags = createAction("tags/PROPOSED_TAGS");
 
 export const getAllActiveTags = () => {
   return dispatch => {
@@ -97,5 +112,14 @@ export const deleteTag = id => {
           `Could not delete tag. Error: ${err.message}`
         );
       });
+  };
+};
+
+// Proposed tags
+export const getProposedTags = params => {
+  return dispatch => {
+    return Tags.getProposedTags(params)
+      .then(res => {})
+      .catch(err => {});
   };
 };
