@@ -33,7 +33,3 @@ export function getAllQuestions(params) {
   const {page, pageSize, tags, sortBy} = params;
   return request('GET', `question/findAll?page=${page + 1}&size=${pageSize}&sortBy=${sortBy}&tags=${tags.join(',')}`);
 }
-
-// export function getAllQuestions(params) {
-//   return request('POST', `question/findAll`, params);
-// }
