@@ -17,19 +17,34 @@
   .filter-tags-label {
     margin-right: 8px;
     padding: 5px;
+    padding-left: 0;
   }
 
   .filter-menu {
     width: 100%;
     position: absolute;
     z-index: 1;
-    padding: 24px;
+    padding: 16px 24px;
     top: 55px;
     right: 0;
 
-    .filter-menu-label {
+    &__label {
       font-weight: 700;
       margin-bottom: 10px;
+    }
+
+    &__btn {
+      padding: 4px 10px;
+    }
+
+    .MuiFormControlLabel {
+      &-root {
+        margin: 0 12px 0 0 !important;
+      }
+
+      &-labelPlacementStart {
+        margin: 0 !important;
+      }
     }
   }
 }

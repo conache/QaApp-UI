@@ -1,0 +1,49 @@
+.question-page {
+  padding: 48px 64px 48px 24px;
+
+  h2 {
+    margin-top: 0;
+  }
+
+  .edit-q-button {
+    margin-left: 72px;
+    margin-top: 2rem;
+  }
+
+  .ml-72 {
+    margin-left: 72px;
+  }
+
+  .answers-container {
+    margin: 20px 0;
+
+    .answer {
+      &-text {
+        padding: 24px 0;
+      }
+    }
+  }
+
+  .post-answer-container {
+    margin-bottom: 1rem;
+  }
+
+  .subtitle {
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 40px;
+  }
+}
+
+.votes-container {
+  min-width: 72px;
+  .normal-size {
+    font-size: 18px;
+    line-height: 24px;
+  }
+
+  .small-size {
+    font-size: 14px;
+    line-height: 17px
+  }
+}

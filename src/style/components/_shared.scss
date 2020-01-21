@@ -1,0 +1,19 @@
+.tag {
+  padding: 8px 16px;
+  margin-right: 8px;
+  background: #C4C4C4;
+  font-size: 14px;
+}
+
+.no-data-message {
+  @extend .container-center;
+
+  height: 200px;
+  opacity: 0.7;
+}
+
+.horizontal-hr {
+  width: 100%;
+  background: #000000;
+  border: 0.35px solid #000000;
+}

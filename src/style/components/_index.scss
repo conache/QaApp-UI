@@ -4,10 +4,12 @@
 @import 'style/components/person-details';
 @import 'style/components/search';
 @import 'style/components/sidebar';
-@import 'style/components/ask-question';
-@import 'style/components/all-questions';
-@import 'style/components/question-card';
 @import 'style/components/react-select';
 @import 'style/components/header-questions-page';
-@import 'style/components/question-page';
 
+@import 'style/components/questions/question-page';
+@import 'style/components/questions/all-questions';
+@import 'style/components/questions/ask-question';
+@import 'style/components/questions/question-card';
+
+@import 'style/components/shared';

@@ -58,7 +58,7 @@ class QuestionsFilterSection extends React.Component {
   }
 
   render() {
-    const { title, tagsOptions } = this.props;
+    const { title, tagsOptions, numbrOfQuestions } = this.props;
     const { filters, menuOpened } = this.state;
 
     return (
@@ -70,6 +70,7 @@ class QuestionsFilterSection extends React.Component {
         >
           <h3>{title}</h3>
           <div className="filters-container align-center">
+            {numbrOfQuestions > 0 && <div style={{ marginRight: '24px' }}>{numbrOfQuestions} questions</div>}
             <FilterButton
               name="Newest"
               selected={filters.sortBy === QUESTIONS_SORT_CRITERIA.NEWEST}
@@ -105,7 +106,6 @@ class QuestionsFilterSection extends React.Component {
               variant="contained"
               className={{ "filter-button": true, selected: menuOpened }}
               endIcon={<TuneIcon />}
-              style={{ marginLeft: "1rem" }}
             >
               Filter
             </Button>

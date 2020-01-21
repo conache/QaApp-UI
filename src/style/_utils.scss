@@ -10,6 +10,18 @@
   padding: 1rem 0;
 }
 
+.m-1 {
+  margin: 1rem;
+}
+
+.mx-1 {
+  margin: 0 1rem;
+}
+
+.my-1 {
+  margin: 1rem 0;
+}
+
 .h-100 {
   height: 100% !important;
 }
@@ -27,9 +39,13 @@
 }
 
 .overflow-y {
-  overflow-y: inherit;
+  overflow-y: auto;
 }
 
 .overflow-x {
-  overflow-x: inherit;
+  overflow-x: auto;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }

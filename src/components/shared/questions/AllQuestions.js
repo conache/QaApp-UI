@@ -82,6 +82,7 @@ class AllQuestions extends React.Component {
       questions = pathOr([], ["value0"], allQuestions);
     }
 
+
     return (
       <div
         className="all-questions d-flex flex-column h-100"
@@ -89,18 +90,20 @@ class AllQuestions extends React.Component {
       >
         <QuestionsFilterSection
           title="All questions page"
+          numbrOfQuestions={totalElements}
           onFiltersChange={(...args) => this.onFiltersChange(...args)}
         />
         <div className="list-container">
           {loadingAllQuestions && <LoadingSpinner />}
           <PaginatedComponent
-            style={{marginRight: "auto"}}
+            style={{ marginRight: "auto" }}
             label="questions"
             count={totalElements}
             page={page}
             pageSize={pageSize}
             onPageChange={page => this.onPageChange(page)}
           >
+            {!loadingAllQuestions && questions.length === 0 && <div className="no-data-message">No questions</div>}
             <QuestionsList questions={questions} />
           </PaginatedComponent>
         </div>

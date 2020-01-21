@@ -37,7 +37,7 @@ class QuestionsFilterMenu extends React.Component {
       <ClickAwayListener onClickAway={() => onClose()}>
         <Card className="filter-menu">
           <Grid container direction="column">
-            <div className="filter-menu-label">Sort by</div>
+            <div className="filter-menu__label">Sort by</div>
             <Grid container direction="row">
               <RadioGroup
                 value={sortBy}
@@ -67,12 +67,11 @@ class QuestionsFilterMenu extends React.Component {
                 />
               </RadioGroup>
             </Grid>
-            <div className="filter-menu-label">By following tags</div>
+            <div className="filter-menu__label">By following tags</div>
             <Grid style={{ marginBottom: "60px" }}>
               <Select
                 isMulti
                 maxMenuHeight={100}
-                closeMenuOnSelect={false}
                 components={makeAnimated()}
                 defaultValue={tags}
                 value={tags}
@@ -82,15 +81,15 @@ class QuestionsFilterMenu extends React.Component {
             </Grid>
             <Box display="flex">
               <Button
+                className="filter-menu__btn"
                 variant="contained"
                 color="primary"
-                size="small"
                 style={{ marginRight: "auto" }}
                 onClick={() => onFilter({ sortBy, tags })}
               >
                 Apply filters
               </Button>
-              <Button size="small" onClick={() => onClose()}>
+              <Button className="filter-menu-btn" onClick={() => onClose()}>
                 Cancel
               </Button>
             </Box>
