@@ -1,19 +1,54 @@
 import { createAction } from "redux-actions";
 import Immutable from "seamless-immutable";
-import {NotificationManager} from 'react-notifications';
-
-import * as Answers from '../api/answers';
+import { NotificationManager } from "react-notifications";
+import { pathOr } from "ramda";
+import * as Answers from "../api/answers";
 
 export default function reducer(state = Immutable({}), action) {
   switch (action.type) {
     case "answers/GET_ANSWERS_LOADING":
-      return state.merge({loadingAnswers: action.payload});
+      return state.merge({ loadingAnswers: action.payload });
     case "answers/ANSWERS":
-      return state.merge({answers: action.payload}, {deep: true});
+      return state.merge(
+        {
+          answers: {
+            data: pathOr([], ["value0"], action.payload),
+            totalCount: pathOr([], ["value1"], action.payload)
+          }
+        },
+        { deep: true }
+      );
     case "answers/CREATE_ANSWER_LOADING":
-      return state.merge({loadingCreateAnswer: action.payload}, {deep: true});
+      return state.merge(
+        { loadingCreateAnswer: action.payload },
+        { deep: true }
+      );
     case "answers/CREATE_ANSWER":
-      return state.merge({newAnswerId: action.payload }, {deep: true})
+      return state.merge({ newAnswerId: action.payload }, { deep: true });
+    case "answers/VOTE_ANSWER":
+      const currentAnswers = pathOr({}, ["answers"], state);
+      return state.merge(
+        {
+          answers: {
+            ...currentAnswers,
+            data: currentAnswers.data.map(answer => {
+              if (answer.modelId !== action.payload.modelId) {
+                return answer;
+              }
+              const voteCount = action.payload.upvote ? 1 : -1;
+              return {
+                ...answer,
+                score: answer.score + voteCount
+              };
+            })
+          }
+        },
+        { deep: true }
+      );
+    case "answer/DELETE_ANSWER_LOADING":
+      return state.merge({ loadingDelete: action.payload }, { deep: true });
+    case "answer/EDIT_ANSWER_LOADING":
+      return state.merge({ loadingEdit: action.payload }, { deep: true });
     default:
       return state;
   }
@@ -21,8 +56,11 @@ export default function reducer(state = Immutable({}), action) {
 
 export const loadingAnswers = createAction("answers/GET_ANSWERS_LOADING");
 export const setAnswers = createAction("answers/ANSWERS");
-export const loadingCreateAnswer = createAction("answers/CREATE_ANSWER_LOADING");
+export const loadingCreateAnswer = createAction(
+  "answers/CREATE_ANSWER_LOADING"
+);
 export const createAnswer = createAction("answers/CREATE_ANSWER");
+export const applyAnswerVote = createAction("answers/VOTE_ANSWER");
 
 export const getAnswers = params => {
   return dispatch => {
@@ -39,7 +77,7 @@ export const getAnswers = params => {
         );
       });
   };
-}
+};
 
 export const addAnswer = params => {
   return dispatch => {
@@ -57,4 +95,19 @@ export const addAnswer = params => {
         );
       });
   };
-}
+};
+
+export const voteAnswer = params => {
+  return dispatch => {
+    const { modelId } = params;
+    return Answers.updateAnswer(params)
+      .then(resp => {
+        dispatch(applyAnswerVote(params));
+      })
+      .catch(err => {
+        NotificationManager.error(
+          `Error encountered while request. Error: ${err.message}`
+        );
+      });
+  };
+};

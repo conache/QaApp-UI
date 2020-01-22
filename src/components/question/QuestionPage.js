@@ -68,8 +68,8 @@ class QuestionPage extends React.Component {
     }
 
     if (answers) {
-      totalAnswersCount = pathOr(0, ["value1"], answers);
-      displayedAnswers = pathOr([], ["value0"], answers);
+      totalAnswersCount = pathOr(0, ["totalCount"], answers);
+      displayedAnswers = pathOr([], ["data"], answers);
     }
 
     const { modelId, score, questionTitle, questionText, questionTags, questionPublishDate, questionAuthorName } = question;

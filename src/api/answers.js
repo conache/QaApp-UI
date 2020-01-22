@@ -10,4 +10,9 @@ export function addAnswer(params) {
   return request('POST', 'answer/addAnswer', params);
 }
 
-
+export function updateAnswer(params) {
+  return new Promise((resolve, reject) => {
+    resolve({message: "Aaa nu e implementat"});
+  });
+  return request('PUT', 'answer/editAnswer', params);
+}
