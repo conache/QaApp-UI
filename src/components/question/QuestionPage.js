@@ -7,26 +7,48 @@ import PostAnswer from './PostAnswer';
 import Answers from './Answers';
 import UpDownVotes from './UpDownVotes';
 import Subscribe from './Subscribe';
+import PaginatedComponent from '../shared/PaginatedComponent';
+import { pathOr } from 'ramda';
 
 class QuestionPage extends React.Component {
   constructor(props) {
     super(props);
-
+    const {match} = this.props;
     this.state = {
       subscribed: false,
       showModal: false,
+      page: 0,
+      pageSize: 5,
+      questionId: match.params.id
     };
   }
 
   componentDidMount() {
-    const { actions: { loadQuestionById, getAnswers }, match } = this.props;
-    loadQuestionById(match.params.id);
-    getAnswers(match.params.id);
+    const { actions: { loadQuestionById }} = this.props;
+    loadQuestionById(this.state.questionId);
+    this.loadAnswers();
+  }
+
+  loadAnswers() {
+    const {page, pageSize, questionId} = this.state;
+    const { actions: { getAnswers } } = this.props;
+    getAnswers({
+      page,
+      pageSize,
+      questionId
+    });
+  }
+
+  onAnswersPageChange(page) {
+    this.setState({page}, () => this.loadAnswers());
+  }
+
+  onPostAnswerSuccess() {
+    this.setState({page: 0}, () => this.loadAnswers());
   }
 
   handleSubscribe = (value) => {
     const { actions: { subscribe } } = this.props;
-    // subscribe()
     this.setState({ subscribed: value });
   }
 
@@ -35,18 +57,22 @@ class QuestionPage extends React.Component {
   }
 
   render() {
-    const { currentQuestion: { loading, question } } = this.props;
-    const { showModal, subscribed } = this.state;
+    const { currentQuestion: { loading, question }, currentAnswers: {loadingAnswers, answers} } = this.props;
+    const { showModal, subscribed, page, pageSize, questionId } = this.state;
+    
+    let totalAnswersCount = 0;
+    let displayedAnswers = [];
 
-    if (loading) {
-      return <LoadingSpinner />
+    if (!question || loading) {
+      return <LoadingSpinner />;
     }
 
-    if (!question) {
-      return null;
+    if (answers) {
+      totalAnswersCount = pathOr(0, ["value1"], answers);
+      displayedAnswers = pathOr([], ["value0"], answers);
     }
 
-    const { modelId, score, answers, questionTitle, questionText, questionTags, questionPublishDate, questionAuthorName } = question;
+    const { modelId, score, questionTitle, questionText, questionTags, questionPublishDate, questionAuthorName } = question;
 
     return (
       <div className="question-page h-100">
@@ -84,9 +110,21 @@ class QuestionPage extends React.Component {
         >
           edit
         </Button>
-
-        <Answers nrAnswers={7} answers={listAnswers} />
-        <PostAnswer />
+        
+        <div className="paginated-answers-container d-flex flex-column">
+          <PaginatedComponent
+              label="answers"
+              count={totalAnswersCount}
+              page={page}
+              pageSize={pageSize}
+              onPageChange={page => this.onAnswersPageChange(page)}
+              loading={loadingAnswers}
+              noDataMessage={"No answers found for this question. Be the first who answers!"}
+              >
+            <Answers answers={displayedAnswers} />
+          </PaginatedComponent>
+        </div>
+        <PostAnswer questionId={questionId} onSuccess={() => this.onPostAnswerSuccess()}/>
 
         <Modal
           open={showModal}
@@ -107,12 +145,3 @@ class QuestionPage extends React.Component {
 }
 
 export default QuestionPage;
-
-const listAnswers = [
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tellus etiam sodales pharetra egestas fames ullamcorper. Dui donec vestibulum morbi odio semper consectetur. Tincidunt vel nam duis pharetra lacus facilisis lectus nulla. Magna proin egestas velit morbi nunc, metus.',
-  'Cursus augue vitae ullamcorper feugiat bibendum diam tellus velit, sed. Et augue id sed sem adipiscing odio ante fusce. Suspendisse facilisis nibh vulputate est, molestie elementum nulla. Penatibus enim, faucibus imperdiet arcu bibendum quis. Est quam in ullamcorper curabitur facilisis tristique. Nullam at nulla id eleifend sed rhoncus faucibus arcu. Morbi.',
-  'Odio mauris hendrerit nulla pharetra turpis pellentesque venenatis integer diam. Viverra risus nunc quam aliquam. Pellentesque turpis nibh etiam ac nulla. A tristique non, elit pellentesque mauris. Elit fames quis aliquet lorem vehicula eu. Iaculis quam pretium urna risus, ipsum ut. Urna commodo tellus nunc morbi diam quam aliquam. Iaculis at amet vitae id ac.',
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tellus etiam sodales pharetra egestas fames ullamcorper. Dui donec vestibulum morbi odio semper consectetur. Tincidunt vel nam duis pharetra lacus facilisis lectus nulla. Magna proin egestas velit morbi nunc, metus.',
-  'Cursus augue vitae ullamcorper feugiat bibendum diam tellus velit, sed. Et augue id sed sem adipiscing odio ante fusce. Suspendisse facilisis nibh vulputate est, molestie elementum nulla. Penatibus enim, faucibus imperdiet arcu bibendum quis. Est quam in ullamcorper curabitur facilisis tristique. Nullam at nulla id eleifend sed rhoncus faucibus arcu. Morbi.',
-  'Odio',
-]

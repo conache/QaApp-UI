@@ -3,7 +3,7 @@ import { Formik } from 'formik';
 import { Button, TextareaAutosize } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { addAnswer } from '../../ducks/questions';
+import { addAnswer } from '../../ducks/answers';
 
 const initialValues = {
   answer: '',
@@ -20,10 +20,11 @@ const validate = values => {
 
 const PostAnswer = (props) => {
   const onSubmit = (values , { resetForm })=> {
-    const { actions: { addAnswer } } = props;
-    addAnswer(values.answer).then(
-      resetForm(initialValues)
-    );
+    const {questionId, onSuccess, actions: { addAnswer }} = props;
+    addAnswer({questionId, answerText: values.answer}).then( () => {
+      resetForm(initialValues);
+      onSuccess();
+    });
   };
 
   return (

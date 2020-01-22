@@ -95,7 +95,6 @@ class AllQuestions extends React.Component {
         />
         <div className="list-container">
           <PaginatedComponent
-            style={{ marginRight: "auto" }}
             label="questions"
             count={totalElements}
             page={page}
