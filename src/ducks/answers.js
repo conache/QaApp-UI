@@ -5,6 +5,8 @@ import { pathOr } from "ramda";
 import * as Answers from "../api/answers";
 
 export default function reducer(state = Immutable({}), action) {
+  const currentAnswers = pathOr({}, ["answers"], state);
+
   switch (action.type) {
     case "answers/GET_ANSWERS_LOADING":
       return state.merge({ loadingAnswers: action.payload });
@@ -26,7 +28,6 @@ export default function reducer(state = Immutable({}), action) {
     case "answers/CREATE_ANSWER":
       return state.merge({ newAnswerId: action.payload }, { deep: true });
     case "answers/VOTE_ANSWER":
-      const currentAnswers = pathOr({}, ["answers"], state);
       return state.merge(
         {
           answers: {
@@ -45,10 +46,25 @@ export default function reducer(state = Immutable({}), action) {
         },
         { deep: true }
       );
-    case "answer/DELETE_ANSWER_LOADING":
+    case "answers/DELETE_ANSWER_LOADING":
       return state.merge({ loadingDelete: action.payload }, { deep: true });
-    case "answer/EDIT_ANSWER_LOADING":
-      return state.merge({ loadingEdit: action.payload }, { deep: true });
+    case "answers/DELETE_ANSWER":
+      return state.merge({ deletedAnswerId: action.payload }, { deep: true });
+    case "answers/EDIT_ANSWER":
+      return state.merge({
+        answers: {
+          ...currentAnswers,
+          data: currentAnswers.data.map(answer => {
+            if (answer.modelId !== action.payload.modelId) {
+              return answer;
+            }
+            return {
+              ...answer,
+              answerText: action.payload.answerText
+            };
+          })
+        }
+      });
     default:
       return state;
   }
@@ -61,6 +77,13 @@ export const loadingCreateAnswer = createAction(
 );
 export const createAnswer = createAction("answers/CREATE_ANSWER");
 export const applyAnswerVote = createAction("answers/VOTE_ANSWER");
+
+export const applyAnswerEdit = createAction("answers/EDIT_ANSWER");
+
+export const loadingDeleteAnswer = createAction(
+  "answers/DELETE_ANSWER_LOADING"
+);
+export const storeDeletedAnswer = createAction("answers/DELETE_ANSWER");
 
 export const getAnswers = params => {
   return dispatch => {
@@ -99,7 +122,6 @@ export const addAnswer = params => {
 
 export const voteAnswer = params => {
   return dispatch => {
-    const { modelId } = params;
     return Answers.updateAnswer(params)
       .then(resp => {
         dispatch(applyAnswerVote(params));
@@ -109,5 +131,44 @@ export const voteAnswer = params => {
           `Error encountered while request. Error: ${err.message}`
         );
       });
+  };
+};
+
+export const deleteAnswer = id => {
+  return dispatch => {
+    dispatch(loadingDeleteAnswer(id));
+    return Answers.deleteAnswer(id)
+      .then(resp => {
+        dispatch(storeDeletedAnswer(id));
+        dispatch(loadingDeleteAnswer(null));
+        NotificationManager.success("Answer successfully deleted.");
+      })
+      .catch(err => {
+        dispatch(loadingDeleteAnswer(null));
+        NotificationManager.error(
+          `Could not delete answer. Error: ${err.message}`
+        );
+      });
+  };
+};
+
+export const editAnswer = params => {
+  return dispatch => {
+    return Answers.updateAnswer(params)
+      .then(resp => {
+        dispatch(applyAnswerEdit(params));
+      })
+      .catch(err => {
+        NotificationManager.error(
+          `Error encountered while editing. Error: ${err.message}`
+        );
+      });
+  };
+};
+
+// HACK - USELESS
+export const emptyDeletedAnswer = () => {
+  return dispatch => {
+    dispatch(storeDeletedAnswer(null));
   };
 };

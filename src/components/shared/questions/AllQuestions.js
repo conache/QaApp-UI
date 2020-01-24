@@ -7,7 +7,6 @@ import {
   QUESTIONS_SORT_CRITERIA
 } from "../../utils/Constants";
 import { getAllQuestions } from "../../../ducks/questions";
-import LoadingSpinner from "../LoadingSpinner";
 import QuestionsFilterSection from "./QuestionsFilterSection";
 import QuestionsList from "./QuestionsList";
 import PaginatedComponent from "../PaginatedComponent";

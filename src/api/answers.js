@@ -1,4 +1,5 @@
 import { request } from './request';
+import { reject } from 'ramda';
 
 
 export function getAnswers(params) {
@@ -11,8 +12,12 @@ export function addAnswer(params) {
 }
 
 export function updateAnswer(params) {
+  return request('POST', 'answer/update', params);
+}
+
+export function deleteAnswer(id) {
   return new Promise((resolve, reject) => {
-    resolve({message: "Aaa nu e implementat"});
+    resolve({});
   });
-  return request('PUT', 'answer/editAnswer', params);
+  return request('DELETE', `answer/deleteAnswer?answerId=${id}`);
 }

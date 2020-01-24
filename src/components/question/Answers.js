@@ -1,7 +1,6 @@
-import React from 'react';
-import Answer from './Answer';
-
-const Answers = ({answers}) => {
+import React from "react";
+import Answer from "./Answer";
+const Answers = ({ answers, questionId, onAnswerDelete }) => {
   return (
     <div className="answers-container">
       {/* The up-down vote width is 72px */}
@@ -9,9 +8,11 @@ const Answers = ({answers}) => {
         <div className="subtitle">{nrAnswers} answers</div>
         <div className="horizontal-hr" />
   </div>*/}
-      {answers.map((answer, idx) => <Answer answer={answer} key={idx} />)}
+      {answers.map((answer, idx) => (
+        <Answer questionId={questionId} answer={answer} key={idx} onDelete={onAnswerDelete}/>
+      ))}
     </div>
-  )
-}
+  );
+};
 
 export default Answers;
