@@ -71,10 +71,16 @@ class Answer extends React.Component {
     });
   }
 
+  hasVotingAccess() {
+    const {answer, currentUser} = this.props;
+
+    return answer?.userId !== currentUser?.id;
+  }
+
   render() {
-    const { answer, key, currentUser } = this.props;
+    const { answer, key } = this.props;
     const { editing, inactive, loading } = this.state;
-    const { answerText, userId, score, voteStatus } = answer;
+    const { answerText, score, voteStatus } = answer;
 
     return (
       <div className="answer w-100 d-flex position-relative" key={key}>
@@ -83,7 +89,7 @@ class Answer extends React.Component {
         <UpDownVotes
           small
           classContainer="container-center d-flex flex-column"
-          disabled={userId === currentUser.id || loading || inactive}
+          disabled={!this.hasVotingAccess()}
           nrVotes={score}
           vote={voteStatus}
           onUpVote={() => this.vote(true)}

@@ -56,11 +56,13 @@ class QuestionPage extends React.Component {
   }
 
   handleSubscribe(value) {
-    const {actions: { subscribeToQuestion }} = this.props;
-    const {questionId} = this.state;
+    const {
+      actions: { subscribeToQuestion }
+    } = this.props;
+    const { questionId } = this.state;
 
-    subscribeToQuestion({subscribe: value, questionId});
-  };
+    subscribeToQuestion({ subscribe: value, questionId });
+  }
 
   handleEditSubmit(newQuestionText) {
     const { questionId } = this.state;
@@ -96,11 +98,22 @@ class QuestionPage extends React.Component {
 
   vote(isUpVote) {
     const { questionId } = this.state;
-    const {actions: { voteQuestion }} = this.props;
+    const {
+      actions: { voteQuestion }
+    } = this.props;
     voteQuestion({
       questionId,
       isUpVote
     });
+  }
+
+  hasVotingAccess() {
+    const {
+      currentUser,
+      currentQuestion: { question }
+    } = this.props;
+
+    return question?.questionAuthorId !== currentUser.id;
   }
 
   render() {
@@ -145,7 +158,10 @@ class QuestionPage extends React.Component {
       <div className="question-page h-100 position-relative">
         {deleteLoading && <InactiveOverlay />}
         <div className="d-flex">
-          <Subscribe subscribed={subscribed} onClick={(value) => this.handleSubscribe(value)} />
+          <Subscribe
+            subscribed={subscribed}
+            onClick={value => this.handleSubscribe(value)}
+          />
           <div>
             <h2 className>{questionTitle}</h2>
             <p>
@@ -159,6 +175,7 @@ class QuestionPage extends React.Component {
           <UpDownVotes
             className="align-center d-flex flex-column"
             style={{ textAlign: "center" }}
+            disabled={!this.hasVotingAccess()}
             nrVotes={score}
             vote={voteStatus}
             onUpVote={() => this.vote(true)}
