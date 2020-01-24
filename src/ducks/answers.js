@@ -56,8 +56,6 @@ export default function reducer(state = Immutable({}), action) {
         },
         { deep: true }
       );
-    case "answers/DELETE_ANSWER_LOADING":
-      return state.merge({ loadingDelete: action.payload }, { deep: true });
     case "answers/DELETE_ANSWER":
       return state.merge({ deletedAnswerId: action.payload }, { deep: true });
     case "answers/EDIT_ANSWER":
@@ -89,11 +87,7 @@ export const createAnswer = createAction("answers/CREATE_ANSWER");
 export const applyAnswerVote = createAction("answers/VOTE_ANSWER");
 
 export const applyAnswerEdit = createAction("answers/EDIT_ANSWER");
-
-export const loadingDeleteAnswer = createAction(
-  "answers/DELETE_ANSWER_LOADING"
-);
-export const storeDeletedAnswer = createAction("answers/DELETE_ANSWER");
+export const applyDeleteAnswer = createAction("answers/DELETE_ANSWER");
 
 export const getAnswers = params => {
   return dispatch => {
@@ -144,17 +138,14 @@ export const voteAnswer = params => {
   };
 };
 
-export const deleteAnswer = id => {
+export const deleteAnswer = params => {
   return dispatch => {
-    dispatch(loadingDeleteAnswer(id));
-    return Answers.deleteAnswer(id)
+    return Answers.deleteAnswer(params)
       .then(resp => {
-        dispatch(storeDeletedAnswer(id));
-        dispatch(loadingDeleteAnswer(null));
+        dispatch(applyDeleteAnswer(params));
         NotificationManager.success("Answer successfully deleted.");
       })
       .catch(err => {
-        dispatch(loadingDeleteAnswer(null));
         NotificationManager.error(
           `Could not delete answer. Error: ${err.message}`
         );
@@ -173,12 +164,5 @@ export const editAnswer = params => {
           `Error encountered while editing. Error: ${err.message}`
         );
       });
-  };
-};
-
-// HACK - USELESS
-export const emptyDeletedAnswer = () => {
-  return dispatch => {
-    dispatch(storeDeletedAnswer(null));
   };
 };

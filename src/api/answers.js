@@ -20,9 +20,7 @@ export function updateAnswer(params) {
   return request('POST', 'answer/update', params);
 }
 
-export function deleteAnswer(id) {
-  return new Promise((resolve, reject) => {
-    resolve({});
-  });
-  return request('DELETE', `answer/deleteAnswer?answerId=${id}`);
+export function deleteAnswer(params) {
+  const {answerId, questionId} = params;
+  return request('DELETE', `answer/delete?answerId=${answerId}&questionId=${questionId}`);
 }

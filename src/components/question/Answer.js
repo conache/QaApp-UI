@@ -12,12 +12,14 @@ import {
 import { pathOr } from "ramda";
 import EditAnswerForm from "./EditAnswerForm";
 import {withUser} from "../../context";
+import InactiveOverlay from "../shared/InactiveOverlay";
 
 class Answer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      editing: false
+      editing: false,
+      deleting: false,
     };
   }
 
@@ -37,31 +39,27 @@ class Answer extends React.Component {
   onDeleteClick() {
     const {
       answer,
+      onDelete,
       actions: { deleteAnswer }
     } = this.props;
-    deleteAnswer(answer.modelId);
+    this.setState({deleting: true});
+    deleteAnswer({answerId: answer.modelId, questionId: answer.questionId})
+      .then(() => {
+        onDelete();
+        this.setState({deleting: false});
+      })
+      .catch(() => {
+        this.setState({deleting: false});
+      })
   }
 
   onEditButtonClick() {
     this.setState({ editing: true });
   }
 
-  componentDidUpdate() {
-    const {
-      deletedAnswer,
-      answer,
-      actions: { emptyDeleted }
-    } = this.props;
-
-    if (deletedAnswer === answer.modelId) {
-      // this.props.onDelete(deletedAnswer);
-      emptyDeleted();
-    }
-  }
-
   render() {
     const { answer, key, currentUser } = this.props;
-    const { editing } = this.state;
+    const { editing, deleting } = this.state;
 
     const {
       answerText,
@@ -75,11 +73,12 @@ class Answer extends React.Component {
     } = answer;
 
     return (
-      <div className="answer w-100 d-flex" key={key}>
+      <div className="answer w-100 d-flex position-relative" key={key}>
+        {deleting && <InactiveOverlay />}
         <UpDownVotes
           small
           classContainer="container-center d-flex flex-column"
-          disabled={userId === currentUser.id}
+          disabled={(userId === currentUser.id) || editing || deleting}
           nrVotes={score}
           vote={voteStatus}
           onUpVote={() => this.vote(true)}
@@ -125,9 +124,7 @@ function mapDispatchToProps(dispatch) {
       },
       deleteAnswer: id => {
         return dispatch(deleteAnswer(id));
-      },
-      // HACK
-      emptyDeleted: () => dispatch(emptyDeletedAnswer())
+      }
     }
   };
 }
