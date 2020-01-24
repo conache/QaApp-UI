@@ -3,6 +3,8 @@ import Immutable from "seamless-immutable";
 import { NotificationManager } from "react-notifications";
 import { pathOr } from "ramda";
 import * as Answers from "../api/answers";
+// TODO: move Constants file to app level
+import {VOTE_SATUS} from '../components/utils/Constants';
 
 export default function reducer(state = Immutable({}), action) {
   const currentAnswers = pathOr({}, ["answers"], state);
@@ -33,13 +35,21 @@ export default function reducer(state = Immutable({}), action) {
           answers: {
             ...currentAnswers,
             data: currentAnswers.data.map(answer => {
-              if (answer.modelId !== action.payload.modelId) {
+              if (answer.modelId !== action.payload.answerId) {
                 return answer;
               }
-              const voteCount = action.payload.upvote ? 1 : -1;
+              let voteCount = 0;
+
+              if (action.payload.isUpVote) {
+                voteCount = answer.voteStatus === VOTE_SATUS.NO_VOTE ? 1 : 2;
+              } else {
+                voteCount = answer.voteStatus === VOTE_SATUS.NO_VOTE ? -1 : -2;
+              }
+
               return {
                 ...answer,
-                score: answer.score + voteCount
+                score: answer.score + voteCount,
+                voteStatus: action.payload.isUpVote ? VOTE_SATUS.UPVOTE : VOTE_SATUS.DOWNVOTE
               };
             })
           }
@@ -122,7 +132,7 @@ export const addAnswer = params => {
 
 export const voteAnswer = params => {
   return dispatch => {
-    return Answers.updateAnswer(params)
+    return Answers.voteAnswer(params)
       .then(resp => {
         dispatch(applyAnswerVote(params));
       })

@@ -11,6 +11,11 @@ export function addAnswer(params) {
   return request('POST', 'answer/addAnswer', params);
 }
 
+export function voteAnswer(params) {
+  const {answerId, questionId, isUpVote} = params;
+  return request('PUT', `answer/vote?answerId=${answerId}&questionId=${questionId}&isUpVote=${isUpVote}`);
+}
+
 export function updateAnswer(params) {
   return request('POST', 'answer/update', params);
 }

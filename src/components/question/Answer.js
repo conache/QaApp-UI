@@ -11,6 +11,7 @@ import {
 } from "../../ducks/answers";
 import { pathOr } from "ramda";
 import EditAnswerForm from "./EditAnswerForm";
+import {withUser} from "../../context";
 
 class Answer extends React.Component {
   constructor(props) {
@@ -20,16 +21,16 @@ class Answer extends React.Component {
     };
   }
 
-  vote(upvote) {
+  vote(isUpVote) {
     const {
       questionId,
       answer,
       actions: { voteAnswer }
     } = this.props;
     voteAnswer({
-      modelId: answer.modelId,
+      answerId: answer.modelId,
       questionId,
-      upvote
+      isUpVote
     });
   }
 
@@ -59,7 +60,7 @@ class Answer extends React.Component {
   }
 
   render() {
-    const { answer, key } = this.props;
+    const { answer, key, currentUser } = this.props;
     const { editing } = this.state;
 
     const {
@@ -69,6 +70,7 @@ class Answer extends React.Component {
       userName,
       correctAnswer,
       score,
+      voteStatus,
       modelId
     } = answer;
 
@@ -77,7 +79,9 @@ class Answer extends React.Component {
         <UpDownVotes
           small
           classContainer="container-center d-flex flex-column"
+          disabled={userId === currentUser.id}
           nrVotes={score}
+          vote={voteStatus}
           onUpVote={() => this.vote(true)}
           onDownVote={() => this.vote(false)}
         />
@@ -128,4 +132,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Answer);
+export default connect(mapStateToProps, mapDispatchToProps)(withUser(Answer));

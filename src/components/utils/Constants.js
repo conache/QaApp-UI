@@ -4,3 +4,8 @@ export const QUESTIONS_SORT_CRITERIA = {
   VOTES: "score",
   NO_ANSWERS: "noAnswers"
 };
+export const VOTE_SATUS = {
+  UPVOTE: "UpVote",
+  DOWNVOTE: "DownVote",
+  NO_VOTE: "NoVote"
+}

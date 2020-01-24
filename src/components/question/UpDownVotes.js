@@ -1,36 +1,67 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import classnames from 'classnames';
-import { IconButton } from '@material-ui/core';
+import React from "react";
+import PropTypes from "prop-types";
+import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
+import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
+import classnames from "classnames";
+import { IconButton } from "@material-ui/core";
+import { VOTE_SATUS } from "../utils/Constants";
 
-const voteType = {
-  UPVOTE: "UPVOTE",
-  DOWNVOTE: "DOWNVOTE"
-}
+const UpDownVotes = ({
+  nrVotes,
+  onUpVote,
+  onDownVote,
+  vote,
+  disabled,
+  small,
+  classContainer,
+  style
+}) => {
+  const clsName = small ? "small-size" : "normal-size";
 
-const UpDownVotes = ({ nrVotes, onUpVote, onDownVote, vote, small, classContainer, style }) => {
-  const clsName = small ? 'small-size' : 'normal-size';
+  const onUpVoteClicked = () => {
+    if (vote === VOTE_SATUS.UPVOTE) {
+      return;
+    }
+    onUpVote();
+  };
+
+  const onDownVoteClicked = () => {
+    if (vote === VOTE_SATUS.DOWNVOTE) {
+      return;
+    }
+    onDownVote();
+  };
 
   return (
-    <div className={classnames("votes-container", classContainer)} style={style}>
-      <IconButton disabled={ voteType.UPVOTE === vote } onClick={onUpVote}>
-        <ArrowUpwardIcon/>
+    <div
+      className={classnames("votes-container", classContainer)}
+      style={style}
+    >
+      <IconButton
+        disabled={disabled}
+        color={vote === VOTE_SATUS.UPVOTE ? "primary" : "default"}
+        onClick={onUpVoteClicked}
+      >
+        <ArrowUpwardIcon />
       </IconButton>
-      <div className={classnames(clsName, "container-center d-flex flex-column")}>
+      <div
+        className={classnames(clsName, "container-center d-flex flex-column")}
+      >
         <div>{nrVotes}</div>
         <div>VOTES</div>
       </div>
-      <IconButton disabled={ voteType.DOWNVOTE === vote } onClick={onDownVote}>
+      <IconButton
+        disabled={disabled}
+        color={vote === VOTE_SATUS.DOWNVOTE ? "secondary" : "black"}
+        onClick={onDownVoteClicked}
+      >
         <ArrowDownwardIcon />
-      </IconButton> 
+      </IconButton>
     </div>
-  )
-}
+  );
+};
 
 export default UpDownVotes;
-
 
 UpDownVotes.propTypes = {
   nrVotes: PropTypes.number,
@@ -38,14 +69,14 @@ UpDownVotes.propTypes = {
   onDownVote: PropTypes.func,
   small: PropTypes.bool,
   classContainer: PropTypes.string,
-  style: PropTypes.string,
+  style: PropTypes.string
 };
 
 UpDownVotes.defaultProps = {
   nrVotes: 0,
   vote: null,
-  onUpVote: () => { },
-  onDownVote: () => { },
+  onUpVote: () => {},
+  onDownVote: () => {},
   small: false,
-  classContainer: '',
+  classContainer: ""
 };

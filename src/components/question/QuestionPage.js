@@ -8,6 +8,7 @@ import Answers from "./Answers";
 import UpDownVotes from "./UpDownVotes";
 import Subscribe from "./Subscribe";
 import PaginatedComponent from "../shared/PaginatedComponent";
+import {withUser} from "../../context";
 import { pathOr } from "ramda";
 
 class QuestionPage extends React.Component {
@@ -171,4 +172,4 @@ class QuestionPage extends React.Component {
   }
 }
 
-export default QuestionPage;
+export default withUser(QuestionPage);
