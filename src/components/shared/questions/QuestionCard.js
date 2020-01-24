@@ -20,18 +20,18 @@ class QuestionCard extends React.Component {
       return null;
     }
 
-    const { modelId, score, answers, questionTitle, questionText, questionTags, questionPublishDate, questionAuthorName } = question;
+    const { modelId, score, noAnswers, questionTitle, questionText, questionTags, questionPublishDate, questionAuthorName } = question;
     return (
       <div className="question-card d-flex" key={key} >
         <div className="question-card__head">
           <Numbers number={score} text="votes" style={{ paddingBottom: '25px' }} />
-          <Numbers number={Math.floor(Math.random() * 100)} text="answers" />
+          <Numbers number={noAnswers} text="answers" />
         </div>
         <div className="question-card__body" onClick={() => history.push(`question/${modelId}`)}>
           <div className="title">{questionTitle}</div>
           <div className="body">{questionText}</div>
           <div className="d-flex">{questionTags?.map(tag => <div className="tag">{tag}</div>)}</div>
-          <div className="card-info">asked on {moment(questionPublishDate).format("MMM Do YY")} by {questionAuthorName}</div>
+          <div className="card-info">asked on {moment(questionPublishDate).format("MMM Do 'YY")} by {questionAuthorName}</div>
         </div>
       </div>
     );

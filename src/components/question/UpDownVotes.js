@@ -52,7 +52,7 @@ const UpDownVotes = ({
       </div>
       <IconButton
         disabled={disabled}
-        color={vote === VOTE_SATUS.DOWNVOTE ? "secondary" : "black"}
+        color={vote === VOTE_SATUS.DOWNVOTE ? "secondary" : "default"}
         onClick={onDownVoteClicked}
       >
         <ArrowDownwardIcon />

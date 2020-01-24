@@ -34,6 +34,23 @@ export function getAllQuestions(params) {
   return request('GET', `question/findAll?page=${page + 1}&size=${pageSize}&sortBy=${sortBy}&tags=${tags.join(',')}`);
 }
 
-export function subscribe(id) {
-  // return request('POST', `question/find?questionId=${id}`);
+export function subscribe(params) {
+  const {questionId, subscribe} = params;
+  return new Promise((resolve, reject) => {
+    setTimeout(() => resolve(), 1000);
+  });
+  return request('POST', `question/subscribe?questionId=${questionId}&subscribe=${subscribe}`);
+}
+
+export function voteQuestion(params) {
+  const {questionId, isUpVote} = params;
+  return request('PUT', `question/vote?questionId=${questionId}&isUpVote=${isUpVote}`);
+}
+
+export function updateQuestion(params) {
+  return request('POST', 'question/update', params);
+}
+
+export function deleteQuestion(id) {
+  return request('DELETE', `question/delete?questionId=${id}`);
 }

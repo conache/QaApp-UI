@@ -5,7 +5,7 @@ import { voteAnswer, deleteAnswer, editAnswer } from "../../ducks/answers";
 import { pathOr } from "ramda";
 import { withUser } from "../../context";
 import InactiveOverlay from "../shared/InactiveOverlay";
-import EntityOptions from "./EntityOptions";
+import EntityOptions from "../shared/questions/EntityOptions";
 import EditableText from "../shared/questions/EditableText";
 import LoadingSpinner from "../shared/LoadingSpinner";
 
@@ -108,20 +108,14 @@ class Answer extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    deletedAnswer: pathOr(null, ["answers", "deletedAnswerId"], state)
-  };
-}
-
 function mapDispatchToProps(dispatch) {
   return {
     actions: {
       voteAnswer: params => dispatch(voteAnswer(params)),
-      deleteAnswer: id => dispatch(deleteAnswer(id)),
+      deleteAnswer: params => dispatch(deleteAnswer(params)),
       editAnswer: params => dispatch(editAnswer(params))
     }
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withUser(Answer));
+export default connect(null, mapDispatchToProps)(withUser(Answer));

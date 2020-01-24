@@ -4,7 +4,7 @@ import { NotificationManager } from "react-notifications";
 import { pathOr } from "ramda";
 import * as Answers from "../api/answers";
 // TODO: move Constants file to app level
-import {VOTE_SATUS} from '../components/utils/Constants';
+import { VOTE_SATUS } from "../components/utils/Constants";
 
 export default function reducer(state = Immutable({}), action) {
   const currentAnswers = pathOr({}, ["answers"], state);
@@ -49,30 +49,33 @@ export default function reducer(state = Immutable({}), action) {
               return {
                 ...answer,
                 score: answer.score + voteCount,
-                voteStatus: action.payload.isUpVote ? VOTE_SATUS.UPVOTE : VOTE_SATUS.DOWNVOTE
+                voteStatus: action.payload.isUpVote
+                  ? VOTE_SATUS.UPVOTE
+                  : VOTE_SATUS.DOWNVOTE
               };
             })
           }
         },
         { deep: true }
       );
-    case "answers/DELETE_ANSWER":
-      return state.merge({ deletedAnswerId: action.payload }, { deep: true });
     case "answers/EDIT_ANSWER":
-      return state.merge({
-        answers: {
-          ...currentAnswers,
-          data: currentAnswers.data.map(answer => {
-            if (answer.modelId !== action.payload.modelId) {
-              return answer;
-            }
-            return {
-              ...answer,
-              answerText: action.payload.answerText
-            };
-          })
-        }
-      });
+      return state.merge(
+        {
+          answers: {
+            ...currentAnswers,
+            data: currentAnswers.data.map(answer => {
+              if (answer.modelId !== action.payload.modelId) {
+                return answer;
+              }
+              return {
+                ...answer,
+                answerText: action.payload.answerText
+              };
+            })
+          }
+        },
+        { deep: true }
+      );
     default:
       return state;
   }
@@ -85,9 +88,7 @@ export const loadingCreateAnswer = createAction(
 );
 export const createAnswer = createAction("answers/CREATE_ANSWER");
 export const applyAnswerVote = createAction("answers/VOTE_ANSWER");
-
 export const applyAnswerEdit = createAction("answers/EDIT_ANSWER");
-export const applyDeleteAnswer = createAction("answers/DELETE_ANSWER");
 
 export const getAnswers = params => {
   return dispatch => {
@@ -142,7 +143,6 @@ export const deleteAnswer = params => {
   return dispatch => {
     return Answers.deleteAnswer(params)
       .then(resp => {
-        dispatch(applyDeleteAnswer(params));
         NotificationManager.success("Answer successfully deleted.");
       })
       .catch(err => {

@@ -1,26 +1,29 @@
 import React from "react";
 import LoadingSpinner from "../shared/LoadingSpinner";
 import moment from "moment-mini";
-import { Button, Modal, Fade } from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
 import PostAnswer from "./PostAnswer";
 import Answers from "./Answers";
 import UpDownVotes from "./UpDownVotes";
 import Subscribe from "./Subscribe";
 import PaginatedComponent from "../shared/PaginatedComponent";
-import {withUser} from "../../context";
+import { withUser } from "../../context";
 import { pathOr } from "ramda";
+import EditableText from "../shared/questions/EditableText";
+import EntityOptions from "../shared/questions/EntityOptions";
+import InactiveOverlay from "../shared/InactiveOverlay";
 
+const ALL_QUESTIONS_ROUTE = "/dashboard/all-questions";
 class QuestionPage extends React.Component {
   constructor(props) {
     super(props);
     const { match } = this.props;
     this.state = {
-      subscribed: false,
-      showModal: false,
       page: 0,
       pageSize: 5,
-      questionId: match.params.id
+      questionId: match.params.id,
+      editingEnabled: false,
+      editLoading: false,
+      deleteLoading: false
     };
   }
 
@@ -52,23 +55,67 @@ class QuestionPage extends React.Component {
     this.setState({ page: 0 }, () => this.loadAnswers());
   }
 
-  handleSubscribe = value => {
-    const {
-      actions: { subscribe }
-    } = this.props;
-    this.setState({ subscribed: value });
+  handleSubscribe(value) {
+    const {actions: { subscribeToQuestion }} = this.props;
+    const {questionId} = this.state;
+
+    subscribeToQuestion({subscribe: value, questionId});
   };
 
-  showModal = showModal => {
-    this.setState({ showModal });
-  };
-  
+  handleEditSubmit(newQuestionText) {
+    const { questionId } = this.state;
+    const {
+      actions: { editQuestion }
+    } = this.props;
+    this.setState({ editLoading: true });
+    editQuestion({ modelId: questionId, questionText: newQuestionText })
+      .then(() => {
+        this.setState({ editingEnabled: false });
+      })
+      .finally(() => {
+        this.setState({ editLoading: false });
+      });
+  }
+
+  handleDeleteClick() {
+    const { questionId } = this.state;
+    const {
+      history,
+      actions: { deleteQuestion }
+    } = this.props;
+
+    this.setState({ deleteLoading: true });
+    deleteQuestion(questionId)
+      .then(() => {
+        history.push(ALL_QUESTIONS_ROUTE);
+      })
+      .finally(() => {
+        this.setState({ deleteLoading: false });
+      });
+  }
+
+  vote(isUpVote) {
+    const { questionId } = this.state;
+    const {actions: { voteQuestion }} = this.props;
+    voteQuestion({
+      questionId,
+      isUpVote
+    });
+  }
+
   render() {
     const {
       currentQuestion: { loading, question },
       currentAnswers: { loadingAnswers, answers }
     } = this.props;
-    const { showModal, subscribed, page, pageSize, questionId } = this.state;
+    const {
+      page,
+      pageSize,
+      questionId,
+      editingEnabled,
+      editLoading,
+      deleteLoading
+    } = this.state;
 
     let totalAnswersCount = 0;
     let displayedAnswers = [];
@@ -85,6 +132,8 @@ class QuestionPage extends React.Component {
     const {
       modelId,
       score,
+      subscribed,
+      voteStatus,
       questionTitle,
       questionText,
       questionTags,
@@ -93,9 +142,10 @@ class QuestionPage extends React.Component {
     } = question;
 
     return (
-      <div className="question-page h-100">
+      <div className="question-page h-100 position-relative">
+        {deleteLoading && <InactiveOverlay />}
         <div className="d-flex">
-          <Subscribe subscribed={subscribed} onClick={this.handleSubscribe} />
+          <Subscribe subscribed={subscribed} onClick={(value) => this.handleSubscribe(value)} />
           <div>
             <h2 className>{questionTitle}</h2>
             <p>
@@ -105,29 +155,33 @@ class QuestionPage extends React.Component {
             <div className="horizontal-hr" />
           </div>
         </div>
-        <div className="d-flex">
+        <div className="d-flex position-relative">
           <UpDownVotes
-            nrVotes={score}
             className="align-center d-flex flex-column"
             style={{ textAlign: "center" }}
+            nrVotes={score}
+            vote={voteStatus}
+            onUpVote={() => this.vote(true)}
+            onDownVote={() => this.vote(false)}
           />
-          <div className="py-1">{questionText}</div>
+          {editLoading && <LoadingSpinner />}
+          <EditableText
+            isEditing={editingEnabled}
+            content={questionText}
+            onEditCancel={() => this.setState({ editingEnabled: false })}
+            onEditSubmit={newText => this.handleEditSubmit(newText)}
+          />
+          <EntityOptions
+            disabled={editingEnabled}
+            onEditClick={() => this.setState({ editingEnabled: true })}
+            onDeleteClick={() => this.handleDeleteClick()}
+          />
         </div>
         <div className="d-flex ml-72">
           {questionTags?.map(tag => (
             <div className="tag">{tag}</div>
           ))}
         </div>
-
-        <Button
-          variant="contained"
-          color="primary"
-          className="edit-q-button"
-          startIcon={<EditIcon />}
-          onClick={() => this.showModal(true)}
-        >
-          edit
-        </Button>
 
         <div className="paginated-answers-container d-flex flex-column">
           <PaginatedComponent
@@ -152,21 +206,6 @@ class QuestionPage extends React.Component {
           questionId={questionId}
           onSuccess={() => this.onPostAnswerSuccess()}
         />
-
-        <Modal
-          open={showModal}
-          onClose={() => this.showModal(false)}
-          className="modal"
-        >
-          <Fade in={showModal}>
-            <div className="modal-body">
-              <div>
-                Here will goes the modal for the edit button and later for the
-                proposed edit button.
-              </div>
-            </div>
-          </Fade>
-        </Modal>
       </div>
     );
   }

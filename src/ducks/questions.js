@@ -1,12 +1,14 @@
 import { createAction } from "redux-actions";
 import Immutable from "seamless-immutable";
-import {NotificationManager} from 'react-notifications';
-
+import { NotificationManager } from "react-notifications";
+import { pathOr } from "ramda";
 import * as Questions from "../api/questions";
-import * as Answers from "../api/answers";
-
+// TODO: move Constants file to app level
+import { VOTE_SATUS } from "../components/utils/Constants";
 
 export default function reducer(state = Immutable({}), action) {
+  const currentQuestion = pathOr({}, ["question"], state);
+
   switch (action.type) {
     case "questions/GET_QUESTION_LOADING":
       return state.merge({ loading: action.payload });
@@ -25,7 +27,48 @@ export default function reducer(state = Immutable({}), action) {
         { deep: true }
       );
     case "questions/CREATE_QUESTION":
-      return state.merge({ newQuestionId: action.payload }, {deep: true})
+      return state.merge({ newQuestionId: action.payload }, { deep: true });
+    case "questions/VOTE_QUESTION":
+      let voteCount = 0;
+
+      if (action.payload.isUpVote) {
+        voteCount = currentQuestion.voteStatus === VOTE_SATUS.NO_VOTE ? 1 : 2;
+      } else {
+        voteCount = currentQuestion.voteStatus === VOTE_SATUS.NO_VOTE ? -1 : -2;
+      }
+
+      return state.merge(
+        {
+          question: {
+            ...currentQuestion,
+            score: currentQuestion.score + voteCount,
+            voteStatus: action.payload.isUpVote
+              ? VOTE_SATUS.UPVOTE
+              : VOTE_SATUS.DOWNVOTE
+          }
+        },
+        { deep: true }
+      );
+    case "questions/EDIT_QUESTION":
+      return state.merge(
+        {
+          question: {
+            ...currentQuestion,
+            questionText: action.payload.questionText
+          }
+        },
+        { deep: true }
+      );
+    case "questions/SUBSCRIBE_TO_QUESTION":
+      return state.merge(
+        {
+          question: {
+            ...currentQuestion,
+            subscribed: action.payload.subscribe
+          }
+        },
+        { deep: true }
+      );
     default:
       return state;
   }
@@ -41,6 +84,11 @@ export const loadingCreateQuestion = createAction(
   "questions/CREATE_QUESTION_LOADING"
 );
 export const createQuestion = createAction("questions/CREATE_QUESTION");
+export const applyQuestionVote = createAction("questions/VOTE_QUESTION");
+export const applyQuestionEdit = createAction("questions/EDIT_QUESTION");
+export const applyQuestionSubscribe = createAction(
+  "questions/SUBSCRIBE_TO_QUESTION"
+);
 
 export const getQuestion = id => {
   return dispatch => {
@@ -52,7 +100,9 @@ export const getQuestion = id => {
       })
       .catch(err => {
         dispatch(loadingQuestion(false));
-        NotificationManager.error(`Could not load question. Please refresh the page. Error: ${err.message}`);
+        NotificationManager.error(
+          `Could not load question. Please refresh the page. Error: ${err.message}`
+        );
       });
   };
 };
@@ -67,7 +117,9 @@ export const getAllQuestions = params => {
       })
       .catch(err => {
         dispatch(loadingAllQuestions(false));
-        NotificationManager.error(`Could not load questions. Please refresh the page. Error: ${err.message}`);
+        NotificationManager.error(
+          `Could not load questions. Please refresh the page. Error: ${err.message}`
+        );
       });
   };
 };
@@ -89,12 +141,16 @@ export const addNewQuestion = params => {
   };
 };
 
-export const subscribeQuestin = (params) => {
-  // TODO: need more work
+export const subscribeToQuestion = params => {
   return dispatch => {
     return Questions.subscribe(params)
       .then(resp => {
-        // dispatch(createQuestion(resp.data));
+        dispatch(applyQuestionSubscribe(params));
+        NotificationManager.success(
+          params.subscribe
+            ? "Successfully subscribed! You will receive updates regarding this question."
+            : "Successfully unusubscribed! You will not receive updates regarding this question anymore."
+        );
       })
       .catch(err => {
         NotificationManager.error(
@@ -102,34 +158,46 @@ export const subscribeQuestin = (params) => {
         );
       });
   };
-}
+};
 
-
-export const getAnswers = params => {
+export const voteQuestion = params => {
   return dispatch => {
-    return Answers.getAnswers(params)
+    return Questions.voteQuestion(params)
       .then(resp => {
-        // dispatch(createQuestion(resp.data));
+        dispatch(applyQuestionVote(params));
       })
       .catch(err => {
         NotificationManager.error(
-          `We've encountered some troubles getting your answers. Please try again. Error: ${err.message}`
+          `Error encountered while request. Error: ${err.message}`
         );
       });
   };
-}
+};
 
-export const addAnswer = params => {
+export const deleteQuestion = id => {
   return dispatch => {
-    return Answers.addAnswer(params)
+    return Questions.deleteQuestion(id)
       .then(resp => {
-        // dispatch(createQuestion(resp.data));
-        NotificationManager.success("Succesfully submitted your answer.")
+        NotificationManager.success("Question successfully deleted.");
       })
       .catch(err => {
         NotificationManager.error(
-          `We've encountered some troubles adding your answer. Please try again. Error: ${err.message}`
+          `Could not delete answer. Error: ${err.message}`
         );
       });
   };
-}
+};
+
+export const editQuestion = params => {
+  return dispatch => {
+    return Questions.updateQuestion(params)
+      .then(resp => {
+        dispatch(applyQuestionEdit(params));
+      })
+      .catch(err => {
+        NotificationManager.error(
+          `Error encountered while editing. Error: ${err.message}`
+        );
+      });
+  };
+};

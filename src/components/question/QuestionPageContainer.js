@@ -1,5 +1,11 @@
 import { connect } from "react-redux";
-import { getQuestion, subscribeQuestin } from "../../ducks/questions";
+import {
+  getQuestion,
+  subscribeToQuestion,
+  voteQuestion,
+  deleteQuestion,
+  editQuestion
+} from "../../ducks/questions";
 import { getAnswers, addAnswer } from "../../ducks/answers";
 import { pathOr } from "ramda";
 import QuestionPage from "./QuestionPage";
@@ -7,7 +13,7 @@ import QuestionPage from "./QuestionPage";
 function mapStateToProps(state) {
   return {
     currentQuestion: pathOr({}, ["questions"], state),
-    currentAnswers: pathOr([], ["answers"], state),
+    currentAnswers: pathOr([], ["answers"], state)
   };
 }
 
@@ -23,8 +29,17 @@ function mapDispatchToProps(dispatch) {
       addAnswer: params => {
         return dispatch(addAnswer(params));
       },
-      subscribe: id => {
-        return dispatch(subscribeQuestin(id));
+      subscribeToQuestion: params => {
+        return dispatch(subscribeToQuestion(params));
+      },
+      voteQuestion: params => {
+        return dispatch(voteQuestion(params));
+      },
+      deleteQuestion: params => {
+        return dispatch(deleteQuestion(params));
+      },
+      editQuestion: params => {
+        return dispatch(editQuestion(params));
       }
     }
   };
