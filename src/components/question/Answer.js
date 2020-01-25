@@ -1,11 +1,17 @@
 import React from "react";
 import { connect } from "react-redux";
+import DoneIcon from "@material-ui/icons/Done";
+
 import UpDownVotes from "./UpDownVotes";
-import { voteAnswer, deleteAnswer, editAnswer } from "../../ducks/answers";
-import { pathOr } from "ramda";
+import {
+  voteAnswer,
+  deleteAnswer,
+  editAnswer,
+  markAsCorrect
+} from "../../ducks/answers";
 import { withUser } from "../../context";
 import InactiveOverlay from "../shared/InactiveOverlay";
-import EntityOptions from "../shared/questions/EntityOptions";
+import CustomMenu from "../shared/questions/CustomMenu";
 import EditableText from "../shared/questions/EditableText";
 import LoadingSpinner from "../shared/LoadingSpinner";
 
@@ -42,7 +48,8 @@ class Answer extends React.Component {
     deleteAnswer({ answerId: answer.modelId, questionId: answer.questionId })
       .then(() => {
         onDelete();
-      }).finally(() => {
+      })
+      .finally(() => {
         this.setState({ inactive: false });
       });
   }
@@ -63,24 +70,32 @@ class Answer extends React.Component {
       modelId: answer.modelId,
       answerText: newAnswerText
     })
-    .then(() => {
-      this.setState({ editing: false });
-    })
-    .finally(() => {
-      this.setState({loading: false});
-    });
+      .then(() => {
+        this.setState({ editing: false });
+      })
+      .finally(() => {
+        this.setState({ loading: false });
+      });
+  }
+
+  markAsCorrect() {
+    const {
+      answer,
+      actions: { markAnswerAsCorrect }
+    } = this.props;
+    markAnswerAsCorrect(answer);
   }
 
   hasVotingAccess() {
-    const {answer, currentUser} = this.props;
+    const { answer, currentUser } = this.props;
 
     return answer?.userId !== currentUser?.id;
   }
 
   render() {
-    const { answer, key } = this.props;
+    const { answer, key, currentUser } = this.props;
     const { editing, inactive, loading } = this.state;
-    const { answerText, score, voteStatus } = answer;
+    const { answerText, score, voteStatus, correct } = answer;
 
     return (
       <div className="answer w-100 d-flex position-relative" key={key}>
@@ -96,16 +111,35 @@ class Answer extends React.Component {
           onDownVote={() => this.vote(false)}
         />
         <div className="d-flex flex-column w-100">
+          {correct && <DoneIcon />}
           <EditableText
             isEditing={editing}
             content={answerText}
             onEditCancel={() => this.setState({ editing: false })}
             onEditSubmit={newText => this.handleEditSubmit(newText)}
           />
-          <EntityOptions
+          <CustomMenu
             disabled={editing}
-            onEditClick={() => this.setState({ editing: true })}
-            onDeleteClick={() => this.onDeleteClick()}
+            options={[
+              {
+                label: "Mark as correct",
+                icon: "playlist_add_check_icon",
+                onClick: () => this.markAsCorrect(),
+                visible: true
+              },
+              {
+                label: "Edit",
+                icon: "edit",
+                onClick: () => this.setState({ editing: true }),
+                visible: true
+              },
+              {
+                label: "Delete",
+                icon: "delete",
+                onClick: () => this.onDeleteClick(),
+                visible: true
+              }
+            ]}
           />
           <div className="horizontal-hr" />
         </div>
@@ -119,7 +153,8 @@ function mapDispatchToProps(dispatch) {
     actions: {
       voteAnswer: params => dispatch(voteAnswer(params)),
       deleteAnswer: params => dispatch(deleteAnswer(params)),
-      editAnswer: params => dispatch(editAnswer(params))
+      editAnswer: params => dispatch(editAnswer(params)),
+      markAnswerAsCorrect: params => dispatch(markAsCorrect(params))
     }
   };
 }

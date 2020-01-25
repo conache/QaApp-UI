@@ -76,6 +76,20 @@ export default function reducer(state = Immutable({}), action) {
         },
         { deep: true }
       );
+    case "answers/MARK_AS_CORRECT_ANSWER":
+      return state.merge(
+        {
+          answers: {
+            ...currentAnswers,
+            data: currentAnswers.data.map(answer => {
+              return {
+                ...answer,
+                correct: action.payload.modelId === answer.modelId
+              }
+            })
+          }
+        }
+      );
     default:
       return state;
   }
@@ -89,6 +103,7 @@ export const loadingCreateAnswer = createAction(
 export const createAnswer = createAction("answers/CREATE_ANSWER");
 export const applyAnswerVote = createAction("answers/VOTE_ANSWER");
 export const applyAnswerEdit = createAction("answers/EDIT_ANSWER");
+export const markCorrectAnswer = createAction("answers/MARK_AS_CORRECT_ANSWER");
 
 export const getAnswers = params => {
   return dispatch => {
@@ -166,3 +181,17 @@ export const editAnswer = params => {
       });
   };
 };
+
+export const markAsCorrect = params => {
+  return dispatch => {
+    return Answers.markAnswerAsCorrect(params)
+      .then(resp => {
+        dispatch(markCorrectAnswer(params));
+      })
+      .catch(err => {
+        NotificationManager.error(
+          `Error encountered while marking answer as correct. Error: ${err.message}`
+        );
+      });
+  }
+}

@@ -24,3 +24,10 @@ export function deleteAnswer(params) {
   const {answerId, questionId} = params;
   return request('DELETE', `answer/delete?answerId=${answerId}&questionId=${questionId}`);
 }
+
+export function markAnswerAsCorrect(params) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => resolve(), 1000);
+  });
+  return request('POST', 'answer/update', {...params, correct: true});
+}
