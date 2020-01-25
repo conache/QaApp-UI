@@ -43,20 +43,12 @@ class AskQuestion extends React.Component {
     loadTags();
   }
 
-  componentDidUpdate() {
-    const {history, newQuestionId} = this.props;
-    
-    if (newQuestionId) {
-      history.push(ALL_QUESTIONS_ROUTE);
-    }
-  }
-
   /**
    * @param { name: string } values
    * @param {object} formikActions - formik helpers
    */
   onSubmit = values => {
-    const { actions: {addQuestion} } = this.props;
+    const { actions: {addQuestion}, history } = this.props;
     const { selectedTags } = this.state;
     const { title, body } = values;
     const newTag = tag => tag.__isNew__;
@@ -68,7 +60,10 @@ class AskQuestion extends React.Component {
       questionTags,
       proposedTags: map(tag => tag.value, filter(newTag, selectedTags))
     };
-    return addQuestion(params);
+
+    return addQuestion(params).then(() => {
+      history.push(ALL_QUESTIONS_ROUTE)
+    });
   };
 
   handleChange = (selectedTags, actionMeta) => {
@@ -171,6 +166,7 @@ class AskQuestion extends React.Component {
                     type="submit"
                     color="primary"
                     variant="contained"
+                    disabled={creatingNewQuestion}
                   >
                     Post question
                   </Button>
@@ -194,8 +190,7 @@ function mapStateToProps(state) {
   return {
     tagsOptions: pathOr([], ["tags", "activeTags", "data"], state).map(tag => {
       return { value: tag.name, label: tag.name };}),
-    creatingNewQuestion: pathOr(false, ["questions", "loadingCreateQuestion"], state),
-    newQuestionId: pathOr(null, ["questions", "newQuestionId"], state),
+    creatingNewQuestion: pathOr(false, ["questions", "loadingCreateQuestion"], state)
   };
 }
 
