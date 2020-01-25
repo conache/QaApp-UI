@@ -196,7 +196,7 @@ class QuestionPage extends React.Component {
                 label: "Propose edit",
                 icon: "chat_bubble_outline_icon",
                 onClick: () => {},
-                visible: currentUser.isEmployee() && !currentUser.isQuestionAuthor(question)
+                visible: true // currentUser.isEmployee() && !currentUser.isQuestionAuthor(question)
               },
               {
                 label: "Edit",

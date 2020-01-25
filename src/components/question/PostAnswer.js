@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Formik } from 'formik';
 import { Button, TextareaAutosize } from '@material-ui/core';
 import { connect } from 'react-redux';
@@ -19,12 +19,18 @@ const validate = values => {
 };
 
 const PostAnswer = (props) => {
+  const [positing, setPosting] = useState(false);
+
   const onSubmit = (values , { resetForm })=> {
     const {questionId, onSuccess, actions: { addAnswer }} = props;
+    setPosting(true);
     addAnswer({questionId, answerText: values.answer}).then( () => {
       resetForm(initialValues);
       onSuccess();
-    });
+    })
+    .finally(() => {
+      setPosting(false);
+    })
   };
 
   return (
@@ -53,7 +59,7 @@ const PostAnswer = (props) => {
               type="submit"
               color="primary"
               variant="contained"
-              disabled={(formik.touched && formik.errors.answer) || !formik.dirty}
+              disabled={positing || (formik.touched && formik.errors.answer) || !formik.dirty}
             >
               Post Answer
             </Button>
