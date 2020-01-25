@@ -26,12 +26,12 @@ export function deleteTag(id) {
 
 export function acceptProposedTag(id) {
   return new Promise((resolve, reject) => {
-    reject({ message: "aa" });
+    resolve({ message: "aa" });
   });
 }
 
 export function declineProposedTag(id) {
   return new Promise((resolve, reject) => {
-    reject({ message: "aa" });
+    resolve({ message: "aa" });
   });
 }

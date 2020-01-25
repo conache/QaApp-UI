@@ -9,7 +9,6 @@ import PaginatedComponent from "../shared/PaginatedComponent";
 import { withUser } from "../../context";
 import { pathOr } from "ramda";
 import EditableText from "../shared/questions/EditableText";
-import EntityOptions from "../shared/questions/EntityOptions";
 import InactiveOverlay from "../shared/InactiveOverlay";
 import CustomMenu from "../shared/questions/CustomMenu";
 

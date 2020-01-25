@@ -19,16 +19,6 @@ export default function reducer(state = Immutable({}), action) {
         { activeTags: { data: action.payload } },
         { deep: true }
       );
-    case "tags/PROPOSED_TAGS_LOADING":
-      return state.merge(
-        { proposedTags: { data: action.payload } },
-        { deep: true }
-      );
-    case "tags/PROPOSED_TAGS":
-      return state.merge(
-        { proposedTags: { loading: action.payload } },
-        { deep: true }
-      );
     default:
       return state;
   }
@@ -41,11 +31,6 @@ export const getAllActiveTagsLoading = createAction(
   "tags/ALL_ACTIVE_TAGS_LOADING"
 );
 export const setAllActiveTags = createAction("tags/ALL_ACTIVE_TAGS");
-
-export const getProposedTagsLoading = createAction(
-  "tagas/PROPOSED_TAGS_LOADING"
-);
-export const setProposedTags = createAction("tags/PROPOSED_TAGS");
 
 export const getAllActiveTags = () => {
   return dispatch => {
@@ -115,11 +100,40 @@ export const deleteTag = id => {
   };
 };
 
-// Proposed tags
-export const getProposedTags = params => {
+export const getProposedTags = (page, pageSize) => {
   return dispatch => {
-    return Tags.getProposedTags(params)
-      .then(res => {})
-      .catch(err => {});
+    return Tags.getProposedTags(page, pageSize)
+      .then(res => {
+        return res.data;
+      })
+      .catch(err => {
+        NotificationManager.error(`Could not fetch proposed tags. Error: ${err.message}`);
+      });
   };
 };
+
+export const declineProposedTag = id => {
+  return dispatch => {
+    return Tags.declineProposedTag(id)
+    .then(res => {
+      NotificationManager.success("Tag successfully declined.");
+      return res.data;
+    })
+    .catch(err => {
+      NotificationManager.error(`Could not decline tag. Error: ${err.message}`);
+    });
+  }
+}
+
+export const acceptProposedTag = id => {
+  return dispatch => {
+    return Tags.acceptProposedTag(id)
+    .then(res => {
+      NotificationManager.success("Tag successfully accepted.");
+      return res.data;
+    })
+    .catch(err => {
+      NotificationManager.error(`Could not accept tag. Error: ${err.message}`);
+    });
+  }
+}
