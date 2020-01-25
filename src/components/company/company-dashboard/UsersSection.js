@@ -7,8 +7,6 @@ import {
   createAccount,
   deleteAccount
 } from "../../../ducks/accounts";
-
-import { NotificationManager } from "react-notifications";
 import { pathOr } from "ramda";
 
 class UsersSection extends React.Component {
@@ -35,6 +33,14 @@ class UsersSection extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.fetchTableData();
+  }
+
+  onPageChange(page) {
+    this.setState({ page }, () => this.fetchTableData());
+  }
+
   fetchTableData() {
     const {
       actions: { getAllAccounts }
@@ -44,18 +50,12 @@ class UsersSection extends React.Component {
     getAllAccounts(page, pageSize);
   }
 
-  componentDidMount() {
-    this.fetchTableData();
-  }
-
-  onPageChange(page) {
-    this.setState({ page }, () => this.fetchTableData());
-  }
-
   onRowDelete(entry) {
-    const {actions: {deleteUserAccount}} = this.props;
-    return deleteUserAccount(entry.id)
-      .then(() => this.fetchTableData());
+    const {
+      actions: { deleteUserAccount }
+    } = this.props;
+
+    return deleteUserAccount(entry.id).then(() => this.fetchTableData());
   }
 
   onRowAdd(entry) {

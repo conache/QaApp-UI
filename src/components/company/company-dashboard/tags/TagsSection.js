@@ -1,90 +1,122 @@
-import React from 'react';
+import React from "react";
+import { connect } from "react-redux";
 import MaterialTable from "material-table";
-import {NotificationManager} from 'react-notifications';
-import {getAllTags, deleteTag, addTag, editTag} from '../../../../api/tags';
+import { NotificationManager } from "react-notifications";
+import { getTags, addTag, editTag, deleteTag } from "../../../../ducks/tags";
+import { pathOr } from "ramda";
 
 class TagsSection extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      columns: [
-        { title: "Name", field: "name" }
-      ]
-    }
+      page: 0,
+      pageSize: 10,
+      columns: [{ title: "Name", field: "name" }]
+    };
   }
 
-  fetchTags(query) {
-    return new Promise((resolve, reject) => {
-      const {page, pageSize} = query;
-      getAllTags(page, pageSize)
-      .then(response => {
-        console.log(response);
-        const result = response.data;
-        console.log("Result:", result);
-        resolve({
-          data: result.content,
-          page: page,
-          totalCount: result.totalElements
-        });
-      })
-      .catch(error => {
-        NotificationManager.error(`Could not fetch tags. Error: ${error.message}`);
-        reject();
-      })
-    });
+  componentDidMount() {
+    this.fetchTableData();
   }
 
-  onRowDelete = (entry) => {
-    return deleteTag(entry.id)
-          .then(() => {
-            NotificationManager.success("Tag removed successfully");
-          })
-          .catch((error) => {
-            NotificationManager.error(`Could not remove tag. Error: ${error.message}`);
-          });
+  onPageChange(page) {
+    this.setState({ page }, () => this.fetchTableData());
   }
+
+  fetchTableData() {
+    const {
+      actions: { getTags }
+    } = this.props;
+    const { page, pageSize } = this.state;
+
+    getTags(page, pageSize);
+  }
+
+  onRowDelete = entry => {
+    const {
+      actions: { deleteTag }
+    } = this.props;
+
+    return deleteTag(entry.id).then(() => this.fetchTableData());
+  };
 
   onRowAdd(entry) {
-    const {name} = entry;
-    return addTag({
-      name
-    }).then(() => {
-      NotificationManager.success("Tag successfully created");
-    }).catch((error) => {
-      NotificationManager.error(`Could not add tag. Error: ${error.message}`);
-    });
+    const {
+      actions: { createTag }
+    } = this.props;
+    const { name } = entry;
+
+    return createTag({ name }).then(() => this.fetchTableData());
   }
 
   onRowUpdate(newEntry, oldEntry) {
-    return editTag(newEntry)
-            .catch(error => {
-              NotificationManager.error(`Failed editing tag. Error: ${error.message}`);
-            });
+    const {
+      actions: { editTag }
+    } = this.props;
+
+    return editTag(newEntry);
   }
 
   render() {
+    const { page, pageSize } = this.state;
+    const { loadingData, totalCount, data } = this.props;
+
     return (
       <div style={{ maxWidth: "100%" }}>
         <MaterialTable
+          onChangePage={page => this.onPageChange(page)}
+          isLoading={loadingData}
+          page={page}
+          totalCount={totalCount}
           options={{
             exportButton: false,
             search: false,
-            addRowPosition: 'first',
-            pageSize: 10,
+            addRowPosition: "first",
+            pageSize: pageSize,
             pageSizeOptions: [],
             sorting: true
           }}
           title="All Tags"
           columns={this.state.columns}
-          data={(query => this.fetchTags(query))}
+          data={[...data]}
           editable={{
-            onRowAdd: (newData) => this.onRowAdd(newData),
-            onRowUpdate: (newData, oldData) => this.onRowUpdate(newData, oldData),
-            onRowDelete: (rowData) => this.onRowDelete(rowData)
-          }} />
+            onRowAdd: newData => this.onRowAdd(newData),
+            onRowUpdate: (newData, oldData) =>
+              this.onRowUpdate(newData, oldData),
+            onRowDelete: rowData => this.onRowDelete(rowData)
+          }}
+        />
       </div>
     );
   }
 }
 
-export default TagsSection;
+function mapStateToProps(state) {
+  return {
+    totalCount: pathOr(0, ["tags", "tags", "totalCount"], state),
+    loadingData: pathOr(false, ["tags", "tags", "loading"], state),
+    data: (() => {
+      const entries = pathOr([], ["tags", "tags", "data"], state);
+      const rows = [];
+
+      for (let tag of entries) {
+        rows.push({ ...tag });
+      }
+
+      return rows;
+    })()
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: {
+      getTags: (page, pageSize) => dispatch(getTags(page, pageSize)),
+      editTag: params => dispatch(editTag(params)),
+      createTag: params => dispatch(addTag(params)),
+      deleteTag: id => dispatch(deleteTag(id))
+    }
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TagsSection);
