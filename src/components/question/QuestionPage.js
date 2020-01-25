@@ -11,6 +11,7 @@ import { pathOr } from "ramda";
 import EditableText from "../shared/questions/EditableText";
 import EntityOptions from "../shared/questions/EntityOptions";
 import InactiveOverlay from "../shared/InactiveOverlay";
+import CustomMenu from "../shared/questions/CustomMenu";
 
 const ALL_QUESTIONS_ROUTE = "/dashboard/all-questions";
 class QuestionPage extends React.Component {
@@ -113,7 +114,7 @@ class QuestionPage extends React.Component {
       currentQuestion: { question }
     } = this.props;
 
-    return question?.questionAuthorId !== currentUser.id;
+    return question?.questionAuthorId !== currentUser.getId();
   }
 
   render() {
@@ -188,10 +189,28 @@ class QuestionPage extends React.Component {
             onEditCancel={() => this.setState({ editingEnabled: false })}
             onEditSubmit={newText => this.handleEditSubmit(newText)}
           />
-          <EntityOptions
+          <CustomMenu 
             disabled={editingEnabled}
-            onEditClick={() => this.setState({ editingEnabled: true })}
-            onDeleteClick={() => this.handleDeleteClick()}
+            options={[
+              {
+                label: "Propose edit",
+                icon: "chat_bubble_outline_icon",
+                onClick: () => {},
+                visible: true
+              },
+              {
+                label: "Edit",
+                icon: "edit",
+                onClick: () => this.setState({ editingEnabled: true }),
+                visible: true
+              },
+              {
+                label: "Delete",
+                icon: "delete",
+                onClick: () => this.handleDeleteClick(),
+                visible: true
+              }
+            ]}
           />
         </div>
         <div className="d-flex ml-72">
@@ -213,7 +232,7 @@ class QuestionPage extends React.Component {
             }
           >
             <Answers
-              questionId={questionId}
+              question={question}
               answers={displayedAnswers}
               onAnswerDelete={() => this.loadAnswers()}
             />

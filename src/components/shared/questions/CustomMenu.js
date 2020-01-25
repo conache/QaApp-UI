@@ -20,14 +20,10 @@ const CustomMenu = props => {
     setAnchorEl(null);
   };
 
-  console.log("Options:");
-  console.log(options);
   const optionsList = options?.filter(option =>
     option.visible === false ? option.visible : true
   );
 
-  console.log("Options list:");
-  console.log(optionsList);
   if (!optionsList || !optionsList.length) {
     return [];
   }

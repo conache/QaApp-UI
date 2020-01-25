@@ -1,10 +1,16 @@
 import React from "react";
 import Answer from "./Answer";
-const Answers = ({ answers, questionId, onAnswerDelete }) => {
+const Answers = ({ answers, question, onAnswerDelete }) => {
   return (
     <div className="answers-container">
       {answers.map((answer, idx) => (
-        <Answer questionId={questionId} answer={answer} key={idx} onDelete={onAnswerDelete}/>
+        <Answer
+          questionAuthorId={question?.questionAuthorId}
+          questionId={question?.modelId}
+          answer={answer}
+          key={idx}
+          onDelete={onAnswerDelete}
+        />
       ))}
     </div>
   );

@@ -7,22 +7,16 @@ import ReportsSection from '../../company/company-dashboard/ReportsSection';
 import TagsSectionsContainer from '../../company/company-dashboard/tags/TagsSectionsContainer';
 import ProposedTags from '../../company/company-dashboard/tags/ProposedTags';
 import QuestionPageContainer from '../../question/QuestionPageContainer';
-import { pathOr } from 'ramda';
 import AllQuestions from '../../shared/questions/AllQuestions';
 
 class Dashboard extends React.Component {
-  isAdminUser() {
-    const role = pathOr('ROLE_USER', ['attributes', 'role', '0'], this.props.currentUser);
-    return role === 'ROLE_COMPANY_ADMINISTRATOR' || role === 'ROLE_ADMIN';
-  }
-
   render() {
-    const { match } = this.props;
+    const { match, currentUser } = this.props;
 
     return (
       <div className="dashboard d-flex h-100">
         <Sidebar>
-          { this.isAdminUser() && 
+          { currentUser?.isCompanyAdmin() && 
             <React.Fragment>
               <NavLink to={`${match.url}/users`} className="item" activeClassName="selected-item">
                 Users

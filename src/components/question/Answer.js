@@ -27,13 +27,12 @@ class Answer extends React.Component {
 
   vote(isUpVote) {
     const {
-      questionId,
       answer,
       actions: { voteAnswer }
     } = this.props;
     voteAnswer({
       answerId: answer.modelId,
-      questionId,
+      questionId: answer.questionId,
       isUpVote
     });
   }
@@ -86,14 +85,8 @@ class Answer extends React.Component {
     markAnswerAsCorrect(answer);
   }
 
-  hasVotingAccess() {
-    const { answer, currentUser } = this.props;
-
-    return answer?.userId !== currentUser?.id;
-  }
-
   render() {
-    const { answer, key, currentUser } = this.props;
+    const { answer, key, currentUser, questionAuthorId, questionId } = this.props;
     const { editing, inactive, loading } = this.state;
     const { answerText, score, voteStatus, correct } = answer;
 
@@ -104,7 +97,7 @@ class Answer extends React.Component {
         <UpDownVotes
           small
           classContainer="container-center d-flex flex-column"
-          disabled={!this.hasVotingAccess()}
+          disabled={currentUser.isAnswerAuthor(answer)}
           nrVotes={score}
           vote={voteStatus}
           onUpVote={() => this.vote(true)}
@@ -125,19 +118,19 @@ class Answer extends React.Component {
                 label: "Mark as correct",
                 icon: "playlist_add_check_icon",
                 onClick: () => this.markAsCorrect(),
-                visible: true
+                visible: currentUser.isQuestionAuthor({questionAuthorId}) && !answer.correct
               },
               {
                 label: "Edit",
                 icon: "edit",
                 onClick: () => this.setState({ editing: true }),
-                visible: true
+                visible: currentUser.isAnswerAuthor(answer)
               },
               {
                 label: "Delete",
                 icon: "delete",
                 onClick: () => this.onDeleteClick(),
-                visible: true
+                visible: currentUser.isCompanyAdmin() || currentUser.isAnswerAuthor(answer)
               }
             ]}
           />
