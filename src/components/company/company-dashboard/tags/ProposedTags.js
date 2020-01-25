@@ -13,6 +13,7 @@ class ProposedTags extends React.Component {
     this.state = {
       columns: [{ title: "Proposed tag", field: "name" }]
     };
+    this.tableRef = React.createRef();
   }
 
   fetchProposedTags = query => {
@@ -20,7 +21,7 @@ class ProposedTags extends React.Component {
       actions: { getProposedTags }
     } = this.props;
     const { page, pageSize } = query;
-    
+
     return getProposedTags(page, pageSize).then(res => {
       return {
         data: res.content,
@@ -30,12 +31,17 @@ class ProposedTags extends React.Component {
     });
   };
 
+  refreshTableData() {
+    this.tableRef.current && this.tableRef.current.onQueryChange();
+  }
+
   acceptProposedTag = rowData => {
     const {
       actions: { acceptTag }
     } = this.props;
 
-    acceptTag(rowData.id);
+    acceptTag(rowData.id)
+      .then(() => this.refreshTableData());
   };
 
   declineProposedTag = rowData => {
@@ -43,7 +49,8 @@ class ProposedTags extends React.Component {
       actions: { declineTag }
     } = this.props;
 
-    declineTag(rowData.id);
+    declineTag(rowData.id)
+      .then(() => this.refreshTableData());
   };
 
   render() {
@@ -57,6 +64,7 @@ class ProposedTags extends React.Component {
             pageSizeOptions: [],
             sorting: true
           }}
+          tableRef={this.tableRef}
           title="Proposed Tags"
           columns={this.state.columns}
           data={query => this.fetchProposedTags(query)}
@@ -64,7 +72,9 @@ class ProposedTags extends React.Component {
             {
               icon: "check",
               tooltip: "Accept",
-              onClick: (_, rowData) => this.acceptProposedTag(rowData)
+              onClick: (_, rowData) => {
+                this.acceptProposedTag(rowData);
+              }
             },
             {
               icon: "clear",
