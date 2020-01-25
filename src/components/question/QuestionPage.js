@@ -120,7 +120,8 @@ class QuestionPage extends React.Component {
   render() {
     const {
       currentQuestion: { loading, question },
-      currentAnswers: { loadingAnswers, answers }
+      currentAnswers: { loadingAnswers, answers },
+      currentUser
     } = this.props;
     const {
       page,
@@ -196,19 +197,19 @@ class QuestionPage extends React.Component {
                 label: "Propose edit",
                 icon: "chat_bubble_outline_icon",
                 onClick: () => {},
-                visible: true
+                visible: currentUser.isEmployee() && !currentUser.isQuestionAuthor(question)
               },
               {
                 label: "Edit",
                 icon: "edit",
                 onClick: () => this.setState({ editingEnabled: true }),
-                visible: true
+                visible: currentUser.isQuestionAuthor(question)
               },
               {
                 label: "Delete",
                 icon: "delete",
                 onClick: () => this.handleDeleteClick(),
-                visible: true
+                visible: currentUser.isCompanyAdmin() || currentUser.isQuestionAuthor(question)
               }
             ]}
           />
