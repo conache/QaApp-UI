@@ -16,6 +16,7 @@ import {
   import search from './ducks/search';
   import questions from './ducks/questions';
   import answers from './ducks/answers';
+  import accounts from './ducks/accounts';
 
   const initialState = Immutable({
     app: {
@@ -47,7 +48,8 @@ import {
     tags,
     search,
     questions,
-    answers
+    answers,
+    accounts
   }));
   
   const middlewares = [thunk];

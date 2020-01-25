@@ -1,88 +1,70 @@
-import React from 'react';
+import React from "react";
+import { connect } from "react-redux";
 import MaterialTable from "material-table";
-import { getUserAccounts, removeUserAccount, createUserAccount, updateUserAccount } from '../../../api/users';
-import { NotificationManager } from 'react-notifications';
-import { reject } from 'ramda';
+import {
+  getAllAccounts,
+  editAccount,
+  createAccount,
+  deleteAccount
+} from "../../../ducks/accounts";
+
+import { NotificationManager } from "react-notifications";
+import { pathOr } from "ramda";
 
 class UsersSection extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      page: 0,
+      pageSize: 10,
       columns: [
         { title: "First Name", field: "firstName" },
         { title: "Last Name", field: "lastName" },
-        { title: "Email", field: "email", editable: 'onAdd' },
-        { title: "User", field: "username", editable: 'onAdd' },
+        { title: "Email", field: "email", editable: "onAdd" },
+        { title: "User", field: "username", editable: "onAdd" },
         { title: "Job", field: "job" },
         {
           title: "Role",
           field: "role",
           lookup: {
-            "ROLE_USER": "Normal user",
-            "ROLE_COMPANY_ADMINISTRATOR": "Company admin"
+            ROLE_USER: "Normal user",
+            ROLE_COMPANY_ADMINISTRATOR: "Company admin"
           }
-        },
-      ],
-      data: (query) => this.fetchUsers(query)
-    }
+        }
+      ]
+    };
   }
 
-  // REFACTOR THIS, IT'S 2 AM, WILL DO TOMOROW
-  formatUserJSON(userJSON) {
-    const { attributes } = userJSON;
-    if (!attributes) {
-      return userJSON;
-    }
+  fetchTableData() {
+    const {
+      actions: { getAllAccounts }
+    } = this.props;
+    const { page, pageSize } = this.state;
 
-    const additional = {};
-    ['job', 'role'].forEach(key => {
-      const fieldValue = attributes[key];
-      if (!fieldValue) {
-        additional[key] = null;
-        return;
-      }
-      additional[key] = fieldValue[0] || '';
-    });
-
-    return {
-      ...userJSON,
-      ...additional
-    }
+    getAllAccounts(page, pageSize);
   }
 
-  fetchUsers(query) {
-    return new Promise((resolve, reject) => {
-      const { page, pageSize } = query;
-      getUserAccounts(page, pageSize)
-        .then(response => {
-          const result = response.data;
-          resolve({
-            data: result.users.map(representation => this.formatUserJSON(representation)),
-            page: page,
-            totalCount: result.totalCount
-          });
-        })
-        .catch(error => {
-          NotificationManager.error(`Could not fetch users. Error: ${error.message}`)
-          reject();
-        })
-    });
+  componentDidMount() {
+    this.fetchTableData();
+  }
+
+  onPageChange(page) {
+    this.setState({ page }, () => this.fetchTableData());
   }
 
   onRowDelete(entry) {
-    return removeUserAccount(entry.id)
-      .then(() => {
-        NotificationManager.success("User removed successfully");
-      })
-      .catch((error) => {
-        NotificationManager.error(`Could not remove user. Error: ${error.message}`);
-      });
+    const {actions: {deleteUserAccount}} = this.props;
+    return deleteUserAccount(entry.id)
+      .then(() => this.fetchTableData());
   }
 
   onRowAdd(entry) {
+    const {
+      actions: { createAccount }
+    } = this.props;
     const { firstName, lastName, email, username, job, role } = entry;
 
-    return createUserAccount({
+    return createAccount({
       userRepresentation: {
         firstName,
         lastName,
@@ -91,48 +73,83 @@ class UsersSection extends React.Component {
       },
       roleName: role,
       jobName: job
-    }).then(() => {
-      NotificationManager.success("User successfully added to company");
-    }).catch((error) => {
-      NotificationManager.error(`Could not add user to company. Error: ${error.message}`);
-    });
+    }).then(() => this.fetchTableData());
   }
 
   onRowUpdate(newEntry) {
+    const {
+      actions: { editAccount }
+    } = this.props;
     let attributes = newEntry.attributes || {};
     newEntry.attributes = {
       ...attributes,
       job: [newEntry.job || "Not specified"],
       role: [newEntry.role || "ROLE_USER"]
-    }
-    return updateUserAccount(newEntry)
-      .catch(error => {
-        NotificationManager.error(`Could not finish editing user. Error: ${error.message}`);
-      });
+    };
+
+    return editAccount(newEntry);
   }
 
   render() {
+    const { page, pageSize } = this.state;
+    const { loadingData, totalCount, data } = this.props;
+
     return (
       <div style={{ maxWidth: "100%" }}>
         <MaterialTable
+          onChangePage={page => this.onPageChange(page)}
+          isLoading={loadingData}
+          page={page}
+          totalCount={totalCount}
           options={{
             exportButton: true,
             search: false,
-            pageSize: 10,
+            pageSize: pageSize,
             pageSizeOptions: [],
-            addRowPosition: 'first',
+            addRowPosition: "first"
           }}
           title="Company users"
           columns={this.state.columns}
-          data={this.state.data}
+          data={[...data]}
           editable={{
-            onRowAdd: (newData) => this.onRowAdd(newData),
-            onRowUpdate: (newData, oldData) => this.onRowUpdate(newData, oldData),
-            onRowDelete: (rowData) => this.onRowDelete(rowData)
-          }} />
+            onRowAdd: newData => this.onRowAdd(newData),
+            onRowUpdate: (newData, oldData) =>
+              this.onRowUpdate(newData, oldData),
+            onRowDelete: rowData => this.onRowDelete(rowData)
+          }}
+        />
       </div>
     );
   }
 }
 
-export default UsersSection
+function mapStateToProps(state) {
+  return {
+    totalCount: pathOr(0, ["accounts", "totalCount"], state),
+    loadingData: pathOr(false, ["accounts", "loading"], state),
+    data: (() => {
+      const tableEntries = pathOr([], ["accounts", "data"], state);
+      const rows = [];
+
+      for (let user of tableEntries) {
+        rows.push({ ...user });
+      }
+
+      return rows;
+    })()
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: {
+      getAllAccounts: (page, pageSize) =>
+        dispatch(getAllAccounts(page, pageSize)),
+      editAccount: params => dispatch(editAccount(params)),
+      createAccount: params => dispatch(createAccount(params)),
+      deleteUserAccount: id => dispatch(deleteAccount(id))
+    }
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UsersSection);
