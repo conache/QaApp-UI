@@ -25,13 +25,9 @@ export function deleteTag(id) {
 }
 
 export function acceptProposedTag(id) {
-  return new Promise((resolve, reject) => {
-    resolve({ message: "aa" });
-  });
+  return request('PUT', `company/acceptTag?tagId=${id}`);
 }
 
 export function declineProposedTag(id) {
-  return new Promise((resolve, reject) => {
-    resolve({ message: "aa" });
-  });
+  return request('PUT', `company/declineTag?tagId=${id}`);
 }
