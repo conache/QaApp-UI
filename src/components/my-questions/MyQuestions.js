@@ -7,7 +7,7 @@ import {
 } from "../utils/Constants";
 import { getQuestions } from "../../ducks/user";
 import PaginatedComponent from "../shared/PaginatedComponent";
-import QuestionsList from "../shared/questions/QuestionsList";
+import QuestionCard from "../shared/QuestionCard";
 
 class MyQuestions extends React.Component {
   constructor(props) {
@@ -46,7 +46,7 @@ class MyQuestions extends React.Component {
         onPageChange={page => this.onPageChange(page)}
         loading={loading}
       >
-        <QuestionsList questions={questions} />
+        {questions.map((question, idx) => <QuestionCard question={question} showAuthor={false} key={idx} />)}
       </PaginatedComponent>
     );
   }

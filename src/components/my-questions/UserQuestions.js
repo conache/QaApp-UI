@@ -57,7 +57,7 @@ const UserQuestions = props => {
 
 function mapStateToProps(state) {
   return {
-    proposalsCount: pathOr(0, ["user", "editProposalsCount"], state),
+    proposalsCount: pathOr(0, ["proposals", "totalCount"], state),
     questionsCount: pathOr(0,["user", "totalQuestionsCount"], state)
   }
 } 

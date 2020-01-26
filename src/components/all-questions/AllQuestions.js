@@ -8,7 +8,7 @@ import {
 } from "../utils/Constants";
 import { getAllQuestions } from "../../ducks/questions";
 import QuestionsFilterSection from "./QuestionsFilterSection";
-import QuestionsList from "../shared/questions/QuestionsList";
+import QuestionCard from "../shared/QuestionCard";
 import PaginatedComponent from "../shared/PaginatedComponent";
 
 class AllQuestions extends React.Component {
@@ -88,7 +88,7 @@ class AllQuestions extends React.Component {
         style={{ padding: "24px" }}
       >
         <QuestionsFilterSection
-          title="All questions page"
+          title="All questions:"
           numbrOfQuestions={totalElements}
           onFiltersChange={(...args) => this.onFiltersChange(...args)}
         />
@@ -101,7 +101,7 @@ class AllQuestions extends React.Component {
             onPageChange={page => this.onPageChange(page)}
             loading={loadingAllQuestions}
           >
-            <QuestionsList questions={questions} />
+            {questions.map((question, idx) => <QuestionCard question={question} key={idx} />)}
           </PaginatedComponent>
         </div>
       </div>
