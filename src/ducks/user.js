@@ -4,6 +4,7 @@ import { NotificationManager } from "react-notifications";
 
 import * as User from "../api/user";
 import { setAuthToken } from "../session";
+import { pathOr } from "ramda";
 
 export default function reducer(state = Immutable({}), action) {
   switch (action.type) {
@@ -14,7 +15,10 @@ export default function reducer(state = Immutable({}), action) {
     case "profile/QUESTIONS_LOADING":
       return state.merge({ lodaingQuestions: action.payload }, { deep: true });
     case "profile/QUESTIONS":
-      return state.merge({ questions: action.payload }, { deep: true });
+      return state.merge({ 
+        totalQuestionsCount: pathOr(0, ["value1"], action.payload),
+        questions: pathOr([], ["value0"], action.payload)
+      }, { deep: true });
     case "profile/LOGOUT":
       return state.set("profile", {});
     default:
@@ -28,7 +32,7 @@ export const getProfileInfo = createAction("profile/GET_PROFILE_INFO");
 export const userLogOut = createAction("profile/LOGOUT");
 
 export const setQuestions = createAction("profile/QUESTIONS");
-export const loadingQuestions = createActions("profile/QUESTIONS_LOADING");
+export const loadingQuestions = createAction("profile/QUESTIONS_LOADING");
 
 export const getUserInfo = () => {
   return dispatch => {
@@ -48,7 +52,7 @@ export const getUserInfo = () => {
 export const getQuestions = (page, pageSize) => {
   return dispatch => {
     dispatch(loadingQuestions(true));
-    return User.getQuestions()
+    return User.getQuestions(page, pageSize)
       .then(resp => {
         dispatch(setQuestions(resp.data));
         dispatch(loadingQuestions(false));

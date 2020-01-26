@@ -43,6 +43,7 @@ class Dashboard extends React.Component {
             <Route exact path={`${match.path}/tags`} component={TagsSectionsContainer} />
             <Route exact path={`${match.path}/tags/proposed`} component={ProposedTags} />
             <Route exact path={`${match.path}/all-questions`} component={AllQuestions} />
+            <Route exact path={`${match.path}/my-questions/question/:id`} component={QuestionPageContainer} />
             <Route path={`${match.path}/my-questions`} component={UserQuestions} />
             <Route path={`${match.path}/question/:id`} component={QuestionPageContainer} />
             <Route component={UsersSection} />
