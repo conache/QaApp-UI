@@ -2,7 +2,7 @@ import React from 'react';
 import LogoutButton from './LogoutButton';
 import { withRouter } from 'react-router-dom';
 import QuestionAnswerOutlinedIcon from '@material-ui/icons/QuestionAnswerOutlined';
-import Search from '../Search';
+import Search from '../shared/Search';
 import { Box, Button } from '@material-ui/core';
 import PersonDetails from './PersonDetails';
 import NotificationsIcon from '@material-ui/icons/Notifications';

@@ -8,9 +8,9 @@ import Subscribe from "./Subscribe";
 import PaginatedComponent from "../shared/PaginatedComponent";
 import { withUser } from "../../context";
 import { pathOr } from "ramda";
-import EditableText from "../shared/questions/EditableText";
+import EditableText from "../all-questions/EditableText";
 import InactiveOverlay from "../shared/InactiveOverlay";
-import CustomMenu from "../shared/questions/CustomMenu";
+import CustomMenu from "../all-questions/CustomMenu";
 
 const ALL_QUESTIONS_ROUTE = "/dashboard/all-questions";
 class QuestionPage extends React.Component {
@@ -196,7 +196,7 @@ class QuestionPage extends React.Component {
                 label: "Propose edit",
                 icon: "chat_bubble_outline_icon",
                 onClick: () => {},
-                visible: true // currentUser.isEmployee() && !currentUser.isQuestionAuthor(question)
+                visible: currentUser.isEmployee() && !currentUser.isQuestionAuthor(question)
               },
               {
                 label: "Edit",

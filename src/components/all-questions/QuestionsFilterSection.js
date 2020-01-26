@@ -5,23 +5,11 @@ import {
   Button,
 } from "@material-ui/core";
 import TuneIcon from "@material-ui/icons/Tune";
-import { QUESTIONS_SORT_CRITERIA } from "../../utils/Constants";
+import { QUESTIONS_SORT_CRITERIA } from "../utils/Constants";
 import { pathOr } from "ramda";
-import { getAllActiveTags } from "../../../ducks/tags";
+import { getAllActiveTags } from "../../ducks/tags";
+import FilterButton from "../shared/FilterButton";
 import QuestionsFilterMenu from './QuestionsFilterMenu';
-
-const FilterButton = props => {
-  const { name, selected, onClick } = props;
-  return (
-    <Button
-      className={{ "filter-button": true, selected: selected }}
-      variant="contained"
-      onClick={() => !selected && onClick()}
-    >
-      {name}
-    </Button>
-  );
-};
 
 class QuestionsFilterSection extends React.Component {
   constructor(props) {

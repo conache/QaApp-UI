@@ -5,11 +5,11 @@ import { pathOr } from "ramda";
 import {
   DEFAULT_PAGE_SIZE,
   QUESTIONS_SORT_CRITERIA
-} from "../../utils/Constants";
-import { getAllQuestions } from "../../../ducks/questions";
+} from "../utils/Constants";
+import { getAllQuestions } from "../../ducks/questions";
 import QuestionsFilterSection from "./QuestionsFilterSection";
-import QuestionsList from "./QuestionsList";
-import PaginatedComponent from "../PaginatedComponent";
+import QuestionsList from "../shared/questions/QuestionsList";
+import PaginatedComponent from "../shared/PaginatedComponent";
 
 class AllQuestions extends React.Component {
   constructor(props) {

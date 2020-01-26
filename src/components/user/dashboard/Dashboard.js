@@ -3,11 +3,11 @@ import { NavLink, Route, Switch } from 'react-router-dom';
 import {withUser} from '../../../context';
 import Sidebar from '../../shared/Sidebar';
 import UsersSection from '../../company/company-dashboard/UsersSection';
-import ReportsSection from '../../company/company-dashboard/ReportsSection';
 import TagsSectionsContainer from '../../company/company-dashboard/tags/TagsSectionsContainer';
 import ProposedTags from '../../company/company-dashboard/tags/ProposedTags';
 import QuestionPageContainer from '../../question/QuestionPageContainer';
-import AllQuestions from '../../shared/questions/AllQuestions';
+import AllQuestions from '../../all-questions/AllQuestions';
+import UserQuestions from '../../my-questions/UserQuestions';
 
 class Dashboard extends React.Component {
   render() {
@@ -26,10 +26,7 @@ class Dashboard extends React.Component {
                 </NavLink>
               <NavLink exact to={`${match.url}/tags/proposed`} className="item" activeClassName="selected-item">
                 Proposed Tags
-                </NavLink>
-              <NavLink to={`${match.url}/reports`} className="item" activeClassName="selected-item">
-                Reports
-                </NavLink>
+              </NavLink>
               </React.Fragment>
 
           }
@@ -40,14 +37,13 @@ class Dashboard extends React.Component {
               My questions
             </NavLink>
         </Sidebar>
-        <section className="h-100 w-100 overflow-y">
+        <section className="h-100 w-100 overflow-y position-relative">
           <Switch>
             <Route path={`${match.path}/users`} component={UsersSection} />
             <Route exact path={`${match.path}/tags`} component={TagsSectionsContainer} />
             <Route exact path={`${match.path}/tags/proposed`} component={ProposedTags} />
-            <Route exact path={`${match.path}/reports`} component={ReportsSection} />
             <Route exact path={`${match.path}/all-questions`} component={AllQuestions} />
-            <Route exact path={`${match.path}/my-questions`} component={AllQuestions} />
+            <Route path={`${match.path}/my-questions`} component={UserQuestions} />
             <Route path={`${match.path}/question/:id`} component={QuestionPageContainer} />
             <Route component={UsersSection} />
           </Switch>

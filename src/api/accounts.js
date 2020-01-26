@@ -1,4 +1,4 @@
-import { request } from '../api/request';
+import { request } from './request';
 
 export function createUserAccount(data) {
   return request('POST', 'company/addUser', data);

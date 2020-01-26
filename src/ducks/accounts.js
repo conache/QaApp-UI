@@ -39,7 +39,7 @@ export default function reducer(state = Immutable({}), action) {
         { deep: true }
       );
     case "accounts/EDIT_ACCOUNT":
-      const currentAccounts = pathOr({}, ["data"], state);
+      const currentAccounts = pathOr([], ["data"], state);
       return state.merge(
         {
           data: currentAccounts.map(account => {
@@ -68,8 +68,6 @@ export const createAccount = params => {
   return dispatch => {
     return Accounts.createUserAccount(params)
       .then(res => {
-        console.log("Got response:");
-        console.log(res);
         NotificationManager.success("User successfully added to company");
       })
       .catch(err => {

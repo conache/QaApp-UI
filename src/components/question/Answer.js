@@ -11,8 +11,8 @@ import {
 } from "../../ducks/answers";
 import { withUser } from "../../context";
 import InactiveOverlay from "../shared/InactiveOverlay";
-import CustomMenu from "../shared/questions/CustomMenu";
-import EditableText from "../shared/questions/EditableText";
+import CustomMenu from "../all-questions/CustomMenu";
+import EditableText from "../all-questions/EditableText";
 import LoadingSpinner from "../shared/LoadingSpinner";
 
 class Answer extends React.Component {

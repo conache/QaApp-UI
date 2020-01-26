@@ -2,12 +2,12 @@ import React from "react";
 import { connect } from "react-redux";
 import { Formik } from "formik";
 import { Button, TextField, TextareaAutosize } from "@material-ui/core";
-import CustomFormInput from "../CustomFormInput";
+import CustomFormInput from "../shared/CustomFormInput";
 import CreatableSelect from "react-select/creatable";
 import { filter, reject, isEmpty, isNil, map } from "ramda";
-import LoadingSpinner from '../../shared/LoadingSpinner';
-import { addNewQuestion } from "../../../ducks/questions";
-import { getAllActiveTags } from "../../../ducks/tags";
+import LoadingSpinner from '../shared/LoadingSpinner';
+import { addNewQuestion } from "../../ducks/questions";
+import { getAllActiveTags } from "../../ducks/tags";
 import { pathOr } from "ramda";
 import makeAnimated from "react-select/animated";
 

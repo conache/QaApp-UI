@@ -27,7 +27,7 @@ export default function reducer(state = Immutable({}), action) {
         { deep: true }
       );
     case "questions/CREATE_QUESTION":
-      return state.merge({ newQuestionId: action.payload }, { deep: true });
+      return state;
     case "questions/VOTE_QUESTION":
       let voteCount = 0;
 

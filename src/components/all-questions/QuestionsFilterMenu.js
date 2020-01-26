@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-import { QUESTIONS_SORT_CRITERIA } from "../../utils/Constants";
+import { QUESTIONS_SORT_CRITERIA } from "../utils/Constants";
 
 class QuestionsFilterMenu extends React.Component {
   constructor(props) {

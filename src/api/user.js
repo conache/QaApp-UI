@@ -11,3 +11,8 @@ export function logout() {
 export function setCompanyGroup(name) {
   return request('post', `company/addGroup?name=${name}`);
 }
+
+export function getQuestions(page, pageSize) {
+  // this should be replaced by another endpoint (for user)
+  return request('GET', `question/findAll?page=${page + 1}&size=${pageSize}`);
+}

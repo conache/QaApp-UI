@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { useKeycloak } from '@react-keycloak/web';
 
-import { logout } from '../../../ducks/user';
+import { logout } from '../../ducks/user';
 import { Button, Box } from '@material-ui/core';
 
 const Logout = (props) => {

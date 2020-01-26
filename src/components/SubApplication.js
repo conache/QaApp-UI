@@ -10,9 +10,9 @@ import Dashboard from "./user/dashboard/Dashboard";
 import LandingPage from "./landing/LandingPage";
 import { UserContext } from "../context";
 import CompanyRegisterInfo from "./company/company-register-info/CompanyRegisterInfo";
-import Navbar from "./shared/navbar/Navbar";
+import Navbar from "./navbar/Navbar";
 import LoadingSpinner from "./shared/LoadingSpinner";
-import AskQuestion from "./shared/questions/AskQuestion";
+import AskQuestion from "./all-questions/AskQuestion";
 import { UserProfile } from "../components/utils/UserProfile";
 // const ROLES = ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_COMPANY_ADMINISTRATOR'],
 class SubApplication extends Component {
