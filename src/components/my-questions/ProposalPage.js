@@ -1,34 +1,8 @@
 import React from "react";
-import ReactDiffViewer from "react-diff-viewer";
+import TextDiff from "../shared/TextDiff";
+import LoadingSpinner from "../shared/LoadingSpinner";
 
-const diffStyles = {
-  variables: {
-    diffViewerBackground: "#1494d9",
-    addedBackground: "#1494d9",
-    addedColor: "#1494d9",
-    removedBackground: "#1494d9",
-    removedColor: "#1494d9",
-    wordAddedBackground: "#1494d9",
-    wordRemovedBackground: "#1494d9"
-  }
-};
-
-const TextDiff = props => {
-  const { oldText, newText } = props;
-
-  return (
-    <ReactDiffViewer
-      styles={diffStyles}
-      oldValue={oldText}
-      newValue={newText}
-      splitView={true}
-      hideLineNumbers={true}
-      showDiffOnly={true}
-      extraLinesSurroundingDiff={1}
-    />
-  );
-};
-
+const USER_QUESTIONS_BASE_URL = "/dashboard/my-questions";
 class ProposalPage extends React.Component {
   constructor(props) {
     super(props);
@@ -39,22 +13,87 @@ class ProposalPage extends React.Component {
     };
   }
 
+  componentDidMount() {
+    const {
+      actions: { getProposal }
+    } = this.props;
+    getProposal(this.state.proposalId);
+  }
+
+  onDeclineClicked() {
+    const {
+      history,
+      actions: {declineProposal}
+    } = this.props;
+    const {currentProposal: {question}} = this.props; 
+    
+    this.setState({loading: true});
+    declineProposal(this.state.proposalId)
+      .then(() => {
+        history.replace(`${USER_QUESTIONS_BASE_URL}/proposed-edits`)
+      })
+      .finally(() => {
+        this.setState({loading: false});
+      })
+  }
+
+  onAcceptClicked() {
+    const {
+      history,
+      actions: {acceptProposal}
+    } = this.props;
+    const {currentProposal: {question}} = this.props;
+
+    this.setState({loading: true});
+    acceptProposal(this.state.proposalId)
+      .then(() => {
+        history.replace(`${USER_QUESTIONS_BASE_URL}/question/${question.modelId}`)
+      })
+      .finally(() => {
+        this.setState({loading: false});
+      })
+  }
+
   render() {
-    const { proposalId } = this.state;
+    const { loadingProposal, currentProposal } = this.props;
 
-    const oldText = `
-      This is the final hook added to this release, useRouteMatch gives you access to the match property without rendering a <Route> component.
-      It matches the URL just like a Route would and it accepts an exact, strict, path and sensitive options just like a <Route>.
-      Before V5.1 the ways to access the match object are through
-        `;
+    if (loadingProposal || !currentProposal) {
+      return <LoadingSpinner />;
+    }
+    const { question, proposal } = currentProposal;
+    const tags = question.questionTags.concat(
+      proposal.questionTags.filter(
+        tag => question.questionTags.indexOf(tag) < 0
+      )
+    );
 
-    const newText = `
-      This is the final hookies added to this release, useRouteMatch gives me some asdasd you access to the match property without rendering a <Route> component.
-      It matches the URL just like a Route would and it accepts an exact, strict, path and sensitive options just like a <Route>.
-      Before V5.1 the ways to access the matchies object are through. Ypu kno man?
-        `;
+    return (
+      <div style={{height: "100%", width: "100%", position: "relative"}}>
+        {this.state.loading && <LoadingSpinner />}
+        <div>{question.questionTitle}</div>
+        <TextDiff
+          oldText={question.questionText}
+          newText={proposal.questionText}
+        />
+        <div>
+          {tags.map(tag => {
+            let tagClass = "";
 
-    return <TextDiff oldText={oldText} newText={newText} />;
+            if (question.questionTags.indexOf(tag) >= 0) {
+              tagClass = proposal.questionTags.indexOf(tag) < 0 ? "tag__removed" : "tag";
+            } else {
+              tagClass = "tag__new";
+            }
+
+            return <div className={tagClass}>{tag}</div>
+          })}
+        </div>
+        <div>
+          <button onClick={() => this.onDeclineClicked()}>Decline</button>
+          <button onClick={() => this.onAcceptClicked()}>Accept</button>
+        </div>
+      </div>
+    );
   }
 }
 

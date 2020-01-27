@@ -3,6 +3,14 @@
   margin-right: 8px;
   background: #C4C4C4;
   font-size: 14px;
+
+  &__new {
+    background: #acf2bd;
+  }
+
+  &__removed {
+    background: #fdb8c0;
+  }
 }
 
 .no-data-message {
