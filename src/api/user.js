@@ -13,6 +13,5 @@ export function setCompanyGroup(name) {
 }
 
 export function getQuestions(page, pageSize) {
-  // this should be replaced by another endpoint (for user)
-  return request('GET', `question/findAll?page=${page + 1}&size=${pageSize}`);
+  return request('GET', `user/questions?page=${page + 1}&size=${pageSize}`);
 }
