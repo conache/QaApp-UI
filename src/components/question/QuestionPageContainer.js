@@ -7,13 +7,16 @@ import {
   editQuestion
 } from "../../ducks/questions";
 import { getAnswers, addAnswer } from "../../ducks/answers";
+import { getAllActiveTags } from "../../ducks/tags";
 import { pathOr } from "ramda";
 import QuestionPage from "./QuestionPage";
 
 function mapStateToProps(state) {
   return {
     currentQuestion: pathOr({}, ["questions"], state),
-    currentAnswers: pathOr([], ["answers"], state)
+    currentAnswers: pathOr([], ["answers"], state),
+    tagsOptions: pathOr([], ["tags", "activeTags", "data"], state).map(tag => {
+      return { value: tag.name, label: tag.name };}),
   };
 }
 
@@ -40,7 +43,8 @@ function mapDispatchToProps(dispatch) {
       },
       editQuestion: params => {
         return dispatch(editQuestion(params));
-      }
+      },
+      loadTags: () => dispatch(getAllActiveTags()),
     }
   };
 }

@@ -8,9 +8,12 @@ import Subscribe from "./Subscribe";
 import PaginatedComponent from "../shared/PaginatedComponent";
 import { withUser } from "../../context";
 import { pathOr } from "ramda";
-import EditableText from "../all-questions/EditableText";
 import InactiveOverlay from "../shared/InactiveOverlay";
 import CustomMenu from "../all-questions/CustomMenu";
+import GeneralModal from "../shared/GeneralModal";
+import EditQuestionTemplate from "./EditQuestionTemplate";
+import { proposeEditQuestion } from '../../api/questions';
+import { NotificationManager } from "react-notifications";
 
 const ALL_QUESTIONS_ROUTE = "/dashboard/all-questions";
 class QuestionPage extends React.Component {
@@ -19,26 +22,28 @@ class QuestionPage extends React.Component {
     const { match } = this.props;
     this.state = {
       page: 0,
-      pageSize: 5,
+      pageSize: 15,
       questionId: match.params.id,
       editingEnabled: false,
       editLoading: false,
-      deleteLoading: false
+      deleteLoading: false,
+      showModal: true, 
     };
   }
 
   componentDidMount() {
     const {
-      actions: { loadQuestionById }
+      actions: { loadQuestionById, loadTags }
     } = this.props;
     loadQuestionById(this.state.questionId);
+    loadTags();
     this.loadAnswers();
   }
 
   loadAnswers() {
     const { page, pageSize, questionId } = this.state;
     const {
-      actions: { getAnswers }
+      actions: { getAnswers },
     } = this.props;
     getAnswers({
       page,
@@ -64,19 +69,46 @@ class QuestionPage extends React.Component {
     subscribeToQuestion({ subscribe: value, questionId });
   }
 
-  handleEditSubmit(newQuestionText) {
+  handleEditSubmit(params) {
     const { questionId } = this.state;
     const {
       actions: { editQuestion }
     } = this.props;
-    this.setState({ editLoading: true });
-    editQuestion({ modelId: questionId, questionText: newQuestionText })
+
+    editQuestion({ modelId: questionId, ...params })
       .then(() => {
-        this.setState({ editingEnabled: false });
+        this.setState({ showModal: false });
       })
       .finally(() => {
-        this.setState({ editLoading: false });
+        this.setState({ showModal: false });
       });
+  }
+  
+  handleProposeSubmit = (data) => {
+    const { questionId } = this.state;
+
+    const params = {
+      question: {
+        modelId: questionId,
+        questionText: data.questionText,
+        questionTags: data.questionTags,
+      },
+      proposedTags: data.proposedTags,
+    }
+
+    proposeEditQuestion(params)
+    .then(() => {
+      this.setState({ showModal: false });
+      NotificationManager.success(
+        `Edit question succesfully proposed`
+      );
+    })
+    .catch(err => {
+      this.setState({ showModal: false });
+      NotificationManager.error(
+        `Error encountered while proposing edit. Error: ${err.message}`
+      );
+    })
   }
 
   handleDeleteClick() {
@@ -116,11 +148,16 @@ class QuestionPage extends React.Component {
     return question?.questionAuthorId !== currentUser.getId();
   }
 
+  showModal = (showModal) => {
+    this.setState({ showModal });
+  }
+
   render() {
     const {
       currentQuestion: { loading, question },
       currentAnswers: { loadingAnswers, answers },
-      currentUser
+      currentUser,
+      tagsOptions,
     } = this.props;
     const {
       page,
@@ -128,7 +165,8 @@ class QuestionPage extends React.Component {
       questionId,
       editingEnabled,
       editLoading,
-      deleteLoading
+      deleteLoading,
+      showModal,
     } = this.state;
 
     let totalAnswersCount = 0;
@@ -155,7 +193,6 @@ class QuestionPage extends React.Component {
       questionAuthorName
     } = question;
 
-    console.log(question)
     return (
       <div className="question-page h-100">
         {deleteLoading && <InactiveOverlay />}
@@ -183,7 +220,6 @@ class QuestionPage extends React.Component {
             onUpVote={() => this.vote(true)}
             onDownVote={() => this.vote(false)}
           />
-          {/* {editLoading && <LoadingSpinner />} */}
           <div style={{ textAlign: 'justify' }} >{questionText}</div>
           {/* <EditableText
             isEditing={editingEnabled}
@@ -203,7 +239,7 @@ class QuestionPage extends React.Component {
               {
                 label: "Edit",
                 icon: "edit",
-                onClick: () => this.setState({ editingEnabled: true }),
+                onClick: () => this.setState({ showModal: true }),
                 visible: currentUser.isQuestionAuthor(question)
               },
               {
@@ -244,6 +280,35 @@ class QuestionPage extends React.Component {
           questionId={questionId}
           onSuccess={() => this.onPostAnswerSuccess()}
         />
+
+        {/* Modals */}
+        <GeneralModal
+          name="edit-question"
+          showModal={showModal}
+          closeModalFct={() => this.showModal(false)}
+        >
+          <EditQuestionTemplate 
+            modalTitle="EDIT QUESTION"
+            question={question}
+            tagsOptions={tagsOptions}
+            onDiscard={() => this.showModal(false)}
+            onSave={(params) => this.handleEditSubmit(params)}
+          />
+        </GeneralModal>
+
+        <GeneralModal
+          name="propose-edit-question"
+          showModal={showModal}
+          closeModalFct={() => this.showModal(false)}
+        >
+          <EditQuestionTemplate 
+            modalTitle="PROPOSE EDIT QUESTION"
+            question={question}
+            tagsOptions={tagsOptions}
+            onDiscard={() => this.showModal(false)}
+            onSave={(params) => this.handleProposeSubmit(params)}
+          />
+        </GeneralModal>
       </div>
     );
   }

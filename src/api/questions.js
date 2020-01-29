@@ -54,3 +54,7 @@ export function updateQuestion(params) {
 export function deleteQuestion(id) {
   return request('DELETE', `question/delete?questionId=${id}`);
 }
+
+export function proposeEditQuestion(params) {
+  return request('POST', '/question/addProposedQuestion', params);
+}

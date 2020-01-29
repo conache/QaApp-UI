@@ -25,7 +25,7 @@ export function deleteAnswer(params) {
   return request('DELETE', `answer/delete?answerId=${answerId}&questionId=${questionId}`);
 }
 
-export function markAnswerAsCorrect(params) {
+export function markAnswerAsCorrect({ answerId, questionId  }) {
   // return request('POST', 'answer/update', {...params, correct: true});
-  return request('POST', 'answer/markCorrect', { ...params });
+  return request('PUT', `answer/markCorrect?answerId=${answerId}&questionId=${questionId}`);
 }

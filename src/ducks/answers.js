@@ -185,7 +185,9 @@ export const editAnswer = params => {
 export const markAsCorrect = params => {
   return dispatch => {
     return Answers.markAnswerAsCorrect(params)
-      .then(resp => {
+      .then(() => {
+        // TODO: Change in store the updated answer!
+        NotificationManager.success('The answer is succesfully marked as correct');
         dispatch(markCorrectAnswer(params));
       })
       .catch(err => {

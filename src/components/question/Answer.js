@@ -86,13 +86,14 @@ class Answer extends React.Component {
       answerId: answer.modelId,
       questionId: answer.questionId,
     }
+    // TODO: Update in store so that wont be necesarry to refresh the answers!!
     markAnswerAsCorrect(params);
   }
 
   render() {
     const { answer, key, currentUser, questionAuthorId, questionId } = this.props;
     const { editing, inactive, loading } = this.state;
-    const { answerText, score, voteStatus, correct } = answer;
+    const { answerText, score, voteStatus, correctAnswer } = answer;
 
     return (
       <div className="answer w-100 d-flex position-relative" key={key}>
@@ -108,7 +109,7 @@ class Answer extends React.Component {
           onDownVote={() => this.vote(false)}
         />
         <div className="d-flex flex-column w-100">
-          {correct && <DoneIcon />}
+          {correctAnswer && <DoneIcon />}
           <EditableText
             isEditing={editing}
             content={answerText}
@@ -122,7 +123,7 @@ class Answer extends React.Component {
                 label: "Mark as correct",
                 icon: "playlist_add_check_icon",
                 onClick: () => this.markAsCorrect(),
-                visible: currentUser.isQuestionAuthor({questionAuthorId}) && !answer.correct
+                visible: currentUser.isQuestionAuthor({questionAuthorId}) && !answer.correctAnswer
               },
               {
                 label: "Edit",
