@@ -31,7 +31,7 @@ export function getQuestion(id) {
 
 export function getAllQuestions(params) {
   const {page, pageSize, tags, sortBy} = params;
-  return request('GET', `question/findAll?page=${page + 1}&size=${pageSize}&sortBy=${sortBy}&tags=${tags.join(',')}`);
+  return request('GET', `question/findAll?page=${page + 1}&size=${pageSize}&tags=${tags.join(',')}&sortBy=${sortBy}`);
 }
 
 export function subscribe(params) {

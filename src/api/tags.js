@@ -5,7 +5,7 @@ export function getAllActiveTags() {
 }
 
 export function getAllTags(page=1, pageSize=10) {
-  return request('GET', `user/tags?pageNumber=${page}&size=${pageSize}`);
+  return request('GET', `user/tags?page=${page}&size=${pageSize}`);
 }
 
 export function getProposedTags(page=1, pageSize=10) {
