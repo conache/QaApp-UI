@@ -27,7 +27,7 @@ class QuestionPage extends React.Component {
       editingEnabled: false,
       editLoading: false,
       deleteLoading: false,
-      showModal: true, 
+      showModal: false, 
     };
   }
 
@@ -233,7 +233,7 @@ class QuestionPage extends React.Component {
               {
                 label: "Propose edit",
                 icon: "chat_bubble_outline_icon",
-                onClick: () => {},
+                onClick: () => this.setState({ showModal: true }),
                 visible: currentUser.isEmployee() && !currentUser.isQuestionAuthor(question)
               },
               {
