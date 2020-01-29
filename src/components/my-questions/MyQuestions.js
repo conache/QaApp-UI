@@ -1,11 +1,11 @@
 import React from "react";
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import { pathOr } from "ramda";
 
 import {
   DEFAULT_PAGE_SIZE
 } from "../utils/Constants";
-import { getQuestions } from "../../ducks/user";
+import { getMyQuestions } from "../../ducks/user";
 import PaginatedComponent from "../shared/PaginatedComponent";
 import QuestionCard from "../shared/QuestionCard";
 
@@ -23,19 +23,19 @@ class MyQuestions extends React.Component {
   }
 
   loadData() {
-    const {actions: {getUserQuestions}} = this.props;
-    const {page, pageSize} = this.state;
+    const { actions: { getUserQuestions } } = this.props;
+    const { page, pageSize } = this.state;
 
     getUserQuestions(page, pageSize);
   }
 
   onPageChange(page) {
-    this.setState({page}, () => this.loadData());
+    this.setState({ page }, () => this.loadData());
   }
 
   render() {
-    const {page, pageSize} = this.state;
-    const {questions, totalCount, loading} = this.props;
+    const { page, pageSize } = this.state;
+    const { myQuestions, totalCount, loading } = this.props;
 
     return (
       <PaginatedComponent
@@ -46,7 +46,7 @@ class MyQuestions extends React.Component {
         onPageChange={page => this.onPageChange(page)}
         loading={loading}
       >
-        {questions.map((question, idx) => <QuestionCard question={question} showAuthor={false} key={idx} />)}
+        {myQuestions.map((question, idx) => <QuestionCard question={question} showAuthor={false} key={idx} />)}
       </PaginatedComponent>
     );
   }
@@ -55,8 +55,8 @@ class MyQuestions extends React.Component {
 function mapStateToProps(state) {
   return {
     loading: pathOr(false, ["user", "lodaingQuestions"], state),
-    questions: pathOr([], ["user", "questions"], state),
-    totalCount: pathOr(0, ["user", "totalQuestionsCount"], state)
+    myQuestions: pathOr([], ["user", "myQuestions"], state),
+    totalCount: pathOr(0, ["user", "totalMyQuestionsCount"], state)
   };
 }
 
@@ -64,7 +64,7 @@ function mapDispatchToProps(dispatch) {
   return {
     actions: {
       getUserQuestions: (page, pageSize) => {
-        return dispatch(getQuestions(page, pageSize))
+        return dispatch(getMyQuestions(page, pageSize))
       }
     }
   }

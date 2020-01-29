@@ -82,7 +82,11 @@ class Answer extends React.Component {
       answer,
       actions: { markAnswerAsCorrect }
     } = this.props;
-    markAnswerAsCorrect(answer);
+    const params = {
+      answerId: answer.modelId,
+      questionId: answer.questionId,
+    }
+    markAnswerAsCorrect(params);
   }
 
   render() {

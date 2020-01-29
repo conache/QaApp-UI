@@ -38,7 +38,7 @@ class Dashboard extends React.Component {
               My questions
             </NavLink>
         </Sidebar>
-        <section className="h-100 w-100 overflow-y position-relative">
+        <section className="h-100 w-100 overflow-y overflow-x-hidden position-relative">
           <Switch>
             <Route path={`${match.path}/users`} component={UsersSection} />
             <Route exact path={`${match.path}/tags`} component={TagsSectionsContainer} />

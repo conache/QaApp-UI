@@ -31,7 +31,7 @@ const QuestionCard = props => {
         <div className="title">{questionTitle}</div>
         <div className="body">{questionText}</div>
         <div className="d-flex">{questionTags?.map(tag => <div className="tag">{tag}</div>)}</div>
-        <div className="card-info">{showAuthor && `asked on ${moment(questionPublishDate).format("MMM Do 'YY")} by ${questionAuthorName}`}</div>
+        <div className="card-info">{`asked on ${moment(questionPublishDate).format("MMM Do 'YY")}`} {showAuthor && `by ${questionAuthorName}`}</div>
       </div>
     </div>
   );

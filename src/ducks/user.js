@@ -19,6 +19,13 @@ export default function reducer(state = Immutable({}), action) {
         totalQuestionsCount: pathOr(0, ["value1"], action.payload),
         questions: pathOr([], ["value0"], action.payload)
       }, { deep: true });
+    case "profile/MY_QUESTIONS_LOADING":
+      return state.merge({ lodaingMyQuestions: action.payload }, { deep: true });
+    case "profile/MY_QUESTIONS":
+      return state.merge({ 
+        totalMyQuestionsCount: pathOr(0, ["value1"], action.payload),
+        myQuestions: pathOr([], ["value0"], action.payload)
+      }, { deep: true });
     case "profile/LOGOUT":
       return state.set("profile", {});
     default:
@@ -33,6 +40,9 @@ export const userLogOut = createAction("profile/LOGOUT");
 
 export const setQuestions = createAction("profile/QUESTIONS");
 export const loadingQuestions = createAction("profile/QUESTIONS_LOADING");
+
+export const setMyQuestions = createAction("profile/MY_QUESTIONS");
+export const loadingMyQuestions = createAction("profile/MY_QUESTIONS_LOADING");
 
 export const getUserInfo = () => {
   return dispatch => {
@@ -59,6 +69,23 @@ export const getQuestions = (page, pageSize) => {
       })
       .catch(err => {
         dispatch(loadingQuestions(false));
+        NotificationManager.error(
+          `An error encountered while fetching your questions. Error: ${err.message}`
+        );
+      });
+  };
+};
+
+export const getMyQuestions = (page, pageSize) => {
+  return dispatch => {
+    dispatch(loadingMyQuestions(true));
+    return User.getMyQuestions(page, pageSize)
+      .then(resp => {
+        dispatch(setMyQuestions(resp.data));
+        dispatch(loadingMyQuestions(false));
+      })
+      .catch(err => {
+        dispatch(loadingMyQuestions(false));
         NotificationManager.error(
           `An error encountered while fetching your questions. Error: ${err.message}`
         );

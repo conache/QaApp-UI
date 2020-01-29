@@ -155,15 +155,16 @@ class QuestionPage extends React.Component {
       questionAuthorName
     } = question;
 
+    console.log(question)
     return (
-      <div className="question-page h-100 position-relative">
+      <div className="question-page h-100">
         {deleteLoading && <InactiveOverlay />}
         <div className="d-flex">
           <Subscribe
             subscribed={subscribed}
             onClick={value => this.handleSubscribe(value)}
           />
-          <div>
+          <div className="w-100">
             <h2 className>{questionTitle}</h2>
             <p>
               asked on {moment(questionPublishDate).format("MMM Do YY")} by{" "}
@@ -172,7 +173,7 @@ class QuestionPage extends React.Component {
             <div className="horizontal-hr" />
           </div>
         </div>
-        <div className="d-flex position-relative">
+        <div className="d-flex py-1">
           <UpDownVotes
             className="align-center d-flex flex-column"
             style={{ textAlign: "center" }}
@@ -182,13 +183,14 @@ class QuestionPage extends React.Component {
             onUpVote={() => this.vote(true)}
             onDownVote={() => this.vote(false)}
           />
-          {editLoading && <LoadingSpinner />}
-          <EditableText
+          {/* {editLoading && <LoadingSpinner />} */}
+          <div style={{ textAlign: 'justify' }} >{questionText}</div>
+          {/* <EditableText
             isEditing={editingEnabled}
             content={questionText}
             onEditCancel={() => this.setState({ editingEnabled: false })}
             onEditSubmit={newText => this.handleEditSubmit(newText)}
-          />
+          /> */}
           <CustomMenu 
             disabled={editingEnabled}
             options={[
