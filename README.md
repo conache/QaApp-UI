@@ -1,3 +1,5 @@
+![Build Status](https://codebuild.us-east-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiMFhFY3lQdmNmMTdSMkdyV2lVK21IQzFIdEYwODBMbjJTTTFlWHRoam9wRXRJS0EzTVlHV0JIK0RBNndSNHBUTnBzVVdFa2ZyS1dwdmR6RnRqZ0tIMS93PSIsIml2UGFyYW1ldGVyU3BlYyI6IlNBa21mQUZ6TGt5ZzY2RkoiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)
+
 # qa-app
 QA app for businesses
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
