@@ -1,0 +1,27 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      # install Node
+      - echo "Installing Node..."
+      - curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
+      - apt install -y nodejs
+      # install npm
+      - echo "Installing npm..."
+      - curl -L https://npmjs.org/install.sh | sudo sh
+      # check npm version
+      - npm -v
+  pre_build:
+    commands:
+      - echo "Installing dependencies..."
+      - npm install
+  build:
+    commands:
+      - echo "Building project..."
+      - npm run build
+artifacts:
+  files:
+    - "**/*"
+  base-directory: build
+
