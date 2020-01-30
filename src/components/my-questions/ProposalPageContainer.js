@@ -17,7 +17,7 @@ function mapDispatchToProps(dispatch) {
         return dispatch(getEditProposal(id))
       },
       acceptProposal: id => {
-        return dispatch(acceptEditProposal(id)) 
+        return dispatch(acceptEditProposal(id))
       },
       declineProposal: id => {
         return dispatch(declineEditProposal(id))

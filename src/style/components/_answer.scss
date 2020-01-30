@@ -5,10 +5,15 @@
     margin: 0.5rem 0 0 0;
   }
 
+  &__content {
+    @extend .d-flex, .flex-column;
+    justify-content: center;
+  }
+
   .correct-answer {
     font-size: 2rem;
     color: #33cccc !important;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
     margin-right: 0.5rem;
   }
 }

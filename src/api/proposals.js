@@ -42,24 +42,19 @@ export function getProposal(id) {
         }
       }
     }), 1000 );
-
   });
+    // return request('GET', `question/findProposed?proposedQuestionId=${id}`);
 }
+
 export function getProposals(page, pageSize) {
   // this should be replaced by another endpoint
   return request('GET', `question/proposedQuestions?page=${page + 1}&size=${pageSize}`);
 }
 
 export function acceptProposal(id) {
-  return new Promise((resolve, reject) => {
-    setTimeout(
-      () => resolve({message: "Not implemented yet"}),
-      1000)
-  })
+  return request('POST', `question/acceptProposed?proposedQuestionId=${id}`);
 }
 
 export function declineProposal(id) {
-  return new Promise((resolve, reject) => {
-    resolve({message: "Not implemented yet"})
-  })
+  return request('DELETE', `question/deleteProposed?proposedQuestionId=${id}`);
 }

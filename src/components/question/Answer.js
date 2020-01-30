@@ -109,9 +109,9 @@ class Answer extends React.Component {
           onDownVote={() => this.vote(false)}
         />
         <div className="d-flex flex-column w-100">
-          <div className="d-flex">
+          <div className="d-flex h-100">
             {correctAnswer && !editing && <CheckIcon className="correct-answer" />}
-            <div className="py-1 w-100">
+            <div className="py-1 w-100 answer__content">
               <EditableText
                 isEditing={editing}
                 content={answerText}

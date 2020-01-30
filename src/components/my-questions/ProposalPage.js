@@ -57,10 +57,11 @@ class ProposalPage extends React.Component {
   render() {
     const { loadingProposal, currentProposal } = this.props;
 
+    console.log(currentProposal);
     if (loadingProposal || !currentProposal) {
       return <LoadingSpinner />;
     }
-    const { question, proposal } = currentProposal;
+    const { question, proposal, questionTags } = currentProposal;
     const tags = question.questionTags.concat(
       proposal.questionTags.filter(
         tag => question.questionTags.indexOf(tag) < 0
@@ -68,7 +69,7 @@ class ProposalPage extends React.Component {
     );
 
     return (
-      <div style={{ height: "100%", width: "100%", position: "relative" }}>
+      <div className="proposal">
         {this.state.loading && <LoadingSpinner />}
         <div>{question.questionTitle}</div>
         <TextDiff
