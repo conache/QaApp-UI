@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import DoneIcon from "@material-ui/icons/Done";
-
+import moment from 'moment-mini';
 import UpDownVotes from "./UpDownVotes";
 import {
   voteAnswer,
@@ -14,6 +13,7 @@ import InactiveOverlay from "../shared/InactiveOverlay";
 import CustomMenu from "../all-questions/CustomMenu";
 import EditableText from "../all-questions/EditableText";
 import LoadingSpinner from "../shared/LoadingSpinner";
+import CheckIcon from '@material-ui/icons/Check';
 
 class Answer extends React.Component {
   constructor(props) {
@@ -93,7 +93,7 @@ class Answer extends React.Component {
   render() {
     const { answer, key, currentUser, questionAuthorId, questionId } = this.props;
     const { editing, inactive, loading } = this.state;
-    const { answerText, score, voteStatus, correctAnswer } = answer;
+    const { answerText, score, voteStatus, correctAnswer, userName, publishDate } = answer;
 
     return (
       <div className="answer w-100 d-flex position-relative" key={key}>
@@ -109,36 +109,47 @@ class Answer extends React.Component {
           onDownVote={() => this.vote(false)}
         />
         <div className="d-flex flex-column w-100">
-          {correctAnswer && <DoneIcon />}
-          <EditableText
-            isEditing={editing}
-            content={answerText}
-            onEditCancel={() => this.setState({ editing: false })}
-            onEditSubmit={newText => this.handleEditSubmit(newText)}
-          />
-          <CustomMenu
-            disabled={editing}
-            options={[
-              {
-                label: "Mark as correct",
-                icon: "playlist_add_check_icon",
-                onClick: () => this.markAsCorrect(),
-                visible: currentUser.isQuestionAuthor({questionAuthorId}) && !answer.correctAnswer
-              },
-              {
-                label: "Edit",
-                icon: "edit",
-                onClick: () => this.setState({ editing: true }),
-                visible: currentUser.isAnswerAuthor(answer)
-              },
-              {
-                label: "Delete",
-                icon: "delete",
-                onClick: () => this.onDeleteClick(),
-                visible: currentUser.isCompanyAdmin() || currentUser.isAnswerAuthor(answer)
-              }
-            ]}
-          />
+          <div className="d-flex">
+            {correctAnswer && !editing && <CheckIcon className="correct-answer" />}
+            <div className="py-1 w-100">
+              <EditableText
+                isEditing={editing}
+                content={answerText}
+                onEditCancel={() => this.setState({ editing: false })}
+                onEditSubmit={newText => this.handleEditSubmit(newText)}
+              />
+              {!editing && (
+                <p className="answer__data-info">
+                  on {moment(publishDate).format("MMM Do YY")} by{" "} {userName}
+                </p>
+              )}
+            </div>
+            {!editing && (
+              <CustomMenu
+                options={[
+                  {
+                    label: "Mark as correct",
+                    icon: "playlist_add_check_icon",
+                    onClick: () => this.markAsCorrect(),
+                    visible: currentUser.isQuestionAuthor({ questionAuthorId }) && !answer.correctAnswer
+                  },
+                  {
+                    label: "Edit",
+                    icon: "edit",
+                    onClick: () => this.setState({ editing: true }),
+                    visible: currentUser.isAnswerAuthor(answer)
+                  },
+                  {
+                    label: "Delete",
+                    icon: "delete",
+                    onClick: () => this.onDeleteClick(),
+                    visible: currentUser.isCompanyAdmin() || currentUser.isAnswerAuthor(answer)
+                  }
+                ]}
+              />
+            )}
+          </div>
+
           <div className="horizontal-hr" />
         </div>
       </div>

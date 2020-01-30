@@ -23,34 +23,34 @@ class ProposalPage extends React.Component {
   onDeclineClicked() {
     const {
       history,
-      actions: {declineProposal}
+      actions: { declineProposal }
     } = this.props;
-    const {currentProposal: {question}} = this.props; 
-    
-    this.setState({loading: true});
+    const { currentProposal: { question } } = this.props;
+
+    this.setState({ loading: true });
     declineProposal(this.state.proposalId)
       .then(() => {
         history.replace(`${USER_QUESTIONS_BASE_URL}/proposed-edits`)
       })
       .finally(() => {
-        this.setState({loading: false});
+        this.setState({ loading: false });
       })
   }
 
   onAcceptClicked() {
     const {
       history,
-      actions: {acceptProposal}
+      actions: { acceptProposal }
     } = this.props;
-    const {currentProposal: {question}} = this.props;
+    const { currentProposal: { question } } = this.props;
 
-    this.setState({loading: true});
+    this.setState({ loading: true });
     acceptProposal(this.state.proposalId)
       .then(() => {
         history.replace(`${USER_QUESTIONS_BASE_URL}/question/${question.modelId}`)
       })
       .finally(() => {
-        this.setState({loading: false});
+        this.setState({ loading: false });
       })
   }
 
@@ -68,7 +68,7 @@ class ProposalPage extends React.Component {
     );
 
     return (
-      <div style={{height: "100%", width: "100%", position: "relative"}}>
+      <div style={{ height: "100%", width: "100%", position: "relative" }}>
         {this.state.loading && <LoadingSpinner />}
         <div>{question.questionTitle}</div>
         <TextDiff

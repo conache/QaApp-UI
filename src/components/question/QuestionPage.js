@@ -25,9 +25,9 @@ class QuestionPage extends React.Component {
       pageSize: 15,
       questionId: match.params.id,
       editingEnabled: false,
-      editLoading: false,
       deleteLoading: false,
-      showModal: false, 
+      showEditModal: false,
+      showProposeModal: false,
     };
   }
 
@@ -69,21 +69,29 @@ class QuestionPage extends React.Component {
     subscribeToQuestion({ subscribe: value, questionId });
   }
 
-  handleEditSubmit(params) {
+  handleEditSubmit(data) {
     const { questionId } = this.state;
     const {
       actions: { editQuestion }
     } = this.props;
 
-    editQuestion({ modelId: questionId, ...params })
+    const params = {
+      question: {
+        modelId: questionId,
+        questionText: data.questionText,
+        questionTags: data.questionTags,
+      },
+      proposedTags: data.proposedTags,
+    }
+    editQuestion(params)
       .then(() => {
-        this.setState({ showModal: false });
+        this.setState({ showEditModal: false });
       })
       .finally(() => {
-        this.setState({ showModal: false });
+        this.setState({ showEditModal: false });
       });
   }
-  
+
   handleProposeSubmit = (data) => {
     const { questionId } = this.state;
 
@@ -97,18 +105,18 @@ class QuestionPage extends React.Component {
     }
 
     proposeEditQuestion(params)
-    .then(() => {
-      this.setState({ showModal: false });
-      NotificationManager.success(
-        `Edit question succesfully proposed`
-      );
-    })
-    .catch(err => {
-      this.setState({ showModal: false });
-      NotificationManager.error(
-        `Error encountered while proposing edit. Error: ${err.message}`
-      );
-    })
+      .then(() => {
+        this.setState({ showProposeModal: false });
+        NotificationManager.success(
+          `Edit question succesfully proposed`
+        );
+      })
+      .catch(err => {
+        this.setState({ showProposeModal: false });
+        NotificationManager.error(
+          `Error encountered while proposing edit. Error: ${err.message}`
+        );
+      })
   }
 
   handleDeleteClick() {
@@ -148,8 +156,9 @@ class QuestionPage extends React.Component {
     return question?.questionAuthorId !== currentUser.getId();
   }
 
-  showModal = (showModal) => {
-    this.setState({ showModal });
+  showModal = (key, value) => {
+    console.log(key, value)
+    this.setState({ [key]: value });
   }
 
   render() {
@@ -164,9 +173,9 @@ class QuestionPage extends React.Component {
       pageSize,
       questionId,
       editingEnabled,
-      editLoading,
       deleteLoading,
-      showModal,
+      showEditModal,
+      showProposeModal,
     } = this.state;
 
     let totalAnswersCount = 0;
@@ -210,7 +219,7 @@ class QuestionPage extends React.Component {
             <div className="horizontal-hr" />
           </div>
         </div>
-        <div className="d-flex py-1">
+        <div className="d-flex">
           <UpDownVotes
             className="align-center d-flex flex-column"
             style={{ textAlign: "center" }}
@@ -220,26 +229,20 @@ class QuestionPage extends React.Component {
             onUpVote={() => this.vote(true)}
             onDownVote={() => this.vote(false)}
           />
-          <div style={{ textAlign: 'justify' }} >{questionText}</div>
-          {/* <EditableText
-            isEditing={editingEnabled}
-            content={questionText}
-            onEditCancel={() => this.setState({ editingEnabled: false })}
-            onEditSubmit={newText => this.handleEditSubmit(newText)}
-          /> */}
-          <CustomMenu 
+          <div className="py-1 w-100" style={{ textAlign: 'justify' }} >{questionText}</div>
+          <CustomMenu
             disabled={editingEnabled}
             options={[
               {
                 label: "Propose edit",
                 icon: "chat_bubble_outline_icon",
-                onClick: () => this.setState({ showModal: true }),
-                visible: currentUser.isEmployee() && !currentUser.isQuestionAuthor(question)
+                onClick: () => this.setState({ showProposeModal: true }),
+                visible: !currentUser.isQuestionAuthor(question)
               },
               {
                 label: "Edit",
                 icon: "edit",
-                onClick: () => this.setState({ showModal: true }),
+                onClick: () => this.setState({ showEditModal: true }),
                 visible: currentUser.isQuestionAuthor(question)
               },
               {
@@ -270,6 +273,7 @@ class QuestionPage extends React.Component {
             }
           >
             <Answers
+              questionNbr={totalAnswersCount}
               question={question}
               answers={displayedAnswers}
               onAnswerDelete={() => this.loadAnswers()}
@@ -284,28 +288,28 @@ class QuestionPage extends React.Component {
         {/* Modals */}
         <GeneralModal
           name="edit-question"
-          showModal={showModal}
-          closeModalFct={() => this.showModal(false)}
+          showModal={showEditModal}
+          closeModalFct={() => this.showModal('showEditModal', false)}
         >
-          <EditQuestionTemplate 
+          <EditQuestionTemplate
             modalTitle="EDIT QUESTION"
             question={question}
             tagsOptions={tagsOptions}
-            onDiscard={() => this.showModal(false)}
+            onDiscard={() => this.showModal('showEditModal', false)}
             onSave={(params) => this.handleEditSubmit(params)}
           />
         </GeneralModal>
 
         <GeneralModal
           name="propose-edit-question"
-          showModal={showModal}
-          closeModalFct={() => this.showModal(false)}
+          showModal={showProposeModal}
+          closeModalFct={() => this.showModal('showProposeModal', false)}
         >
-          <EditQuestionTemplate 
+          <EditQuestionTemplate
             modalTitle="PROPOSE EDIT QUESTION"
             question={question}
             tagsOptions={tagsOptions}
-            onDiscard={() => this.showModal(false)}
+            onDiscard={() => this.showModal('showProposeModal', false)}
             onSave={(params) => this.handleProposeSubmit(params)}
           />
         </GeneralModal>

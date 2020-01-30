@@ -54,7 +54,8 @@ export default function reducer(state = Immutable({}), action) {
         {
           question: {
             ...currentQuestion,
-            questionText: action.payload.questionText
+            questionText: action.payload.questionText,
+            questionTags: action.payload.questionTags,
           }
         },
         { deep: true }
@@ -144,7 +145,7 @@ export const addNewQuestion = params => {
 export const subscribeToQuestion = params => {
   return dispatch => {
     return Questions.subscribe(params)
-      .then(resp => {
+      .then(() => {
         dispatch(applyQuestionSubscribe(params));
         NotificationManager.success(
           params.subscribe
@@ -163,7 +164,7 @@ export const subscribeToQuestion = params => {
 export const voteQuestion = params => {
   return dispatch => {
     return Questions.voteQuestion(params)
-      .then(resp => {
+      .then(() => {
         dispatch(applyQuestionVote(params));
       })
       .catch(err => {
@@ -177,7 +178,7 @@ export const voteQuestion = params => {
 export const deleteQuestion = id => {
   return dispatch => {
     return Questions.deleteQuestion(id)
-      .then(resp => {
+      .then(() => {
         NotificationManager.success("Question successfully deleted.");
       })
       .catch(err => {
@@ -191,8 +192,10 @@ export const deleteQuestion = id => {
 export const editQuestion = params => {
   return dispatch => {
     return Questions.updateQuestion(params)
-      .then(resp => {
-        dispatch(applyQuestionEdit(params));
+      .then(() => {
+        console.log(params)
+        dispatch(applyQuestionEdit(params.question));
+        NotificationManager.success('Question succesfully edited');
       })
       .catch(err => {
         NotificationManager.error(

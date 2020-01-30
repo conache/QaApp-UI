@@ -47,9 +47,6 @@ const EditableText = props => {
               onBlur={formik.handleBlur}
               value={formik.values.content}
             />
-            <Button variant="contained" onClick={onEditCancel}>
-              Cancel
-            </Button>
             <Button
               className="form-button"
               type="submit"
@@ -60,6 +57,9 @@ const EditableText = props => {
               }
             >
               Save
+            </Button>
+            <Button variant="contained" onClick={onEditCancel} style={{ marginLeft: '0.5rem' }}>
+              Cancel
             </Button>
           </form>
         )}

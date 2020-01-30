@@ -84,7 +84,7 @@ export default function reducer(state = Immutable({}), action) {
             data: currentAnswers.data.map(answer => {
               return {
                 ...answer,
-                correct: action.payload.modelId === answer.modelId
+                correctAnswer: action.payload.answerId === answer.modelId
               }
             })
           }
@@ -171,7 +171,7 @@ export const deleteAnswer = params => {
 export const editAnswer = params => {
   return dispatch => {
     return Answers.updateAnswer(params)
-      .then(resp => {
+      .then(() => {
         dispatch(applyAnswerEdit(params));
       })
       .catch(err => {
@@ -186,7 +186,6 @@ export const markAsCorrect = params => {
   return dispatch => {
     return Answers.markAnswerAsCorrect(params)
       .then(() => {
-        // TODO: Change in store the updated answer!
         NotificationManager.success('The answer is succesfully marked as correct');
         dispatch(markCorrectAnswer(params));
       })

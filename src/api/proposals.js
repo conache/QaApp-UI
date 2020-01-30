@@ -47,7 +47,7 @@ export function getProposal(id) {
 }
 export function getProposals(page, pageSize) {
   // this should be replaced by another endpoint
-  return request('GET', `question/findAll?page=${page + 1}&size=${pageSize}`);
+  return request('GET', `question/proposedQuestions?page=${page + 1}&size=${pageSize}`);
 }
 
 export function acceptProposal(id) {
