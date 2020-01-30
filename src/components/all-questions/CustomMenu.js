@@ -1,5 +1,4 @@
-import React from "react";
-import IconButton from "@material-ui/core/IconButton";
+import React, { Fragment } from "react";
 import Typography from "@material-ui/core/Typography";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Icon from "@material-ui/core/Icon";
@@ -8,7 +7,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 const CustomMenu = props => {
-  const { options, disabled } = props;
+  const { options } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -29,16 +28,12 @@ const CustomMenu = props => {
   }
 
   return (
-    <div>
-      <IconButton
-        disabled={disabled}
-        aria-label="more"
-        aria-controls="long-menu"
-        aria-haspopup="true"
+    <Fragment>
+      <MoreVertIcon
+        className="cursor-pointer p-1"
+        style={{ color: '#3f51b5' }}
         onClick={handleMoreClick}
-      >
-        <MoreVertIcon />
-      </IconButton>
+      />
       <Menu
         id="custom-menu"
         anchorEl={anchorEl}
@@ -54,6 +49,10 @@ const CustomMenu = props => {
           vertical: "top",
           horizontal: "center"
         }}
+      // anchorOrigin={{
+      //   vertical: 'bottom',
+      //   horizontal: 'center',
+      // }}
       >
         {optionsList.map((option, key) => (
           <MenuItem
@@ -70,7 +69,7 @@ const CustomMenu = props => {
           </MenuItem>
         ))}
       </Menu>
-    </div>
+    </Fragment>
   );
 };
 

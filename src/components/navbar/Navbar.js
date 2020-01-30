@@ -22,7 +22,7 @@ const Navbar = props => {
       </Box>
       <Box display="flex" className="nav-right">
         <div className="h-100">
-          <Button variant="contained" color="primary" className="h-100" onClick={() => history.push("/ask-question")}>
+          <Button className="h-100 main-color-background" onClick={() => history.push("/ask-question")}>
             Ask question
             </Button>
         </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import { pathOr } from "ramda";
 
 import { DEFAULT_PAGE_SIZE } from '../utils/Constants';
@@ -21,14 +21,14 @@ class EditProposals extends React.Component {
   }
 
   loadData() {
-    const {actions: {getEditProposals}} = this.props;
-    const {page, pageSize} = this.state;
+    const { actions: { getEditProposals } } = this.props;
+    const { page, pageSize } = this.state;
 
     getEditProposals(page, pageSize);
   }
 
   onPageChange(page) {
-    this.setState({page}, () => this.loadData());
+    this.setState({ page }, () => this.loadData());
   }
 
   render() {

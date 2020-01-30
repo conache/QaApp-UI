@@ -62,7 +62,7 @@ class TagsSection extends React.Component {
     const { loadingData, totalCount, data } = this.props;
 
     return (
-      <div style={{ maxWidth: "100%" }}>
+      <div className="w-100">
         <MaterialTable
           onChangePage={page => this.onPageChange(page)}
           isLoading={loadingData}

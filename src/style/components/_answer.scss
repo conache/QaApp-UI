@@ -1,0 +1,14 @@
+.answer {
+  &__data-info {
+    text-align: end;
+    font-size: 12px;
+    margin: 0.5rem 0 0 0;
+  }
+
+  .correct-answer {
+    font-size: 2rem;
+    color: #33cccc !important;
+    margin-top: 1rem;
+    margin-right: 0.5rem;
+  }
+}

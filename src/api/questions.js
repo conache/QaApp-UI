@@ -48,7 +48,7 @@ export function voteQuestion(params) {
 }
 
 export function updateQuestion(params) {
-  return request('POST', 'question/update', params);
+  return request('POST', 'question/edit', params);
 }
 
 export function deleteQuestion(id) {
@@ -56,5 +56,5 @@ export function deleteQuestion(id) {
 }
 
 export function proposeEditQuestion(params) {
-  return request('POST', '/question/addProposedQuestion', params);
+  return request('POST', 'question/addProposedQuestion', params);
 }
