@@ -84,7 +84,7 @@ class AllQuestions extends React.Component {
 
     return (
       <div
-        className="all-questions d-flex flex-column h-100"
+        className="all-questions d-flex flex-column h-100 w-100"
         style={{ padding: "24px" }}
       >
         <QuestionsFilterSection

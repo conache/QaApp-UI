@@ -55,7 +55,7 @@ class ProposedTags extends React.Component {
 
   render() {
     return (
-      <div style={{ maxWidth: "100%" }}>
+      <div className="w-100">
         <MaterialTable
           options={{
             exportButton: false,

@@ -21,7 +21,7 @@ const UserQuestions = props => {
   }
 
   return (
-    <div className="d-flex flex-column h-100" style={{ padding: "24px" }}>
+    <div className="d-flex flex-column h-100 w-100" style={{ padding: "24px" }}>
       <Box 
         className="user-questions"
         display="flex"
