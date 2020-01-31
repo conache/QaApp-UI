@@ -25,6 +25,7 @@ const TextDiff = props => {
       hideLineNumbers={true}
       showDiffOnly={true}
       extraLinesSurroundingDiff={1}
+      useDarkTheme={false}
     />
   );
 };

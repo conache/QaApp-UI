@@ -92,6 +92,10 @@ export const acceptEditProposal = id => {
 export const declineEditProposal = id => {
   return dispatch => {
     return Proposals.declineProposal(id)
+    .then(res => {
+      NotificationManager.success(`Proposal successfully deleted!`);
+      return res;
+    })
     .catch(err => {
       NotificationManager.error(
         `Could not decline edit proposal. Error: ${err.message}`
