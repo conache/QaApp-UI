@@ -203,7 +203,7 @@ class QuestionPage extends React.Component {
     } = question;
 
     return (
-      <div className="question-page h-100 w-100">
+      <div className="question-page w-100 overflow-y">
         {deleteLoading && <InactiveOverlay />}
         <div className="d-flex">
           <Subscribe

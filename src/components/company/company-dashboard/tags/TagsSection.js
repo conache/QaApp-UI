@@ -81,8 +81,6 @@ class TagsSection extends React.Component {
           data={[...data]}
           editable={{
             onRowAdd: newData => this.onRowAdd(newData),
-            onRowUpdate: (newData, oldData) =>
-              this.onRowUpdate(newData, oldData),
             onRowDelete: rowData => this.onRowDelete(rowData)
           }}
         />

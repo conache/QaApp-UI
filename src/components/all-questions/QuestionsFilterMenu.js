@@ -62,7 +62,7 @@ class QuestionsFilterMenu extends React.Component {
                 <FormControlLabel
                   value={QUESTIONS_SORT_CRITERIA.NO_ANSWERS}
                   control={<Radio color="default" />}
-                  label="No answers"
+                  label="Answers"
                   labelPlacement="start"
                 />
               </RadioGroup>

@@ -74,7 +74,7 @@ class QuestionsFilterSection extends React.Component {
               }
             />
             <FilterButton
-              name="No answers"
+              name="Answers"
               selected={filters.sortBy === QUESTIONS_SORT_CRITERIA.NO_ANSWERS}
               onClick={() =>
                 this.applyFilters({
