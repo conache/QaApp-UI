@@ -54,6 +54,7 @@
     ]
   },
   "devDependencies": {
+    "env-cmd": "^10.0.1",
     "react-global-configuration": "^1.4.0",
     "redux": "^4.0.5",
     "redux-seamless-immutable": "^0.4.0"
