@@ -8,6 +8,7 @@ import { KeycloakProvider } from '@react-keycloak/web';
 import Keycloak from 'keycloak-js';
 import { loaded, loading } from '../ducks/app';
 import { loadingProfileUser } from '../ducks/user';
+import socketService from '../socketService';
 
 const keycloak = new Keycloak('/keycloak.json');
 const kyecloakInitConfig = {
@@ -20,6 +21,13 @@ class Main extends Component {
     const { token } = tokens;
     const { actions: { appLoaded } } = this.props;
     setAuthToken(token);
+    socketService.connectToServer(token)
+      .then(() => {
+        socketService.onNotification((data) => {
+          console.log("Received data:");
+          console.log(data);
+        });
+      })
     appLoaded();
   }
 

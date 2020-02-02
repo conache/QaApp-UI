@@ -7,4 +7,5 @@ export const ENV = {
   client_env: 'development',
 };
 
-export const __BASE_API_URL__ = isDevEnvironment() ? "http://18.195.101.10:8080" : "http://18.195.101.10:8080";
+export const __BASE_API_URL__ = isDevEnvironment() ? "http://localhost:8085" : "http://18.195.101.10:8080";
+export const _BASE_SOCKET_SERVER_URL_ = isDevEnvironment() ? "http://3.134.101.74:8080" : "http://3.134.101.74:8080";
