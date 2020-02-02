@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import LogoutButton from './LogoutButton';
 import { withRouter } from 'react-router-dom';
 import QuestionAnswerOutlinedIcon from '@material-ui/icons/QuestionAnswerOutlined';
@@ -6,11 +6,23 @@ import Search from '../shared/Search';
 import { Box, Button } from '@material-ui/core';
 import PersonDetails from './PersonDetails';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import { getAuthToken } from '../../session';
+import socketService from "../../socketService";
 
 const Navbar = props => {
   const { history, location } = props;
 
-  if (location.pathname === "/company-info/" || location.pathname === "/company-info") {
+  useEffect(() => {
+    socketService.connectToServer(getAuthToken())
+    .then(() => {
+      socketService.onNotification((data) => {
+        console.log("Received data:");
+        console.log(data);
+      });
+    })
+  }, []);
+    
+  if(location.pathname === "/company-info/" || location.pathname === "/company-info") {
     return null;
   }
 

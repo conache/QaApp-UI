@@ -16,6 +16,10 @@ import AskQuestion from "./all-questions/AskQuestion";
 import { UserProfile } from "../components/utils/UserProfile";
 // const ROLES = ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_COMPANY_ADMINISTRATOR'],
 class SubApplication extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   renderPathByRole = () => {
     const {
       userProfile: { profile }

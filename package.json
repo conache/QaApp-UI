@@ -31,7 +31,6 @@
     "redux-actions": "^2.6.5",
     "redux-thunk": "^2.3.0",
     "sass-loader": "^8.0.1",
-    "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0"
   },
   "scripts": {
@@ -56,6 +55,7 @@
     ]
   },
   "devDependencies": {
+    "env-cmd": "^10.0.1",
     "react-global-configuration": "^1.4.0",
     "redux": "^4.0.5",
     "redux-seamless-immutable": "^0.4.0"
