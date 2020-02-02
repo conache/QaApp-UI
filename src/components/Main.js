@@ -21,13 +21,6 @@ class Main extends Component {
     const { token } = tokens;
     const { actions: { appLoaded } } = this.props;
     setAuthToken(token);
-    socketService.connectToServer(token)
-      .then(() => {
-        socketService.onNotification((data) => {
-          console.log("Received data:");
-          console.log(data);
-        });
-      })
     appLoaded();
   }
 

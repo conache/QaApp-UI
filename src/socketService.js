@@ -10,8 +10,6 @@ class SocketService {
         token: token
       }
     }
-    console.log("Tocked")
-    console.log(options.query.token);
     this.socket = io( _BASE_SOCKET_SERVER_URL_, options);
 
     return new Promise((resolve, reject) => {
@@ -30,7 +28,7 @@ class SocketService {
     if (!this.socket) {
       return;
     }
-
+    
     this.socket.on("notification", (data) => callback(data));
   }
 

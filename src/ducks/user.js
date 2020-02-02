@@ -5,6 +5,7 @@ import { NotificationManager } from "react-notifications";
 import * as User from "../api/user";
 import { setAuthToken } from "../session";
 import { pathOr } from "ramda";
+import socketService from "../socketService";
 
 export default function reducer(state = Immutable({}), action) {
   switch (action.type) {
@@ -97,6 +98,7 @@ export const logout = () => {
   return dispatch => {
     dispatch(userLogOut());
     setAuthToken(null);
+    socketService.disconnect();
   };
 };
 
