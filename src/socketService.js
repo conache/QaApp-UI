@@ -13,8 +13,8 @@ class SocketService {
     this.socket = io( _BASE_SOCKET_SERVER_URL_, options);
 
     return new Promise((resolve, reject) => {
-      this.socket.on('unauthorized', _ => {
-        console.log("Socket not authorized.");
+      this.socket.on('disconnect', _ => {
+        console.log("Socket disconnected. It mey be not authorized.");  
         reject()
       });      
       this.socket.on('authorized', _ => {
