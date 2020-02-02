@@ -14,6 +14,8 @@ import GeneralModal from "../shared/GeneralModal";
 import EditQuestionTemplate from "./EditQuestionTemplate";
 import { proposeEditQuestion } from '../../api/questions';
 import { NotificationManager } from "react-notifications";
+import GeneralPopover from '../shared/GeneralPopover';
+import Badge from '../utils/Badges';
 
 const ALL_QUESTIONS_ROUTE = "/dashboard/all-questions";
 class QuestionPage extends React.Component {
@@ -199,7 +201,8 @@ class QuestionPage extends React.Component {
       questionText,
       questionTags,
       questionPublishDate,
-      questionAuthorName
+      questionAuthorName,
+      userScore,
     } = question;
 
     return (
@@ -212,9 +215,11 @@ class QuestionPage extends React.Component {
           />
           <div className="w-100">
             <h2 className>{questionTitle}</h2>
-            <p>
+            <p className="d-flex">
               asked on {moment(questionPublishDate).format("MMM Do YY")} by{" "}
-              <b>{questionAuthorName}</b>
+              <GeneralPopover popoverAnchor={<b>{questionAuthorName}</b>} popoverId="author-question">
+                <Badge score={userScore} />
+              </GeneralPopover>
             </p>
             <div className="horizontal-hr" />
           </div>

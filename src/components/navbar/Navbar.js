@@ -10,7 +10,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 const Navbar = props => {
   const { history, location } = props;
 
-  if(location.pathname === "/company-info/" || location.pathname === "/company-info") {
+  if (location.pathname === "/company-info/" || location.pathname === "/company-info") {
     return null;
   }
 

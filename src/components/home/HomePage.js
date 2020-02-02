@@ -16,7 +16,7 @@ class HomePage extends React.Component {
 
   render() {
     return (
-      <div className="home-page h-100 d-flex">
+      <div className="home-page h-100 d-flex position-relative">
         <Sidebar />
         <div>
           <h3>HomePage page</h3>

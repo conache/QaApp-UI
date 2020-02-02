@@ -14,6 +14,8 @@ import CustomMenu from "../all-questions/CustomMenu";
 import EditableText from "../all-questions/EditableText";
 import LoadingSpinner from "../shared/LoadingSpinner";
 import CheckIcon from '@material-ui/icons/Check';
+import GeneralPopover from '../shared/GeneralPopover';
+import Badge from '../utils/Badges';
 
 class Answer extends React.Component {
   constructor(props) {
@@ -93,7 +95,7 @@ class Answer extends React.Component {
   render() {
     const { answer, key, currentUser, questionAuthorId, questionId } = this.props;
     const { editing, inactive, loading } = this.state;
-    const { answerText, score, voteStatus, correctAnswer, userName, publishDate } = answer;
+    const { answerText, score, voteStatus, correctAnswer, userName, publishDate, userScore } = answer;
 
     return (
       <div className="answer w-100 d-flex position-relative" key={key}>
@@ -120,7 +122,12 @@ class Answer extends React.Component {
               />
               {!editing && (
                 <p className="answer__data-info">
-                  on {moment(publishDate).format("MMM Do YY")} by{" "} {userName}
+                  on {moment(publishDate).format("MMM Do YY")} by{" "}
+                  {
+                    <GeneralPopover popoverAnchor={userName} popoverId="author-question">
+                      <Badge score={userScore} />
+                    </GeneralPopover>
+                  }
                 </p>
               )}
             </div>
