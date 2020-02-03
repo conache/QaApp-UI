@@ -2,6 +2,7 @@ import { connect } from "react-redux";
 import {
   getQuestion,
   subscribeToQuestion,
+  unsubscribeToQuestion,
   voteQuestion,
   deleteQuestion,
   editQuestion
@@ -32,8 +33,11 @@ function mapDispatchToProps(dispatch) {
       addAnswer: params => {
         return dispatch(addAnswer(params));
       },
-      subscribeToQuestion: params => {
-        return dispatch(subscribeToQuestion(params));
+      subscribeToQuestion: id => {
+        return dispatch(subscribeToQuestion(id));
+      },
+      unsubscribeToQuestion: id => {
+        return dispatch(unsubscribeToQuestion(id));
       },
       voteQuestion: params => {
         return dispatch(voteQuestion(params));

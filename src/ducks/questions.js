@@ -60,12 +60,12 @@ export default function reducer(state = Immutable({}), action) {
         },
         { deep: true }
       );
-    case "questions/SUBSCRIBE_TO_QUESTION":
+    case "questions/SUBSCRIBE_STATUS__TO_QUESTION":
       return state.merge(
         {
           question: {
             ...currentQuestion,
-            subscribed: action.payload.subscribe
+            currentUserSubscribed: action.payload,
           }
         },
         { deep: true }
@@ -87,9 +87,10 @@ export const loadingCreateQuestion = createAction(
 export const createQuestion = createAction("questions/CREATE_QUESTION");
 export const applyQuestionVote = createAction("questions/VOTE_QUESTION");
 export const applyQuestionEdit = createAction("questions/EDIT_QUESTION");
-export const applyQuestionSubscribe = createAction(
-  "questions/SUBSCRIBE_TO_QUESTION"
+export const applyQuestionSubscribeStatus = createAction(
+  "questions/SUBSCRIBE_STATUS__TO_QUESTION"
 );
+
 
 export const getQuestion = id => {
   return dispatch => {
@@ -146,11 +147,27 @@ export const subscribeToQuestion = params => {
   return dispatch => {
     return Questions.subscribe(params)
       .then(() => {
-        dispatch(applyQuestionSubscribe(params));
+        dispatch(applyQuestionSubscribeStatus(true));
         NotificationManager.success(
-          params.subscribe
-            ? "Successfully subscribed! You will receive updates regarding this question."
-            : "Successfully unusubscribed! You will not receive updates regarding this question anymore."
+          "Successfully subscribed! You will receive updates regarding this question."
+          // "Successfully unusubscribed! You will not receive updates regarding this question anymore."
+        );
+      })
+      .catch(err => {
+        NotificationManager.error(
+          `We've encountered some troubles. Please try again. Error: ${err.message}`
+        );
+      });
+  };
+};
+
+export const unsubscribeToQuestion = params => {
+  return dispatch => {
+    return Questions.unsubscribe(params)
+      .then(() => {
+        dispatch(applyQuestionSubscribeStatus(false));
+        NotificationManager.success(
+          "Successfully unusubscribed! You will not receive updates regarding this question anymore."
         );
       })
       .catch(err => {

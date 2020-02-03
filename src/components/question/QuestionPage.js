@@ -14,6 +14,8 @@ import GeneralModal from "../shared/GeneralModal";
 import EditQuestionTemplate from "./EditQuestionTemplate";
 import { proposeEditQuestion } from '../../api/questions';
 import { NotificationManager } from "react-notifications";
+import GeneralPopover from '../shared/GeneralPopover';
+import Badge from '../utils/Badges';
 
 const ALL_QUESTIONS_ROUTE = "/dashboard/all-questions";
 class QuestionPage extends React.Component {
@@ -60,13 +62,17 @@ class QuestionPage extends React.Component {
     this.setState({ page: 0 }, () => this.loadAnswers());
   }
 
-  handleSubscribe(value) {
+  handleSubscribe(currentUserSubscribed) {
     const {
-      actions: { subscribeToQuestion }
+      actions: { subscribeToQuestion, unsubscribeToQuestion }
     } = this.props;
     const { questionId } = this.state;
-
-    subscribeToQuestion({ subscribe: value, questionId });
+    
+    if (currentUserSubscribed) {
+      unsubscribeToQuestion(questionId)
+    } else {
+      subscribeToQuestion(questionId);
+    }
   }
 
   handleEditSubmit(data) {
@@ -193,13 +199,14 @@ class QuestionPage extends React.Component {
     const {
       modelId,
       score,
-      subscribed,
       voteStatus,
       questionTitle,
       questionText,
       questionTags,
       questionPublishDate,
-      questionAuthorName
+      questionAuthorName,
+      userScore,
+      currentUserSubscribed,
     } = question;
 
     return (
@@ -207,15 +214,17 @@ class QuestionPage extends React.Component {
         {deleteLoading && <InactiveOverlay />}
         <div className="d-flex">
           <Subscribe
-            subscribed={subscribed}
-            onClick={value => this.handleSubscribe(value)}
+            subscribed={currentUserSubscribed}
+            onClick={() => this.handleSubscribe(currentUserSubscribed)}
           />
           <div className="w-100">
             <h2 className>{questionTitle}</h2>
-            <p>
+            <div className="d-flex">
               asked on {moment(questionPublishDate).format("MMM Do YY")} by{" "}
-              <b>{questionAuthorName}</b>
-            </p>
+              <GeneralPopover popoverAnchor={<b>{questionAuthorName}</b>} popoverId="author-question">
+                <Badge score={userScore} />
+              </GeneralPopover>
+            </div>
             <div className="horizontal-hr" />
           </div>
         </div>
@@ -255,8 +264,8 @@ class QuestionPage extends React.Component {
           />
         </div>
         <div className="d-flex ml-72">
-          {questionTags?.map(tag => (
-            <div className="tag">{tag}</div>
+          {questionTags?.map((tag, idx) => (
+            <div className="tag" key={idx}>{tag}</div>
           ))}
         </div>
 
