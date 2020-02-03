@@ -34,12 +34,12 @@ export function getAllQuestions(params) {
   return request('GET', `question/findAll?page=${page + 1}&size=${pageSize}&tags=${tags.join(',')}&sortBy=${sortBy}`);
 }
 
-export function subscribe(params) {
-  const {questionId, subscribe} = params;
-  return new Promise((resolve, reject) => {
-    setTimeout(() => resolve(), 1000);
-  });
-  return request('POST', `question/subscribe?questionId=${questionId}&subscribe=${subscribe}`);
+export function subscribe(questionId) {
+  return request('POST', `user/subscribe?questionId=${questionId}`);
+}
+
+export function unsubscribe(questionId) {
+  return request('POST', `user/unsubscribe?questionId=${questionId}`);
 }
 
 export function voteQuestion(params) {

@@ -3,6 +3,8 @@
 // GoldenHero - Earn at least 200 reputation (the daily maximum) in a single day 37.8k awarded
 // Epic - Earn 200 daily reputation 50 times 716 awarded
 // Legendary -  Earn 200 daily reputation 150 times
+// https://stackoverflow.com/help/badges
+
 import React from 'react';
 import LegendaryBadge from '../../assets/Legendary.svg'
 import EpicBadge from '../../assets/Epic.svg';

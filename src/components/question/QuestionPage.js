@@ -62,13 +62,17 @@ class QuestionPage extends React.Component {
     this.setState({ page: 0 }, () => this.loadAnswers());
   }
 
-  handleSubscribe(value) {
+  handleSubscribe(currentUserSubscribed) {
     const {
-      actions: { subscribeToQuestion }
+      actions: { subscribeToQuestion, unsubscribeToQuestion }
     } = this.props;
     const { questionId } = this.state;
-
-    subscribeToQuestion({ subscribe: value, questionId });
+    
+    if (currentUserSubscribed) {
+      unsubscribeToQuestion(questionId)
+    } else {
+      subscribeToQuestion(questionId);
+    }
   }
 
   handleEditSubmit(data) {
@@ -195,7 +199,6 @@ class QuestionPage extends React.Component {
     const {
       modelId,
       score,
-      subscribed,
       voteStatus,
       questionTitle,
       questionText,
@@ -203,6 +206,7 @@ class QuestionPage extends React.Component {
       questionPublishDate,
       questionAuthorName,
       userScore,
+      currentUserSubscribed,
     } = question;
 
     return (
@@ -210,17 +214,17 @@ class QuestionPage extends React.Component {
         {deleteLoading && <InactiveOverlay />}
         <div className="d-flex">
           <Subscribe
-            subscribed={subscribed}
-            onClick={value => this.handleSubscribe(value)}
+            subscribed={currentUserSubscribed}
+            onClick={() => this.handleSubscribe(currentUserSubscribed)}
           />
           <div className="w-100">
             <h2 className>{questionTitle}</h2>
-            <p className="d-flex">
+            <div className="d-flex">
               asked on {moment(questionPublishDate).format("MMM Do YY")} by{" "}
               <GeneralPopover popoverAnchor={<b>{questionAuthorName}</b>} popoverId="author-question">
                 <Badge score={userScore} />
               </GeneralPopover>
-            </p>
+            </div>
             <div className="horizontal-hr" />
           </div>
         </div>
@@ -260,8 +264,8 @@ class QuestionPage extends React.Component {
           />
         </div>
         <div className="d-flex ml-72">
-          {questionTags?.map(tag => (
-            <div className="tag">{tag}</div>
+          {questionTags?.map((tag, idx) => (
+            <div className="tag" key={idx}>{tag}</div>
           ))}
         </div>
 
