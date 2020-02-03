@@ -42,6 +42,17 @@ class QuestionPage extends React.Component {
     this.loadAnswers();
   }
 
+//   shouldComponentUpdate(prevProps) {
+//     const { match,  actions: { loadQuestionById } } = this.props;
+
+//     if (prevProps.match.params.id !== match.params.id) {
+//         loadQuestionById(this.state.questionId);
+//         this.loadAnswers();
+//         return true;
+//     }
+//     return false;
+// }
+
   loadAnswers() {
     const { page, pageSize, questionId } = this.state;
     const {
@@ -221,7 +232,7 @@ class QuestionPage extends React.Component {
             <h2 className>{questionTitle}</h2>
             <div className="d-flex">
               asked on {moment(questionPublishDate).format("MMM Do YY")} by{" "}
-              <GeneralPopover popoverAnchor={<b>{questionAuthorName}</b>} popoverId="author-question">
+              <GeneralPopover popoverAnchor={(<b style={{ marginLeft: '5px' }}>{questionAuthorName}</b>)} popoverId="author-question">
                 <Badge score={userScore} />
               </GeneralPopover>
             </div>

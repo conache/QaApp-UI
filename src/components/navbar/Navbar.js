@@ -48,7 +48,6 @@ class Navbar extends React.Component {
           console.log("Received data:");
           console.log(data);
           this.handleBadgeVisibility(false);
-          // {"objectId":"DwFf-28BbAi_SCGMv_R9","notificationText":"Your answer was marked as correct!","notificationType":"CORRECT_ANSWER"}
           this.setState(prevState => {
             return { notifications: prevState.notifications.concat([data]) }
           })
@@ -76,7 +75,7 @@ class Navbar extends React.Component {
     const index = findIndex(propEq('objectId', id))(notifications);
     notifications[index].seen = true;
     this.handleCloseNotification();
-    history.push(`dashboard/question/${id}`);
+    history.push(`/dashboard/question/${id}`);
   }
 
   render() {
@@ -128,7 +127,6 @@ class Navbar extends React.Component {
                 </MenuItem> 
               )}
             </StyledMenu>
-
           </div>
           <PersonDetails />
           <LogoutButton />
