@@ -24,7 +24,7 @@ class QuestionPage extends React.Component {
     const { match } = this.props;
     this.state = {
       page: 0,
-      pageSize: 15,
+      pageSize: 5,
       questionId: match.params.id,
       editingEnabled: false,
       deleteLoading: false,

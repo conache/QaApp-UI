@@ -82,22 +82,6 @@ class ProposedTags extends React.Component {
               onClick: (_, rowData) => this.declineProposedTag(rowData)
             }
           ]}
-          detailPanel={[
-            {
-              tooltip: "Show similar existing tags",
-              render: rowData => {
-                return (
-                  <div style={{ padding: "1rem" }}>
-                    {rowData.similarTags && rowData.similarTags.length
-                      ? `Similar tags with the proposed tag: ${rowData.similarTags.join(
-                          ", "
-                        )}`
-                      : "No existing tag is similar with this tag"}
-                  </div>
-                );
-              }
-            }
-          ]}
         />
       </div>
     );

@@ -6,45 +6,10 @@
 // https://stackoverflow.com/help/badges
 
 import React from 'react';
-import LegendaryBadge from '../../assets/Legendary.svg'
-import EpicBadge from '../../assets/Epic.svg';
-import GoldenHeroBadge from '../../assets/GoldenHero.svg';
-import FanaticBadge from '../../assets/Fanatic.svg';
-import EnthusiastBadge from '../../assets/Enthusiast.svg';
+import { BADGES } from "./Constants";
 
-const getBadgeStatus = (score) => {
-  switch (score) {
-    case score < 10:
-      return {
-        label: 'Enthusiast',
-        icon: EnthusiastBadge,
-      }
-    case score > 10 && score < 20:
-      return {
-        label: 'Fanatic',
-        icon: FanaticBadge,
-      }
-    case score > 20 && score < 30:
-      return {
-        label: 'Legendary',
-        icon: LegendaryBadge,
-      }
-    case score > 30 && score < 40:
-      return {
-        label: 'Epic',
-        icon: EpicBadge,
-      }
-    case score > 40 && score < 50:
-      return {
-        label: 'GoldenHero',
-        icon: GoldenHeroBadge,
-      }
-    default:
-      return {
-        label: 'Enthusiast',
-        icon: EnthusiastBadge,
-      }
-  }
+const getBadgeStatus = ({score}) => {
+  return BADGES.find(badge => badge.minScore <= score && score <= badge.maxScore);
 }
 
 const Badge = (score = 0) => {
