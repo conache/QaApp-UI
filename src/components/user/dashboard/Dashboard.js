@@ -48,7 +48,7 @@ class Dashboard extends React.Component {
             <Route exact path={`${match.path}/my-questions/proposed-edits/:id`} component={ProposalPageContainer} />
             <Route path={`${match.path}/my-questions`} component={UserQuestions} />
             <Route path={`${match.path}/question/:id`} component={QuestionPageContainer} />
-            <Route component={UsersSection} />
+            <Route component={AllQuestions} />
           </Switch>
         </section>
       </div>

@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import {Popover, Menu} from '@material-ui/core';
+import { Popover, Menu } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 
 export default function GeneralPopover({ children, popoverAnchor, popoverId }) {
@@ -21,7 +21,7 @@ export default function GeneralPopover({ children, popoverAnchor, popoverId }) {
         aria-haspopup="true"
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
-        // onClose={handlePopoverClose}
+      // onClose={handlePopoverClose}
       >
         {popoverAnchor}
       </Typography>
@@ -40,9 +40,9 @@ export default function GeneralPopover({ children, popoverAnchor, popoverId }) {
         onClose={handlePopoverClose}
         disableRestoreFocus
       >
-          <div className="popover-container">
-            {children}
-          </div>
+        <div className="popover-container">
+          {children}
+        </div>
       </Popover>
     </Fragment>
   );
