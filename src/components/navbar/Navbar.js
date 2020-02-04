@@ -75,7 +75,11 @@ class Navbar extends React.Component {
     const index = findIndex(propEq('objectId', id))(notifications);
     notifications[index].seen = true;
     this.handleCloseNotification();
-    history.push(`/dashboard/question/${id}`);
+    if(notifications[index].notificationType === 'PROPOSED_QUESTION') {
+      history.push(`/dashboard/my-questions/proposed-edits/BVqiDXABbESlSlq1J5PP/${id}`);
+    } else {
+      history.push(`/dashboard/question/${id}`);
+    }
   }
 
   render() {

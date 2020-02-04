@@ -44,9 +44,8 @@ class QuestionPage extends React.Component {
 
 //   shouldComponentUpdate(prevProps) {
 //     const { match,  actions: { loadQuestionById } } = this.props;
-
 //     if (prevProps.match.params.id !== match.params.id) {
-//         loadQuestionById(this.state.questionId);
+//         loadQuestionById(match.params.id);
 //         this.loadAnswers();
 //         return true;
 //     }
