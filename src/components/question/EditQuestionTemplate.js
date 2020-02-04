@@ -15,7 +15,7 @@ class EditQuestionTemplate extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedTags: formatTags(props.question.questionTags),
+      selectedTags: formatTags(props.question.questionTags || []),
       proposedTagMessage: ""
     };
   }

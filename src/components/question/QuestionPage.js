@@ -213,10 +213,11 @@ class QuestionPage extends React.Component {
       <div className="question-page w-100 overflow-y">
         {deleteLoading && <InactiveOverlay />}
         <div className="d-flex">
-          <Subscribe
+          {!currentUser.isQuestionAuthor(question) && 
+            <Subscribe
             subscribed={currentUserSubscribed}
             onClick={() => this.handleSubscribe(currentUserSubscribed)}
-          />
+          />}
           <div className="w-100">
             <h2 className>{questionTitle}</h2>
             <div className="d-flex">
