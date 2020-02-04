@@ -15,7 +15,7 @@ class EditQuestionTemplate extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedTags: formatTags(props.question.questionTags),
+      selectedTags: formatTags(props.question.questionTags || []),
       proposedTagMessage: ""
     };
   }
@@ -26,11 +26,11 @@ class EditQuestionTemplate extends React.Component {
     const { body } = values;
     const newTag = tag => tag.__isNew__;
 
-    const questionTags = map(tag => tag.value, reject(newTag, selectedTags));
+    const questionTags = map(tag => tag.value, reject(newTag, selectedTags || []));
     const params = {
       questionText: body,
       questionTags,
-      proposedTags: map(tag => tag.value, filter(newTag, selectedTags))
+      proposedTags: map(tag => tag.value, filter(newTag, selectedTags || []))
     };
 
     onSave(params);
