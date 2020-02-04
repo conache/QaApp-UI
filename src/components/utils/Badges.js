@@ -8,12 +8,12 @@
 import React from 'react';
 import { BADGES } from "./Constants";
 
-const getBadgeStatus = ({score}) => {
-  return BADGES.find(badge => badge.minScore <= score && score <= badge.maxScore);
+const getBadgeStatus = (score) => {
+  return BADGES.find(badge => badge.minScore <= score && score < badge.maxScore);
 }
 
-const Badge = (score = 0) => {
-  const badgeInfo = getBadgeStatus(score);
+const Badge = ({score}) => {
+  const badgeInfo = getBadgeStatus(score || 0);
   return (
     <div className="badge container-center">
       <small>{badgeInfo.label}</small>
