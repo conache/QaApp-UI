@@ -19,9 +19,7 @@ export default function GeneralPopover({ children, popoverAnchor, popoverId }) {
       <Typography
         aria-owns={open ? popoverId : undefined}
         aria-haspopup="true"
-        onMouseEnter={handlePopoverOpen}
-        onMouseLeave={handlePopoverClose}
-      // onClose={handlePopoverClose}
+        onClick={handlePopoverOpen}
       >
         {popoverAnchor}
       </Typography>

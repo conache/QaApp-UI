@@ -31,7 +31,7 @@ const CustomMenu = props => {
     <Fragment>
       <MoreVertIcon
         className="cursor-pointer p-1"
-        style={{ color: '#3f51b5' }}
+        style={{ color: '#3f51b5', position: "absolute", right: 10 }}
         onClick={handleMoreClick}
       />
       <Menu

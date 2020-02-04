@@ -5,6 +5,16 @@
     margin-top: 0;
   }
 
+  .author-name {
+    margin-left: 5px;
+    font-weight: 500;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
   .star-icon {
     width: 72px;
     cursor: pointer;

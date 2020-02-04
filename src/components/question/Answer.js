@@ -121,14 +121,14 @@ class Answer extends React.Component {
                 onEditSubmit={newText => this.handleEditSubmit(newText)}
               />
               {!editing && (
-                <p className="answer__data-info">
+                <div className="answer__data-info">
                   on {moment(publishDate).format("MMM Do YY")} by{" "}
                   {
-                    <GeneralPopover popoverAnchor={userName} popoverId="author-question">
+                    <GeneralPopover popoverAnchor={(<div className="author-name">{userName}</div>)} popoverId="author-question">
                       <Badge score={userScore} />
                     </GeneralPopover>
                   }
-                </p>
+                </div>
               )}
             </div>
             {!editing && (

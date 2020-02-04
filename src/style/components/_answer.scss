@@ -3,11 +3,14 @@
     text-align: end;
     font-size: 12px;
     margin: 0.5rem 0 0 0;
+    width: fit-content;
+    margin-left: auto;
   }
 
   &__content {
     @extend .d-flex, .flex-column;
     justify-content: center;
+    margin-right: 55px;
   }
 
   .correct-answer {
@@ -15,5 +18,15 @@
     color: #33cccc !important;
     margin-top: 0.5rem;
     margin-right: 0.5rem;
+  }
+
+  .author-name {
+    margin-left: 5px;
+    font-weight: 500;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }

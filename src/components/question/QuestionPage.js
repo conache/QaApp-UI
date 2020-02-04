@@ -221,14 +221,14 @@ class QuestionPage extends React.Component {
             <h2 className>{questionTitle}</h2>
             <div className="d-flex">
               asked on {moment(questionPublishDate).format("MMM Do YY")} by{" "}
-              <GeneralPopover popoverAnchor={(<b style={{ marginLeft: '5px' }}>{questionAuthorName}</b>)} popoverId="author-question">
+              <GeneralPopover popoverAnchor={(<div className="author-name">{questionAuthorName}</div>)} popoverId="author-question">
                 <Badge score={userScore} />
               </GeneralPopover>
             </div>
             <div className="horizontal-hr" />
           </div>
         </div>
-        <div className="d-flex">
+        <div className="d-flex position-relative">
           <UpDownVotes
             className="align-center d-flex flex-column"
             style={{ textAlign: "center" }}
