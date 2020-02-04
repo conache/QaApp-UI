@@ -76,7 +76,7 @@ class Navbar extends React.Component {
     notifications[index].seen = true;
     this.handleCloseNotification();
     if(notifications[index].notificationType === 'PROPOSED_QUESTION') {
-      history.push(`/dashboard/my-questions/proposed-edits/BVqiDXABbESlSlq1J5PP/${id}`);
+      history.push(`/dashboard/my-questions/proposed-edits/${id}`);
     } else {
       history.push(`/dashboard/question/${id}`);
     }

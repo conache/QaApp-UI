@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, Route, Switch } from 'react-router-dom';
+import { NavLink, Route, Switch, Redirect } from 'react-router-dom';
 import {withUser} from '../../../context';
 import Sidebar from '../../shared/Sidebar';
 import UsersSection from '../../company/company-dashboard/UsersSection';
@@ -44,11 +44,17 @@ class Dashboard extends React.Component {
             <Route exact path={`${match.path}/tags`} component={TagsSectionsContainer} />
             <Route exact path={`${match.path}/tags/proposed`} component={ProposedTags} />
             <Route exact path={`${match.path}/all-questions`} component={AllQuestions} />
-            <Route exact path={`${match.path}/my-questions/question/:id`} component={QuestionPageContainer} />
-            <Route exact path={`${match.path}/my-questions/proposed-edits/:id`} component={ProposalPageContainer} />
+            <Route exact path={`${match.path}/my-questions/question/:id`} render={(props) => (
+              <QuestionPageContainer key={props.match.params.id} {...props} />
+            )}/>
+            <Route exact path={`${match.path}/my-questions/proposed-edits/:id`} render={(props) => (
+              <ProposalPageContainer key={props.match.params.id} {...props} />
+            )}/>
             <Route path={`${match.path}/my-questions`} component={UserQuestions} />
-            <Route path={`${match.path}/question/:id`} component={QuestionPageContainer} />
-            <Route component={AllQuestions} />
+            <Route path={`${match.path}/question/:id`} render={(props) => (
+              <QuestionPageContainer key={props.match.params.id} {...props} />
+            )}/>
+            <Redirect to={`${match.path}/all-questions`} />
           </Switch>
         </section>
       </div>

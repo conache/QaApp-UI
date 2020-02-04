@@ -7,6 +7,7 @@ import Badge from '../utils/Badges';
 
 const PersonDetails = (props) => {
   let { currentUser } = props;
+  console.log(currentUser);
   const userBadgeScore = pathOr(0, ['_jsonProfile', 'attributes', 'correctAnswers', 0], currentUser);
 
   return (

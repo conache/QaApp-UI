@@ -41,17 +41,7 @@ class QuestionPage extends React.Component {
     loadTags();
     this.loadAnswers();
   }
-
-//   shouldComponentUpdate(prevProps) {
-//     const { match,  actions: { loadQuestionById } } = this.props;
-//     if (prevProps.match.params.id !== match.params.id) {
-//         loadQuestionById(match.params.id);
-//         this.loadAnswers();
-//         return true;
-//     }
-//     return false;
-// }
-
+  
   loadAnswers() {
     const { page, pageSize, questionId } = this.state;
     const {

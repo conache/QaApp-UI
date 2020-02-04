@@ -36,7 +36,7 @@ const BadgesList = () => {
       return `At least ${badgeInfo.minScore} answers marked as correct.`;
     }
 
-    return `Between ${badgeInfo.minScore} and ${badgeInfo.maxScore} correct answers`;
+    return `Between ${badgeInfo.minScore} and ${badgeInfo.maxScore} correct answers.`;
   }
   
   return BADGES.map(badge => {
