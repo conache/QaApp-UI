@@ -6,22 +6,22 @@ button {
 .filter-button {
   padding: 8px 22px;
   background-color: transparent;
-  box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.75) !important;
+  box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.75) !important;
 
   &.selected {
     background-color: black;
-    color: white
+    color: white;
   }
 }
 
 .main-color-background {
-  background: linear-gradient(89.46deg, #0067C6 0.13%, #40A3FF 99.9%);
+  background: linear-gradient(89.46deg, #0067c6 0.13%, #40a3ff 99.9%);
   box-shadow: 0px 0px 10px rgba(55, 111, 255, 0.25) !important;
   color: white !important;
 }
 
 .red-button {
-  background: #F16C5F !important;
+  background: #f16c5f !important;
   box-shadow: 0px 0px 10px rgba(55, 111, 255, 0.25) !important;
   color: white !important;
 }
